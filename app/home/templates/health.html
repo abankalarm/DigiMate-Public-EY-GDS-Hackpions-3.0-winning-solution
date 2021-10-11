@@ -1,0 +1,544 @@
+{% extends "layouts/base.html" %} {% block title %} UI Tabs {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    #chartdiv-steps {
+        width: 100%;
+        height: 600px;
+    }
+    
+    #chartdiv-calories {
+        width: 40%;
+        height: 600px;
+    }
+    
+    #chartdiv-bmi {
+        width: 60%;
+        height: 600px;
+    }
+</style>
+{% endblock stylesheets %} {% block content %}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="col-sm-12">
+            <h5 class="mt-4">Health Analysis</h5>
+            This dashboard allows you to look at your health data for the past 10 days compared to other company employees.
+            <br><b>
+            <h6 id="reco">
+                </b>
+            </h6>
+            <hr>
+            <div class="row">
+                <div id="chartdiv-calories"></div>
+                <div id="chartdiv-bmi"></div>
+            </div>
+            <div id="chartdiv-steps"></div>
+        </div>
+    </div>
+    <!-- <div class="col-sm-12">
+        <h5 class="mt-4">Health Recommendations</h5>
+        <h7 id = "reco">
+        </h7>
+        <hr>
+    </div> -->
+</div>
+
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/dataviz.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/timeline.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/bullets.js"></script>
+<script>
+    var allData = JSON.parse('{{allData | tojson}}');
+    var bmi = (allData.biometrics.weight[0] * 100 * 100 / (allData.biometrics.height[0] * allData.biometrics.height[0]));
+    var verdict = "";
+    if (bmi < 18.5) {
+        verdict = "Underweight";
+    } else if (bmi >= 18.5 && bmi <= 24.9) {
+        verdict = "Normal";
+    } else if (bmi >= 25.0 && bmi <= 29.9) {
+        verdict = "Overweight";
+    } else {
+        verdict = "Obese";
+    }
+
+    $(document).ready(function() {
+        setTimeout(function() {
+            am4core.ready(function() {
+                // Themes begin
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+                var insterfaceColors = new am4core.InterfaceColorSet();
+                var lineColor = insterfaceColors.getFor("background");
+
+                var chart = am4core.create("chartdiv-steps", am4plugins_timeline.CurveChart);
+                chart.curveContainer.padding(20, 20, 20, 20);
+
+                var compTotal = 0;
+                var empTotal = 0;
+                var deptTotal = 0;
+
+                for (var i = 0; i < Object.keys(allData.employee).length; i++) {
+                    empTotal += allData.employee.Steps[i];
+                    compTotal += allData.companyAvg.Steps[i];
+                    deptTotal += allData.deptAvg.Steps[i];
+                }
+
+                var reco = document.getElementById("reco");
+                if (empTotal >= deptTotal && empTotal >= compTotal) {
+                    wereco = "You are having more steps than your department and your company average. You are doing well. "
+                } else if (empTotal >= deptTotal && empTotal < compTotal) {
+                    wereco = "You are having more steps than your department average but less than your company average. You are doing well but can do better. "
+                } else if (empTotal < deptTotal && empTotal >= compTotal) {
+                    wereco = "You are having more steps than your company average but less than you department average. You are doing well but can do better. "
+                } else {
+                    wereco = "You are having less steps than your department and your company average. You can do better. "
+                }
+                wereco += "<br>"
+                if (bmi < 18.5) {
+                    wereco += "Your BMI is low, try having more calorie rich food."
+                } else if (bmi >= 18.5 && bmi <= 24.9) {
+                    wereco += "Your BMI is normal, you are doing well according to this metric."
+                } else if (bmi >= 25.0 && bmi <= 29.9) {
+                    wereco += "According to BMI, you are overweight. You will need to exercise to be in the normal levels.";
+                } else {
+                    wereco += "You are in the obese category. You must exercise to reduce your weight.";
+                }
+                reco.innerHTML = wereco;
+
+                var valueCutOff = Math.min(compTotal, Math.min(deptTotal, empTotal))
+                chart.data = [{
+                    name: "Employee Steps " + Math.round(empTotal / 10),
+                    file: "/static/assets/images/user/avatar-1",
+                    track: 1,
+                    value: Math.round(empTotal / 10)
+                }, {
+                    name: "Department Average Steps " + Math.round(deptTotal / 10),
+                    file: "/static/assets/images/user/avatar-2",
+                    track: 2,
+                    value: Math.round(deptTotal / 10)
+                }, {
+                    name: "Company Average Steps " + Math.round(compTotal / 10),
+                    file: "/static/assets/images/user/avatar-3",
+                    track: 3,
+                    value: Math.round(compTotal / 10)
+                }]
+
+                console.log(chart.data)
+                var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+                categoryAxis.dataFields.category = "name";
+                categoryAxis.renderer.minGridDistance = 10;
+                categoryAxis.renderer.innerRadius = 5;
+                categoryAxis.renderer.radius = 145;
+                categoryAxis.renderer.line.stroke = lineColor;
+                categoryAxis.renderer.line.strokeWidth = 5;
+                categoryAxis.renderer.line.strokeOpacity = 1;
+
+                var labelTemplate = categoryAxis.renderer.labels.template;
+                labelTemplate.fill = lineColor;
+                labelTemplate.fontWeight = 600;
+                labelTemplate.fontSize = 11;
+
+                var gridTemplate = categoryAxis.renderer.grid.template;
+                gridTemplate.strokeWidth = 1;
+                gridTemplate.strokeOpacity = 1;
+                gridTemplate.stroke = lineColor;
+                gridTemplate.location = 0;
+                gridTemplate.above = true;
+
+                var fillTemplate = categoryAxis.renderer.axisFills.template;
+                fillTemplate.disabled = false;
+                fillTemplate.fill = am4core.color("#b84f49");
+                fillTemplate.fillOpacity = 1;
+
+                categoryAxis.fillRule = function(dataItem) {
+                    dataItem.axisFill.__disabled = false;
+                    dataItem.axisFill.opacity = 1;
+                }
+
+                var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+                valueAxis.min = 0;
+                valueAxis.max = 20000;
+                valueAxis.renderer.points = [{
+                    x: 0,
+                    y: -100
+                }, {
+                    x: 200,
+                    y: -100
+                }, {
+                    x: 200,
+                    y: 100
+                }, {
+                    x: 0,
+                    y: 100
+                }, {
+                    x: -200,
+                    y: 100
+                }, {
+                    x: -200,
+                    y: -100
+                }, {
+                    x: 0,
+                    y: -100
+                }];
+                valueAxis.renderer.polyspline.tensionX = 0.4;
+                valueAxis.renderer.line.strokeOpacity = 0.1;
+                valueAxis.renderer.line.strokeWidth = 10;
+                valueAxis.renderer.maxLabelPosition = 0.98;
+                valueAxis.renderer.minLabelPosition = 0.02;
+
+                // Flag bullet
+                var flagRange = valueAxis.axisRanges.create();
+                flagRange.value = 0;
+                var flagBullet = new am4plugins_bullets.FlagBullet();
+                flagBullet.label.text = "START";
+                flagRange.bullet = flagBullet;
+                //flagBullet.dy = -145;
+                flagBullet.adapter.add("dy", function(dy, target) {
+                    return -categoryAxis.renderer.radius;
+                })
+
+                var valueLabelTemplate = valueAxis.renderer.labels.template;
+                valueLabelTemplate.fill = lineColor;
+                valueLabelTemplate.fontSize = 8;
+                valueLabelTemplate.fontWeight = 600;
+                valueLabelTemplate.fillOpacity = 1;
+                valueLabelTemplate.horizontalCenter = "right";
+                valueLabelTemplate.verticalCenter = "bottom";
+                valueLabelTemplate.padding(0, 10, 0, 0);
+                valueLabelTemplate.adapter.add("rotation", function(rotation, target) {
+                    var value = target.dataItem.value;
+                    var position = valueAxis.valueToPosition(value);
+
+                    var angle = valueAxis.renderer.positionToAngle(position);
+                    return angle;
+                })
+
+                var valueGridTemplate = valueAxis.renderer.grid.template;
+                valueGridTemplate.strokeOpacity = 0.3;
+                valueGridTemplate.stroke = lineColor;
+
+
+                // SERIES
+                var series = chart.series.push(new am4plugins_timeline.CurveColumnSeries());
+                series.dataFields.categoryY = "name";
+                series.stroke = lineColor;
+                series.fill = lineColor;
+                series.dataFields.valueX = "value";
+                series.defaultState.transitionDuration = 4000;
+
+                var columnTemplate = series.columns.template;
+                columnTemplate.fill = lineColor;
+                columnTemplate.strokeOpacity = 0;
+                columnTemplate.fillOpacity = 0.3;
+                columnTemplate.height = am4core.percent(100);
+
+                var hoverState = columnTemplate.states.create("hover");
+                hoverState.properties.fillOpacity = 0.9;
+
+                var bullet = series.bullets.push(new am4charts.CircleBullet())
+                bullet.fill = lineColor;
+
+                // LEGEND
+                chart.legend = new am4charts.Legend();
+                chart.legend.data = chart.data;
+                chart.legend.parent = chart.curveContainer;
+                chart.legend.width = 360;
+                chart.legend.horizontalCenter = "middle";
+                chart.legend.verticalCenter = "middle";
+
+                var markerTemplate = chart.legend.markers.template;
+                markerTemplate.width = 30;
+                markerTemplate.height = 30;
+
+                chart.legend.itemContainers.template.events.on("over", function(event) {
+                    series.dataItems.each(function(dataItem) {
+                        if (dataItem.dataContext == event.target.dataItem.dataContext) {
+                            dataItem.column.isHover = true;
+                        } else {
+                            dataItem.column.isHover = false;
+                        }
+                    })
+                })
+
+                chart.legend.itemContainers.template.events.on("hit", function(event) {
+                    series.dataItems.each(function(dataItem) {
+                        if (dataItem.dataContext == event.target.dataItem.dataContext) {
+                            if (dataItem.visible) {
+                                dataItem.hide(1000, 0, 0, ["valueX"]);
+                            } else {
+                                dataItem.show(1000, 0, ["valueX"]);
+                            }
+                        }
+                    })
+                })
+
+                var rect = markerTemplate.children.getIndex(0);
+                rect.cornerRadius(20, 20, 20, 20);
+
+                var as = markerTemplate.states.create("active");
+                as.properties.opacity = 0.5;
+
+                var image = markerTemplate.createChild(am4core.Image)
+                    //image.propertyFields.href = "file";
+                image.width = 30;
+                image.height = 30;
+                image.filters.push(new am4core.DesaturateFilter());
+
+                image.events.on("inited", function(event) {
+                    var image = event.target;
+                    var parent = image.parent;
+                    image.mask = parent.children.getIndex(0);
+                })
+            });
+        }, 700);
+    });
+
+    am4core.ready(function() {
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        var iconPath = "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z"
+
+        var chart = am4core.create("chartdiv-calories", am4charts.SlicedChart);
+        chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
+
+        var sum = 0;
+        var sumInactive = 0;
+
+        for (var i = 0; i < Object.keys(allData.employee.Calories).length; i++) {
+            sum += allData.employee.VActive[i] + allData.employee.Active[i] + allData.employee.LActive[i];
+            sumInactive += allData.employee.IActive[i]
+        }
+
+        chart.data = [{
+            "name": "Active Minutes",
+            "value": Math.round(sum / 10),
+        }, {
+            "name": "Inactive Minutes",
+            "value": Math.round(sumInactive / 10),
+        }];
+
+        var series = chart.series.push(new am4charts.PictorialStackedSeries());
+        series.dataFields.value = "value";
+        series.dataFields.category = "name";
+        series.alignLabels = true;
+
+        series.maskSprite.path = iconPath;
+        series.ticks.template.locationX = 1;
+        series.ticks.template.locationY = 0.5;
+
+        //series.labelsContainer.width = 10;
+
+        /*chart.legend = new am4charts.Legend();
+        chart.legend.position = "left";
+        chart.legend.valign = "bottom";*/
+
+    }); // end am4core.ready()
+
+
+    am4core.ready(function() {
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+        var chartMin = 0;
+        var chartMax = 50;
+
+        var data = {
+            score: bmi,
+            gradingData: [{
+                title: "Obese Class III",
+                color: "#ee1f25",
+                lowScore: 40,
+                highScore: 50
+            }, {
+                title: "Obese Class II",
+                color: "#f04922",
+                lowScore: 35,
+                highScore: 39.9
+            }, {
+                title: "Obese Class I",
+                color: "#fdae19",
+                lowScore: 30,
+                highScore: 34.9
+            }, {
+                title: "Overweight",
+                color: "#f3eb0c",
+                lowScore: 25,
+                highScore: 29.9
+            }, {
+                title: "Normal",
+                color: "#54b947",
+                lowScore: 18.5,
+                highScore: 24.9
+            }, {
+                title: "Underweight",
+                color: "blue",
+                lowScore: 0,
+                highScore: 18.5
+            }, ]
+        };
+
+        /**
+        Grading Lookup
+        */
+        function lookUpGrade(lookupScore, grades) {
+            // Only change code below this line
+            for (var i = 0; i < grades.length; i++) {
+                if (
+                    grades[i].lowScore < lookupScore &&
+                    grades[i].highScore >= lookupScore
+                ) {
+                    return grades[i];
+                }
+            }
+            return null;
+        }
+
+        // create chart
+        var chart = am4core.create("chartdiv-bmi", am4charts.GaugeChart);
+        chart.hiddenState.properties.opacity = 0;
+        chart.fontSize = 11;
+        chart.innerRadius = am4core.percent(80);
+        chart.resizable = true;
+
+        /**
+         * Normal axis
+         */
+
+        var axis = chart.xAxes.push(new am4charts.ValueAxis());
+        axis.min = chartMin;
+        axis.max = chartMax;
+        axis.strictMinMax = true;
+        axis.renderer.radius = am4core.percent(80);
+        axis.renderer.inside = true;
+        axis.renderer.line.strokeOpacity = 0.1;
+        axis.renderer.ticks.template.disabled = false;
+        axis.renderer.ticks.template.strokeOpacity = 1;
+        axis.renderer.ticks.template.strokeWidth = 0.5;
+        axis.renderer.ticks.template.length = 5;
+        axis.renderer.grid.template.disabled = true;
+        axis.renderer.labels.template.radius = am4core.percent(10);
+        axis.renderer.labels.template.fontSize = "0.9em";
+
+        /**
+         * Axis for ranges
+         */
+
+        var axis2 = chart.xAxes.push(new am4charts.ValueAxis());
+        axis2.min = chartMin;
+        axis2.max = chartMax;
+        axis2.strictMinMax = true;
+        axis2.renderer.labels.template.disabled = true;
+        axis2.renderer.ticks.template.disabled = true;
+        axis2.renderer.grid.template.disabled = false;
+        axis2.renderer.grid.template.opacity = 1;
+        axis2.renderer.labels.template.bent = true;
+        axis2.renderer.labels.template.fill = am4core.color("#fff");
+        axis2.renderer.labels.template.fontWeight = "bold";
+        axis2.renderer.labels.template.fillOpacity = 1;
+
+
+
+        /**
+        Ranges
+        */
+
+        for (let grading of data.gradingData) {
+            var range = axis2.axisRanges.create();
+            range.axisFill.fill = am4core.color(grading.color);
+            range.axisFill.fillOpacity = 0.8;
+            range.axisFill.zIndex = -1;
+            range.value = grading.lowScore > chartMin ? grading.lowScore : chartMin;
+            range.endValue = grading.highScore < chartMax ? grading.highScore : chartMax;
+            range.grid.strokeOpacity = 0;
+            range.stroke = am4core.color(grading.color).lighten(-0.1);
+            range.label.inside = true;
+            range.label.text = grading.title.toUpperCase();
+            range.label.inside = true;
+            range.label.location = 0.5;
+            range.label.inside = true;
+            range.label.radius = am4core.percent(10);
+            range.label.paddingBottom = -5; // ~half font size
+            range.label.fontSize = "0.9em";
+        }
+
+        console.log(data)
+
+        var matchingGrade = lookUpGrade(data.score, data.gradingData);
+
+        /**
+         * Label 1
+         */
+
+        var label = chart.radarContainer.createChild(am4core.Label);
+        label.isMeasured = false;
+        label.fontSize = "5em";
+        label.x = am4core.percent(50);
+        label.paddingBottom = 5;
+        label.horizontalCenter = "middle";
+        label.verticalCenter = "bottom";
+        //label.dataItem = data;
+        label.text = "\n" + data.score.toFixed(1) + "\n BMI";
+        //label.text = "{score}";
+        label.fill = am4core.color(matchingGrade.color);
+
+        /**
+         * Label 2
+         */
+
+        /*var label2 = chart.radarContainer.createChild(am4core.Label);
+        label2.isMeasured = false;
+        label2.fontSize = "2em";
+        label2.horizontalCenter = "middle";
+        label2.verticalCenter = "bottom";
+        label2.text = matchingGrade.title.toUpperCase();
+        label2.fill = am4core.color(matchingGrade.color);*/
+
+
+        /**
+         * Hand
+         */
+
+        var hand = chart.hands.push(new am4charts.ClockHand());
+        hand.axis = axis2;
+        hand.innerRadius = am4core.percent(55);
+        hand.startWidth = 8;
+        hand.pin.disabled = true;
+        hand.value = data.score;
+        hand.fill = am4core.color("#444");
+        hand.stroke = am4core.color("#000");
+
+        /*hand.events.on("positionchanged", function(){
+        label.text = axis2.positionToValue(hand.currentPosition).toFixed(1);
+        var value2 = axis.positionToValue(hand.currentPosition);
+        var matchingGrade = lookUpGrade(axis.positionToValue(hand.currentPosition), data.gradingData);
+        label2.text = matchingGrade.title.toUpperCase();
+        label2.fill = am4core.color(matchingGrade.color);
+        label2.stroke = am4core.color(matchingGrade.color);  
+        label.fill = am4core.color(matchingGrade.color);
+        })*/
+
+        /*setInterval(function() {
+            var value = chartMin + Math.random() * (chartMax - chartMin);
+            hand.showValue(value, 1000, am4core.ease.cubicOut);
+        }, 2000);*/
+
+    }); // end am4core.ready()
+</script>
+
+{% endblock javascripts %}

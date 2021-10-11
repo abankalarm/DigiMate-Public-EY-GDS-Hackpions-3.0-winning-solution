@@ -1,0 +1,62 @@
+ {% extends "layouts/base.html" %} {% block title %} Page Blank {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.0.min.js"></script>
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Analyse your current skillset to find the next.</h5>
+                            </div>
+                            <div class="card-block">
+                                <p>This section allows our intelligent systems to use the skills set that you posses and recommend you the next one that you should take up to enhance your current skillset and be an overall better employ
+                                    <br>
+                                    <br> below are our recommendations, for a more transparent understanding you can also look the brain graph being rendered below
+
+                                </p><b>
+                                {% for option in recomm %} {{option}} <br> {% endfor %}
+                            </b>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- [ Main Content ] end -->
+                Please wait a few seconds as the wizards on the other side do their magic
+                <div id="myplot"></div>
+                <div id="myplot2"></div>
+                <script>
+                    fetch('/plot')
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(item) {
+                            Bokeh.embed.embed_item(item);
+                        })
+                </script>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}

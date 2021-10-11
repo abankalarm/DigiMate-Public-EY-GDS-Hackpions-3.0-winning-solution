@@ -1,0 +1,18 @@
+MINE:
+Reg
+skills - 5 
+dob 
+   bmi - height weight  ask later
+department id
+employee id
+
+DASHBOARD
+weekly hours worked
+weekly average
+today hours
+
+skills
+	nodes ka graph
+	job level k basis p skills
+
+	recommend - accepted and rejected

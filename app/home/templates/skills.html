@@ -1,0 +1,118 @@
+ {% extends "layouts/base.html" %} {% block title %} Page Blank {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    #myplot {
+        height: 800px;
+        width: 100%;
+    }
+</style>
+{% endblock stylesheets %} {% block content %}
+
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-2.4.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-2.4.0.min.js"></script>
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Analyse your current skillset to find the next.</h5>
+                            </div>
+                            <div class="card-block">
+                                <p>This section allows our intelligent systems to use the skills set that you posses and recommend you the next one that you should take up to enhance your current skillset and be an overall better employ
+                                    <br>
+                                    <br> below are our recommendations, for a more transparent understanding you can also look the brain graph being rendered below
+
+                                </p><b>
+                                {% for option in recomm %} {{option}} <br> {% endfor %}
+                            </b>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- [ Main Content ] end -->
+                
+                <div id="myplot"></div>
+                <script>
+                    
+                </script>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script>
+var allData = JSON.parse('{{allData | tojson}}');
+$(document).ready(function() {
+    setTimeout(function() {
+        am4core.ready(function() {
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
+
+            var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+            networkSeries.dataFields.linkWith = "linkWith";
+            networkSeries.dataFields.name = "name";
+            networkSeries.dataFields.id = "name";
+            networkSeries.dataFields.value = "value";
+            networkSeries.dataFields.children = "children";
+
+            networkSeries.nodes.template.label.text = "{name}"
+            networkSeries.fontSize = 8;
+            networkSeries.linkWithStrength = 0;
+
+            var nodeTemplate = networkSeries.nodes.template;
+            nodeTemplate.tooltipText = "{name}";
+            nodeTemplate.fillOpacity = 1;
+            nodeTemplate.label.hideOversized = true;
+            nodeTemplate.label.truncate = true;
+
+            var linkTemplate = networkSeries.links.template;
+            linkTemplate.strokeWidth = 1;
+            var linkHoverState = linkTemplate.states.create("hover");
+            linkHoverState.properties.strokeOpacity = 1;
+            linkHoverState.properties.strokeWidth = 2;
+
+            nodeTemplate.events.on("over", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = true;
+                })
+            })
+
+            nodeTemplate.events.on("out", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = false;
+                })
+            })
+
+            networkSeries.data = allData
+                    });
+                }, 700);
+            });
+</script>
+
+{% endblock javascripts %}

@@ -1,0 +1,454 @@
+{% extends "layouts/base.html" %} {% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+    .buttonup,
+    .buttonup::after {
+        width: 120%;
+        height: 86px;
+        font-size: 36px;
+        font-family: 'Bebas Neue', cursive;
+        background: linear-gradient(45deg, transparent 5%, #6700ee 5%);
+        border: 0;
+        color: #fff;
+        letter-spacing: 3px;
+        line-height: 88px;
+        box-shadow: 6px 0px 0px #00E6F6;
+        outline: transparent;
+        position: relative;
+    }
+    
+    .buttonup::after {
+        --slice-0: inset(50% 50% 50% 50%);
+        --slice-1: inset(80% -6px 0 0);
+        --slice-2: inset(50% -6px 30% 0);
+        --slice-3: inset(10% -6px 85% 0);
+        --slice-4: inset(40% -6px 43% 0);
+        --slice-5: inset(80% -6px 5% 0);
+        content: 'AVAILABLE NOW';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 3%, #00E6F6 3%, #00E6F6 5%, #ff01f2 5%);
+        text-shadow: -3px -3px 0px #F8F005, 3px 3px 0px #00E6F6;
+        clip-path: var(--slice-0);
+    }
+    
+    .buttonup:hover::after {
+        animation: 1s glitch;
+        animation-timing-function: steps(2, end);
+    }
+    
+    @keyframes glitch {
+        0% {
+            clip-path: var(--slice-1);
+            transform: translate(-20px, -10px);
+        }
+        10% {
+            clip-path: var(--slice-3);
+            transform: translate(10px, 10px);
+        }
+        20% {
+            clip-path: var(--slice-1);
+            transform: translate(-10px, 10px);
+        }
+        30% {
+            clip-path: var(--slice-3);
+            transform: translate(0px, 5px);
+        }
+        40% {
+            clip-path: var(--slice-2);
+            transform: translate(-5px, 0px);
+        }
+        50% {
+            clip-path: var(--slice-3);
+            transform: translate(5px, 0px);
+        }
+        60% {
+            clip-path: var(--slice-4);
+            transform: translate(5px, 10px);
+        }
+        70% {
+            clip-path: var(--slice-2);
+            transform: translate(-10px, 10px);
+        }
+        80% {
+            clip-path: var(--slice-5);
+            transform: translate(20px, -10px);
+        }
+        90% {
+            clip-path: var(--slice-1);
+            transform: translate(-10px, 0px);
+        }
+        100% {
+            clip-path: var(--slice-1);
+            transform: translate(0);
+        }
+    }
+    
+    #myProgress {
+        width: 100%;
+        background-color: #ddd;
+    }
+    
+    #myBar {
+        width: 1%;
+        height: 30px;
+        background-color: #042baa;
+    }
+    
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        padding-top: 100px;
+        /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+    /* Modal Content */
+    
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+    }
+    /* The Close Button */
+    
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+</style>
+{% endblock stylesheets %} {% block content %}
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <b>Syncing all your data ;)</b>
+        <span class="close">&times;</span>
+        <div id="myProgress">
+            <div id="myBar"></div>
+        </div>
+        This should take a second
+        <br>
+    </div>
+
+</div>
+
+<!-- Trigger/Open The Modal -->
+
+
+<script>
+    function syncitall() {
+        const Http = new XMLHttpRequest();
+        const url = '/Sync';
+        Http.open("GET", url);
+        Http.send();
+        Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
+        }
+    }
+    var i = 0;
+
+    function move() {
+        if (i == 0) {
+            i = 1;
+            var elem = document.getElementById("myBar");
+            var width = 1;
+            var id = setInterval(frame, 10);
+
+            function frame() {
+                if (width >= 100) {
+                    clearInterval(id);
+                    i = 0;
+                } else {
+                    width++;
+                    elem.style.width = width + "%";
+                }
+            }
+        }
+    }
+</script>
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <!--[ daily sales section ] start-->
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card daily-sales">
+                            <div class="card-block">
+                                <h6 class="mb-3"><b>Professional details</b>
+                                </h6>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                        <b>Current job level:</b> {{job_level}} <br><b>Your top skills:</b> {{skill1}}, {{skill2}}, {{skill3}} <br><b>Department:</b> {{department}}
+                                    </div>
+                                </div>
+                                <!--<div class="progress m-t-30" style="height: 7px;">
+                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--[ daily sales section ] end-->
+                    <!--[ Monthly  sales section ] starts-->
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card Monthly-sales">
+
+                            <div class="card-block">
+                                <h6 class="mb-4">Total Working Time Last Month</h6>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                        <h3 class="f-w-300 d-flex align-items-center  m-b-0" id="work">
+                                            <script>
+                                                var allData = JSON.parse('{{allData | tojson}}');
+                                                document.getElementById("work").innerHTML = Math.round(allData.LoggedInThisMonth / 60) + " Hours"
+                                            </script>
+                                        </h3>
+                                    </div>
+                                    <br></br>
+                                    <div class="col-9">
+                                        <h5 class="f-w-300 d-flex align-items-center  m-b-0" id="work1">
+                                            <script>
+                                                var allData = JSON.parse('{{allData | tojson}}');
+                                                var x = Math.round(allData.LoggedInThisMonth / 60)
+                                                var y = Math.round(allData.LoggedInLastMonth / 60)
+                                                var per = Math.round((x - y) * 100 / y)
+                                                if (per > 0) {
+                                                    document.getElementById("work1").innerHTML = per + "%"
+                                                } else {
+                                                    document.getElementById("work1").innerHTML = -per + "%"
+                                                }
+                                            </script>
+                                            {% if allData['LoggedInThisMonth'] > allData['LoggedInLastMonth'] %}
+                                            <i class="feather icon-arrow-up text-c-blue f-30 m-r-10"></i> {% else %}
+                                            <i class="feather icon-arrow-down text-c-red f-30 m-r-10"></i> {% endif %}
+
+                                        </h5>
+                                    </div>
+                                    <!--<div class="col-3 text-right">
+                                        <p class="m-b-0">36%</p>
+                                    </div>-->
+                                </div>
+                                <!--<div class="progress m-t-30" style="height: 7px;">
+                                    <div class="progress-bar progress-c-theme2" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--[ Monthly  sales section ] end-->
+                    <!--[ year  sales section ] starts-->
+                    <div class="col-md-12 col-xl-4">
+                        <div class="card yearly-sales">
+                            <div class="card-block">
+                                <h6 class="mb-4">Sync your data</h6>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                        <!-- Use this button to automatically update all your data from company servers. -->
+                                        <button id="myBtn" class="buttonup">SYNC YOUR DATA</button>
+                                        <script>
+                                            // Get the modal
+                                            var modal = document.getElementById("myModal");
+
+                                            // Get the button that opens the modal
+                                            var btn = document.getElementById("myBtn");
+
+                                            // Get the <span> element that closes the modal
+                                            var span = document.getElementsByClassName("close")[0];
+
+                                            // When the user clicks the button, open the modal 
+                                            btn.onclick = function() {
+                                                modal.style.display = "block";
+                                                syncitall();
+                                                move();
+                                            }
+
+                                            // When the user clicks on <span> (x), close the modal
+                                            span.onclick = function() {
+                                                modal.style.display = "none";
+                                            }
+
+                                            // When the user clicks anywhere outside of the modal, close it
+                                            window.onclick = function(event) {
+                                                if (event.target == modal) {
+                                                    modal.style.display = "none";
+                                                }
+                                            }
+                                        </script>
+
+                                    </div>
+                                    <!--<div class="col-3 text-right">
+                                        <p class="m-b-0">80%</p>
+                                    </div>-->
+                                </div>
+                                <!--<div class="progress m-t-30" style="height: 7px;">
+                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--[ year  sales section ] end-->
+                    <!--[ Recent Users ] start-->
+                    <div class="col-xl-8 col-md-6">
+                        <div class="card Recent-Users">
+                            <div class="card-header">
+                                <h5>Upcoming events</h5>
+                            </div>
+                            <script>
+                                var id = 0;
+                                var html = '<img class="rounded-circle" style="width:40px;" src="/static/assets/images/user/avatar-'
+                                var html2 = '.jpg">';
+
+                                function render(i) {
+                                    document.write(html + String(i) + html2);
+                                }
+                            </script>
+
+                            {% for event in events %}
+                            <div id='{{event["Event"]}}'>
+                                <div class="card-block px-0 py-3">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <tbody>
+
+                                                <tr class="unread">
+                                                    <script>
+                                                    </script>
+                                                    <td>
+                                                        <script>
+                                                            render(id % 4 + 1);
+                                                            id++;
+                                                        </script>
+                                                    </td>
+                                                    <td>
+
+                                                        <h6 class="mb-1">{{event["Event"]}}</h6>
+                                                        <p class="m-0">{{event["Description"]}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>{{event["Start"]}}</h6>
+                                                    </td>
+
+                                                    <td>
+                                                        <form method="post" action="/index"> <input type="hidden" id="registerEvent" name="registerEvent" value="{{event['Id']}}">
+                                                            <input type="submit" name="submit" value="Accept" class="label theme-bg text-white f-12"><a href='javascript:document.getElementById("{{event["Event"]}}").hidden=true' class="label theme-bg2 text-white f-12">Reject</a>
+                                                        </form>
+                                                        <!-- </form><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
+                                                <td>
+                                                    
+                                                </td> -->
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>{% endfor %}
+                        </div>
+                    </div>
+                    <!--[ Recent Users ] end-->
+
+                    <!-- [ statistics year chart ] start -->
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card card-event">
+                            <div class="card-block">
+                                {% if attend|length > 0 %}
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col">
+                                        <h5 class="m-0">{{attend[0].Event}}</h5>
+                                    </div>
+
+                                </div>
+                                <h2 class="mt-3 f-w-300">{{ attend[0]["Attending"]|length -1}}<sub class="text-muted f-14">Competitors</sub></h2>
+                                <h6 class="text-muted mt-4 mb-0">{{ attend[0]["Description"] }} </h6>
+                                <i class="fab fa-angellist text-c-purple f-50"></i> {% else %}
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col">
+                                        <h5 class="m-0">Not Attending any Events</h5>
+                                    </div>
+
+                                </div>
+                                <h2 class="mt-3 f-w-300">0<sub class="text-muted f-14">Competitors</sub></h2>
+                                <h6 class="text-muted mt-4 mb-0">None </h6>
+                                <i class="fab fa-angellist text-c-purple f-50"></i> {% endif %}
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-block border-bottom">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-auto">
+                                        <i class="feather icon-zap f-30 text-c-green"></i>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="f-w-300">{{ attend|length }}</h3>
+                                        <span class="d-block text-uppercase">Events Attending</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-auto">
+                                        <i class="feather icon-map-pin f-30 text-c-blue"></i>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="f-w-300">{{ events|length + attend|length }}</h3>
+                                        <span class="d-block text-uppercase">Available Events</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ statistics year chart ] end -->
+                    <!--[social-media section] start-->
+
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock content %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}{% endblock javascripts %}

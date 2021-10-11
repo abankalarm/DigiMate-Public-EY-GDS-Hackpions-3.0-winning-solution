@@ -1,0 +1,295 @@
+{% extends "layouts/adminbase.html" %} {% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    #chartdiv-loggedin,
+    #chartdiv-meetings,
+    #chartdiv-email,
+    #chartdiv-issues,
+    #chartdiv-department {
+        width: 100%;
+        height: 500px;
+    }
+    
+    #chartdiv-offs,
+    #chartdiv-rankingLoggedIn,
+    #chartdiv-rankingOffs {
+        width: 100%;
+        height: 600px;
+    }
+</style>
+{% endblock stylesheets %} {% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <!--[ daily sales section ] start-->
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card daily-sales">
+                            <div class="card-block">
+                                <h6 class="mb-4">Total Departments</h6>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                        <h3 class="f-w-300 d-flex align-items-center m-b-0" id="depts"></h3>
+                                    </div>
+
+                                    <!--<div class="col-3 text-right">
+                                        <p class="m-b-0">67%</p>
+                                    </div>-->
+                                </div>
+                                <!--<div class="progress m-t-30" style="height: 7px;">
+                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--[ daily sales section ] end-->
+                    <!--[ Monthly  sales section ] starts-->
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card Monthly-sales">
+                            <div class="card-block">
+                                <h6 class="mb-4">Total Employees</h6>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                        <h3 class="f-w-300 d-flex align-items-center  m-b-0" id="emps"></h3>
+                                    </div>
+                                    <!--<div class="col-3 text-right">
+                                        <p class="m-b-0">36%</p>
+                                    </div>-->
+                                </div>
+                                <!--<div class="progress m-t-30" style="height: 7px;">
+                                    <div class="progress-bar progress-c-theme2" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--[ Monthly  sales section ] end-->
+                    <!--[ year  sales section ] starts-->
+                    <div class="col-md-12 col-xl-4">
+                        <div class="card yearly-sales">
+                            <div class="card-block">
+                                <h6 class="mb-4">Average Each Employee Working Time Last Month</h6>
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                        <h3 class="f-w-300 d-flex align-items-center  m-b-0" id="times"></h3>
+                                    </div>
+                                    <!--<div class="col-3 text-right">
+                                        <p class="m-b-0">80%</p>
+                                    </div>-->
+                                </div>
+                                <!--<div class="progress m-t-30" style="height: 7px;">
+                                    <div class="progress-bar progress-c-theme" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--[ year  sales section ] end-->
+                    <div class="col-xl-8">
+                        <div class="card-block">
+                            <div id="chartdiv-department"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6">
+                        <div class="card card-event">
+                            <div class="card-block">
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col">
+                                        <h5 class="m-0">Upcoming Event</h5>
+                                    </div>
+                                </div>
+                                {% if events|length >0 %}
+
+                                <div class="col">
+                                    <h5 class="m-0">{{events[0]["Event"]}}</h5>
+                                </div>
+                                <h2 class="mt-3 f-w-300">{{events[0]["Attending"]|length}}<sub class="text-muted f-14">Competitors</sub></h2>
+
+                                {% else %}
+
+                                <div class="col">
+                                    <h5 class="m-0">None</h5>
+                                </div>
+                                {% endif %}
+                                <i class="fab fa-angellist text-c-purple f-50"></i>
+                            </div>
+                        </div>
+                        <div class="card">
+
+                            <div class="card-block">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-auto">
+                                        <i class="feather icon-map-pin f-30 text-c-blue"></i>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="f-w-300">{{events|length}}</h3>
+                                        <span class="d-block text-uppercase">TOTAL Events</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--[ Recent Users ] start-->
+                    <div class="col-xl-12 col-md-6">
+                        <div class="card Recent-Users">
+                            <div class="card-header">
+                                <h5>Upcoming events</h5>
+                            </div>
+                            <script>
+                                var id = 0;
+                                var html = '<img class="rounded-circle" style="width:40px;" src="/static/assets/images/user/avatar-'
+                                var html2 = '.jpg">';
+
+                                function render(i) {
+                                    document.write(html + String(i) + html2);
+                                }
+                            </script>
+
+                            {% for event in events %}
+                            <div id='{{event["Event"]}}'>
+                                <div class="card-block px-0 py-3">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <tbody>
+
+                                                <tr class="unread">
+                                                    <script>
+                                                    </script>
+                                                    <td>
+                                                        <script>
+                                                            render(id % 4 + 1);
+                                                            id++;
+                                                        </script>
+                                                    </td>
+                                                    <td>
+
+                                                        <h6 class="mb-1">{{event["Event"]}}</h6>
+                                                        <p class="m-0">{{event["Description"]}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>{{event["Start"]}}</h6>
+                                                        Number of people participating: {{event["Attending"] | length}}
+                                                    </td>
+
+                                                    </td>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>{% endfor %}
+                        </div>
+                    </div>
+                    <!--[ Recent Users ] end-->
+                    <!--[ Recent Users ] end-->
+
+                    <!-- [ statistics year chart ] start -->
+
+                    <!-- [ statistics year chart ] end -->
+
+                    <!--[social-media section] start-->
+
+                    <!--[social-media section] end-->
+                    <!-- [ rating list ] starts-->
+
+                    <!-- [ rating list ] end-->
+
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock content %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/dataviz.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script>
+        var allData = JSON.parse('{{allData | tojson}}');
+
+        document.getElementById("depts").innerHTML = Object.keys(allData.numberOfEmployees.Count).length;
+
+        document.getElementById("times").innerHTML = Math.round(allData.totalWorkingThisMonth / 60) + " Hours"
+
+        $(document).ready(function() {
+            setTimeout(function() {
+                am4core.ready(function() {
+
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    // create chart
+                    var chart = am4core.create("chartdiv-department", am4charts.TreeMap);
+                    chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
+
+                    chart.data = []
+                    var cnt = 0;
+
+                    for (var i = 0; i < Object.keys(allData.numberOfEmployees.Count).length; i++) {
+                        cnt += allData.numberOfEmployees.Count[i]
+                        chart.data.push({
+                            name: "Employees in",
+                            children: [{
+                                name: allData.numberOfEmployees.Dept[i] + " Department",
+                                value: allData.numberOfEmployees.Count[i]
+                            }]
+                        })
+                    }
+
+                    document.getElementById("emps").innerHTML = cnt;
+
+                    chart.colors.step = 2;
+
+                    // define data fields
+                    chart.dataFields.value = "value";
+                    chart.dataFields.name = "name";
+                    chart.dataFields.children = "children";
+
+                    chart.zoomable = false;
+                    var bgColor = new am4core.InterfaceColorSet().getFor("background");
+
+                    // level 0 series template
+                    var level0SeriesTemplate = chart.seriesTemplates.create("0");
+                    var level0ColumnTemplate = level0SeriesTemplate.columns.template;
+
+                    level0ColumnTemplate.column.cornerRadius(10, 10, 10, 10);
+                    level0ColumnTemplate.fillOpacity = 0;
+                    level0ColumnTemplate.strokeWidth = 4;
+                    level0ColumnTemplate.strokeOpacity = 0;
+
+                    // level 1 series template
+                    var level1SeriesTemplate = chart.seriesTemplates.create("1");
+                    var level1ColumnTemplate = level1SeriesTemplate.columns.template;
+
+                    level1SeriesTemplate.tooltip.animationDuration = 0;
+                    level1SeriesTemplate.strokeOpacity = 1;
+
+                    level1ColumnTemplate.column.cornerRadius(10, 10, 10, 10)
+                    level1ColumnTemplate.fillOpacity = 1;
+                    level1ColumnTemplate.strokeWidth = 4;
+                    level1ColumnTemplate.stroke = bgColor;
+
+                    var bullet1 = level1SeriesTemplate.bullets.push(new am4charts.LabelBullet());
+                    bullet1.locationY = 0.5;
+                    bullet1.locationX = 0.5;
+                    bullet1.label.text = "{name}";
+                    bullet1.label.fill = am4core.color("#ffffff");
+
+                    chart.maxLevels = 2;
+                })
+            }, 700);
+        });
+    </script>
+    {% endblock javascripts %}

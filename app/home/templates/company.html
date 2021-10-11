@@ -1,0 +1,895 @@
+{% extends "layouts/adminbase.html" %} {% block title %} UI Tabs {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    #chartdiv-loggedin,
+    #chartdiv-meetings,
+    #chartdiv-email,
+    #chartdiv-issues,
+    #chartdiv-department {
+        width: 100%;
+        height: 500px;
+    }
+    
+    #chartdiv-offs,
+    #chartdiv-rankingLoggedIn,
+    #chartdiv-rankingOffs {
+        width: 100%;
+        height: 600px;
+    }
+</style>
+{% endblock stylesheets %} {% block content %}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="col-sm-12">
+            <h5 class="mt-4">Analysis</h5>
+            This dashboard allows you to look at your activity and production levels.
+            <hr>
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Department Details</h5>
+                                </div>
+                                <div class="card-block">
+                                    <div id="chartdiv-department"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/dataviz.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script>
+    var d = {
+
+    };
+    $(document).ready(function() {
+        var url = "https://jsonplaceholder.typicode.com/todos";
+        $.getJSON(url, {
+                format: "json"
+            })
+            .done(function(data) {
+                d = [{
+                    'Index': '0',
+                    'username': 'HR1004',
+                    'Month': '01-10-2020',
+                    'SystemLoggedInTime': '12841',
+                    'Email': '2322',
+                    'Meetings': '5138',
+                    'WorkingOnIssues': '5381',
+                    'SystemInactiveTime': '12359',
+                    'Offs': '0'
+                }, {
+                    'Index': '1',
+                    'username': 'HR1004',
+                    'Month': '01-11-2020',
+                    'SystemLoggedInTime': '16778',
+                    'Email': '997',
+                    'Meetings': '1964',
+                    'WorkingOnIssues': '13817',
+                    'SystemInactiveTime': '8422',
+                    'Offs': '1'
+                }, {
+                    'Index': '2',
+                    'username': 'HR1004',
+                    'Month': '01-12-2020',
+                    'SystemLoggedInTime': '16780',
+                    'Email': '2231',
+                    'Meetings': '4185',
+                    'WorkingOnIssues': '10364',
+                    'SystemInactiveTime': '8420',
+                    'Offs': '0'
+                }, {
+                    'Index': '3',
+                    'username': 'HR1004',
+                    'Month': '01-01-2021',
+                    'SystemLoggedInTime': '14438',
+                    'Email': '74',
+                    'Meetings': '1057',
+                    'WorkingOnIssues': '13307',
+                    'SystemInactiveTime': '10762',
+                    'Offs': '0'
+                }, {
+                    'Index': '4',
+                    'username': 'HR1004',
+                    'Month': '01-02-2021',
+                    'SystemLoggedInTime': '19539',
+                    'Email': '2303',
+                    'Meetings': '4966',
+                    'WorkingOnIssues': '12270',
+                    'SystemInactiveTime': '5661',
+                    'Offs': '1'
+                }, {
+                    'Index': '5',
+                    'username': 'HR1004',
+                    'Month': '01-03-2021',
+                    'SystemLoggedInTime': '11401',
+                    'Email': '2255',
+                    'Meetings': '3272',
+                    'WorkingOnIssues': '5874',
+                    'SystemInactiveTime': '13799',
+                    'Offs': '2'
+                }, {
+                    'Index': '6',
+                    'username': 'HR1004',
+                    'Month': '01-04-2021',
+                    'SystemLoggedInTime': '17495',
+                    'Email': '1803',
+                    'Meetings': '1064',
+                    'WorkingOnIssues': '14628',
+                    'SystemInactiveTime': '7705',
+                    'Offs': '1'
+                }, {
+                    'Index': '7',
+                    'username': 'HR1004',
+                    'Month': '01-05-2021',
+                    'SystemLoggedInTime': '5672',
+                    'Email': '732',
+                    'Meetings': '947',
+                    'WorkingOnIssues': '3993',
+                    'SystemInactiveTime': '19528',
+                    'Offs': '0'
+                }, {
+                    'Index': '8',
+                    'username': 'HR1004',
+                    'Month': '01-06-2021',
+                    'SystemLoggedInTime': '16976',
+                    'Email': '1658',
+                    'Meetings': '1043',
+                    'WorkingOnIssues': '14275',
+                    'SystemInactiveTime': '8224',
+                    'Offs': '0'
+                }, {
+                    'Index': '9',
+                    'username': 'HR1004',
+                    'Month': '01-07-2021',
+                    'SystemLoggedInTime': '18647',
+                    'Email': '380',
+                    'Meetings': '4593',
+                    'WorkingOnIssues': '13674',
+                    'SystemInactiveTime': '6553',
+                    'Offs': '0'
+                }, {
+                    'Index': '10',
+                    'username': 'HR1004',
+                    'Month': '01-08-2021',
+                    'SystemLoggedInTime': '6872',
+                    'Email': '920',
+                    'Meetings': '1070',
+                    'WorkingOnIssues': '4882',
+                    'SystemInactiveTime': '18328',
+                    'Offs': '0'
+                }, {
+                    'Index': '11',
+                    'username': 'HR1004',
+                    'Month': '01-09-2021',
+                    'SystemLoggedInTime': '17108',
+                    'Email': '2073',
+                    'Meetings': '4455',
+                    'WorkingOnIssues': '10580',
+                    'SystemInactiveTime': '8092',
+                    'Offs': '0'
+                }];
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        // Themes begin
+                        am4core.useTheme(am4themes_animated);
+                        // Themes end
+                        var chart = am4core.create("chartdiv-department", am4charts.XYChart);
+                        var data = [];
+                        var value = 100050;
+                        console.log(Date.parse(d[0].Month));
+                        for (var i = 0; i < 12; i++) {
+                            dates = d[i].Month.split("-")
+                            dt = dates[1] + "-" + dates[0] + "-" + dates[2];
+                            data.push({
+                                Month: new Date(Date.parse(dt)),
+                                Email: d[i].Email
+                            });
+                        }
+
+                        chart.data = data;
+                        console.log("Email", chart.data);
+                        // Create axes
+                        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                        dateAxis.renderer.minGridDistance = 60;
+
+                        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+                        // Create series
+                        var series = chart.series.push(new am4charts.LineSeries());
+                        series.dataFields.valueY = "Email";
+                        series.dataFields.dateX = "Month";
+                        series.tooltipText = "{Email}"
+
+                        series.tooltip.pointerOrientation = "vertical";
+
+                        chart.cursor = new am4charts.XYCursor();
+                        chart.cursor.snapToSeries = series;
+                        chart.cursor.xAxis = dateAxis;
+
+                        //chart.scrollbarY = new am4core.Scrollbar();
+                        chart.scrollbarX = new am4core.Scrollbar();
+
+                    });
+                }, 700);
+            });
+    });
+
+    var issues = document.getElementById('v-pills-issues-tab');
+    var drawnIssues = false;
+    issues.addEventListener('click', function() {
+        if (!drawnIssues) {
+            setTimeout(function() {
+                am4core.ready(function() {
+                    // Themes begin
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+                    var chart = am4core.create("chartdiv-issues", am4charts.XYChart);
+                    var data = [];
+                    var value = 50;
+                    for (var i = 0; i < 12; i++) {
+                        dates = d[i].Month.split("-")
+                        dt = dates[1] + "-" + dates[0] + "-" + dates[2];
+                        data.push({
+                            Month: new Date(Date.parse(dt)),
+                            Issue: d[i].WorkingOnIssues
+                        });
+                    }
+
+                    chart.data = data;
+                    console.log("issues", chart.data)
+                        // Create axes
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.renderer.minGridDistance = 60;
+
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+                    // Create series
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "Issue";
+                    series.dataFields.dateX = "Month";
+                    series.tooltipText = "{value}"
+
+                    series.tooltip.pointerOrientation = "vertical";
+
+                    chart.cursor = new am4charts.XYCursor();
+                    chart.cursor.snapToSeries = series;
+                    chart.cursor.xAxis = dateAxis;
+
+                    //chart.scrollbarY = new am4core.Scrollbar();
+                    chart.scrollbarX = new am4core.Scrollbar();
+
+                });
+            }, 700);
+            drawnIssues = true;
+        }
+    });
+
+    var meetings = document.getElementById('v-pills-meetings-tab');
+    var drawnMeetings = false;
+
+    meetings.addEventListener('click', function() {
+        if (!drawnMeetings) {
+            setTimeout(function() {
+                am4core.ready(function() {
+                    // Themes begin
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+                    var chart = am4core.create("chartdiv-meetings", am4charts.XYChart);
+                    var data = [];
+                    for (var i = 0; i < 12; i++) {
+                        dates = d[i].Month.split("-")
+                        dt = dates[1] + "-" + dates[0] + "-" + dates[2];
+                        data.push({
+                            Month: new Date(Date.parse(dt)),
+                            Meetings: d[i].Meetings
+                        });
+                    }
+
+                    chart.data = data;
+
+                    // Create axes
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.renderer.minGridDistance = 60;
+
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+
+                    // Create series
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "Meetings";
+                    series.dataFields.dateX = "Month";
+                    series.tooltipText = "{Meetings}"
+
+                    series.tooltip.pointerOrientation = "vertical";
+
+                    chart.cursor = new am4charts.XYCursor();
+                    chart.cursor.snapToSeries = series;
+                    chart.cursor.xAxis = dateAxis;
+
+                    //chart.scrollbarY = new am4core.Scrollbar();
+                    chart.scrollbarX = new am4core.Scrollbar();
+
+                });
+            }, 700);
+            drawnMeetings = true;
+        }
+    });
+
+    var offs = document.getElementById('v-pills-offs-tab');
+    var drawnOffs = false;
+    offs.addEventListener('click', function() {
+        if (!drawnOffs) {
+            setTimeout(function() {
+                am4core.ready(function() {
+                    am4core.useTheme(am4themes_animated);
+                    var chart = am4core.create("chartdiv-offs", am4charts.RadarChart);
+                    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                    chart.data = []
+                    for (var i = 0; i < 12; i++) {
+                        dates = d[i].Month.split("-")
+                        dt = dates[1] + "-" + dates[0] + "-" + dates[2];
+                        chart.data.push({
+                            Month: dates[1] + "-" + dates[2],
+                            Offs: d[i].Offs
+                        })
+                    }
+
+                    chart.padding(20, 20, 20, 20);
+
+                    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                    categoryAxis.dataFields.category = "Month";
+                    categoryAxis.renderer.labels.template.location = 0.5;
+                    categoryAxis.renderer.tooltipLocation = 0.5;
+
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    valueAxis.tooltip.disabled = true;
+                    valueAxis.renderer.labels.template.horizontalCenter = "left";
+                    valueAxis.min = 0;
+
+                    var series1 = chart.series.push(new am4charts.RadarColumnSeries());
+                    series1.columns.template.tooltipText = "{name}: {valueY.value}";
+                    series1.columns.template.width = am4core.percent(80);
+                    series1.name = "Offs";
+                    series1.dataFields.categoryX = "Month";
+                    series1.dataFields.valueY = "Offs";
+                    series1.stacked = true;
+
+                    chart.seriesContainer.zIndex = -1;
+
+                    chart.scrollbarX = new am4core.Scrollbar();
+                    chart.scrollbarX.exportable = false;
+                    chart.scrollbarY = new am4core.Scrollbar();
+                    chart.scrollbarY.exportable = false;
+
+                    chart.cursor = new am4charts.RadarCursor();
+                    chart.cursor.xAxis = categoryAxis;
+                    chart.cursor.fullWidthXLine = true;
+                    chart.cursor.lineX.strokeOpacity = 0;
+                    chart.cursor.lineX.fillOpacity = 0.1;
+                    chart.cursor.lineX.fill = am4core.color("#000000");
+
+                }); // end am4core.ready()
+            }, 700);
+            drawnOffs = true;
+        }
+    });
+
+    var loggedIn = document.getElementById('v-pills-loggedin-tab');
+    var drawnLoggedIn = false;
+    loggedIn.addEventListener('click', function() {
+        if (!drawnLoggedIn) {
+            setTimeout(function() {
+                am4core.ready(function() {
+                    // Themes begin
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+                    // Create chart instance
+                    var chart = am4core.create("chartdiv-loggedin", am4charts.XYChart);
+                    // Add data
+                    chart.data = [];
+                    for (var i = 0; i < 12; i++) {
+                        dates = d[i].Month.split("-")
+                        dt = dates[2] + "-" + dates[1] + "-" + dates[0];
+                        chart.data.push({
+                            date: dt,
+                            Email: d[i].Email,
+                            Meetings: d[i].Meetings,
+                            Issues: d[i].WorkingOnIssues,
+                            LoggedIn: d[i].SystemLoggedInTime
+                        })
+                    }
+
+                    // Create axes
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    //dateAxis.renderer.grid.template.location = 0;
+                    //dateAxis.renderer.minGridDistance = 30;
+
+                    var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
+                    valueAxis1.title.text = "Minutes";
+
+                    var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+                    valueAxis2.title.text = "Work Done";
+                    valueAxis2.renderer.opposite = true;
+                    valueAxis2.renderer.grid.template.disabled = true;
+
+                    // Create series
+                    var series1 = chart.series.push(new am4charts.ColumnSeries());
+                    series1.dataFields.valueY = "Email";
+                    series1.dataFields.dateX = "date";
+                    series1.yAxis = valueAxis1;
+                    series1.name = "Email";
+                    series1.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                    series1.fill = chart.colors.getIndex(0);
+                    series1.strokeWidth = 0;
+                    series1.clustered = false;
+                    series1.columns.template.width = am4core.percent(40);
+
+                    var series2 = chart.series.push(new am4charts.ColumnSeries());
+                    series2.dataFields.valueY = "Meetings";
+                    series2.dataFields.dateX = "date";
+                    series2.yAxis = valueAxis1;
+                    series2.name = "Meetings";
+                    series2.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                    series2.fill = chart.colors.getIndex(0).lighten(0.5);
+                    series2.strokeWidth = 0;
+                    series2.clustered = false;
+                    series2.toBack();
+
+                    var series3 = chart.series.push(new am4charts.ColumnSeries());
+                    series3.dataFields.valueY = "Issues";
+                    series3.dataFields.dateX = "date";
+                    series3.yAxis = valueAxis1;
+                    series3.name = "Issues";
+                    series3.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                    series3.fill = chart.colors.getIndex(2).lighten(0.5);
+                    series3.strokeWidth = 0;
+                    series3.clustered = false;
+                    series3.toBack();
+
+                    var series4 = chart.series.push(new am4charts.LineSeries());
+                    series4.dataFields.valueY = "LoggedIn";
+                    series4.dataFields.dateX = "date";
+                    series4.name = "LoggedIn";
+                    series4.strokeWidth = 2;
+                    series4.tensionX = 0.7;
+                    series4.yAxis = valueAxis2;
+                    series4.tooltipText = "{name}\n[bold font-size: 20]{valueY} Mintues[/]";
+
+                    var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+                    bullet4.circle.radius = 3;
+                    bullet4.circle.strokeWidth = 2;
+                    bullet4.circle.fill = am4core.color("#fff");
+
+                    // Add cursor
+                    chart.cursor = new am4charts.XYCursor();
+
+                    // Add legend
+                    chart.legend = new am4charts.Legend();
+                    chart.legend.position = "top";
+
+                    // Add scrollbar
+                    chart.scrollbarX = new am4charts.XYChartScrollbar();
+                    chart.scrollbarX.series.push(series1);
+                    chart.scrollbarX.series.push(series4);
+                    chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+                }); // end am4core.ready()
+            }, 700);
+            drawnLoggedIn = true;
+        }
+    });
+
+    var dept = document.getElementById('v-pills-department-tab');
+    var drawnDept = false;
+    dept.addEventListener('click', function() {
+        if (!drawnDept) {
+            setTimeout(function() {
+                am4core.ready(function() {
+
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    // create chart
+                    var chart = am4core.create("chartdiv-department", am4charts.TreeMap);
+                    chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
+
+                    chart.data = [{
+                        name: "Employees in",
+                        children: [{
+                            name: "HR Department",
+                            value: 106
+                        }]
+                    }, {
+                        name: "Employees in",
+                        children: [{
+                            name: "Technology Department",
+                            value: 98
+                        }]
+                    }, {
+                        name: "Employees in",
+                        children: [{
+                            name: "Marketing Department",
+                            value: 94
+                        }]
+                    }, {
+                        name: "Employees in",
+                        children: [{
+                            name: "Sales Department",
+                            value: 92
+                        }, ]
+                    }, {
+                        name: "Employees in",
+                        children: [{
+                            name: "Purchasing Department",
+                            value: 109
+                        }, ]
+                    }];
+
+                    chart.colors.step = 2;
+
+                    // define data fields
+                    chart.dataFields.value = "value";
+                    chart.dataFields.name = "name";
+                    chart.dataFields.children = "children";
+
+                    chart.zoomable = false;
+                    var bgColor = new am4core.InterfaceColorSet().getFor("background");
+
+                    // level 0 series template
+                    var level0SeriesTemplate = chart.seriesTemplates.create("0");
+                    var level0ColumnTemplate = level0SeriesTemplate.columns.template;
+
+                    level0ColumnTemplate.column.cornerRadius(10, 10, 10, 10);
+                    level0ColumnTemplate.fillOpacity = 0;
+                    level0ColumnTemplate.strokeWidth = 4;
+                    level0ColumnTemplate.strokeOpacity = 0;
+
+                    // level 1 series template
+                    var level1SeriesTemplate = chart.seriesTemplates.create("1");
+                    var level1ColumnTemplate = level1SeriesTemplate.columns.template;
+
+                    level1SeriesTemplate.tooltip.animationDuration = 0;
+                    level1SeriesTemplate.strokeOpacity = 1;
+
+                    level1ColumnTemplate.column.cornerRadius(10, 10, 10, 10)
+                    level1ColumnTemplate.fillOpacity = 1;
+                    level1ColumnTemplate.strokeWidth = 4;
+                    level1ColumnTemplate.stroke = bgColor;
+
+                    var bullet1 = level1SeriesTemplate.bullets.push(new am4charts.LabelBullet());
+                    bullet1.locationY = 0.5;
+                    bullet1.locationX = 0.5;
+                    bullet1.label.text = "{name}";
+                    bullet1.label.fill = am4core.color("#ffffff");
+
+                    chart.maxLevels = 2;
+
+                });
+            }, 700);
+            drawnDept = true;
+        }
+    });
+
+    var rankingLoggedIn = document.getElementById('v-pills-rankingLoggedIn-tab');
+    var drawnRankingLoggedIn = false;
+    rankingLoggedIn.addEventListener('click', function() {
+        if (!drawnRankingLoggedIn) {
+            setTimeout(function() {
+                am4core.ready(function() {
+
+                    // Themes begin
+                    am4core.useTheme(am4themes_dataviz);
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    /**
+                     * Chart design taken from Samsung health app
+                     */
+
+                    var chart = am4core.create("chartdiv-rankingLoggedIn", am4charts.XYChart);
+                    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                    chart.paddingRight = 40;
+
+                    chart.data = [{
+                        "name": "Monica",
+                        "steps": 45688,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/monica.jpg"
+                    }, {
+                        "name": "Joey",
+                        "steps": 35781,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/joey.jpg"
+                    }, {
+                        "name": "Ross",
+                        "steps": 25464,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/ross.jpg"
+                    }, {
+                        "name": "Phoebe",
+                        "steps": 18788,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/phoebe.jpg"
+                    }, {
+                        "name": "Rachel",
+                        "steps": 15465,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/rachel.jpg"
+                    }, {
+                        "name": "Chandler",
+                        "steps": 11561,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/chandler.jpg"
+                    }];
+
+                    var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+                    categoryAxis.dataFields.category = "name";
+                    categoryAxis.renderer.grid.template.strokeOpacity = 0;
+                    categoryAxis.renderer.minGridDistance = 10;
+                    categoryAxis.renderer.labels.template.dx = -40;
+                    categoryAxis.renderer.minWidth = 120;
+                    categoryAxis.renderer.tooltip.dx = -40;
+
+                    var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+                    valueAxis.renderer.inside = true;
+                    valueAxis.renderer.labels.template.fillOpacity = 0.3;
+                    valueAxis.renderer.grid.template.strokeOpacity = 0;
+                    valueAxis.min = 0;
+                    valueAxis.cursorTooltipEnabled = false;
+                    valueAxis.renderer.baseGrid.strokeOpacity = 0;
+                    valueAxis.renderer.labels.template.dy = 20;
+
+                    var series = chart.series.push(new am4charts.ColumnSeries);
+                    series.dataFields.valueX = "steps";
+                    series.dataFields.categoryY = "name";
+                    series.tooltipText = "{valueX.value}";
+                    series.tooltip.pointerOrientation = "vertical";
+                    series.tooltip.dy = -30;
+                    series.columnsContainer.zIndex = 100;
+
+                    var columnTemplate = series.columns.template;
+                    columnTemplate.height = am4core.percent(50);
+                    columnTemplate.maxHeight = 50;
+                    columnTemplate.column.cornerRadius(60, 10, 60, 10);
+                    columnTemplate.strokeOpacity = 0;
+
+                    series.heatRules.push({
+                        target: columnTemplate,
+                        property: "fill",
+                        dataField: "valueX",
+                        min: am4core.color("#e5dc36"),
+                        max: am4core.color("#5faa46")
+                    });
+                    series.mainContainer.mask = undefined;
+
+                    var cursor = new am4charts.XYCursor();
+                    chart.cursor = cursor;
+                    cursor.lineX.disabled = true;
+                    cursor.lineY.disabled = true;
+                    cursor.behavior = "none";
+
+                    var bullet = columnTemplate.createChild(am4charts.CircleBullet);
+                    bullet.circle.radius = 30;
+                    bullet.valign = "middle";
+                    bullet.align = "left";
+                    bullet.isMeasured = true;
+                    bullet.interactionsEnabled = false;
+                    bullet.horizontalCenter = "right";
+                    bullet.interactionsEnabled = false;
+
+                    var hoverState = bullet.states.create("hover");
+                    var outlineCircle = bullet.createChild(am4core.Circle);
+                    outlineCircle.adapter.add("radius", function(radius, target) {
+                        var circleBullet = target.parent;
+                        return circleBullet.circle.pixelRadius + 10;
+                    })
+
+                    var image = bullet.createChild(am4core.Image);
+                    image.width = 60;
+                    image.height = 60;
+                    image.horizontalCenter = "middle";
+                    image.verticalCenter = "middle";
+                    image.propertyFields.href = "href";
+
+                    image.adapter.add("mask", function(mask, target) {
+                        var circleBullet = target.parent;
+                        return circleBullet.circle;
+                    })
+
+                    var previousBullet;
+                    chart.cursor.events.on("cursorpositionchanged", function(event) {
+                        var dataItem = series.tooltipDataItem;
+
+                        if (dataItem.column) {
+                            var bullet = dataItem.column.children.getIndex(1);
+
+                            if (previousBullet && previousBullet != bullet) {
+                                previousBullet.isHover = false;
+                            }
+
+                            if (previousBullet != bullet) {
+
+                                var hs = bullet.states.getKey("hover");
+                                hs.properties.dx = dataItem.column.pixelWidth;
+                                bullet.isHover = true;
+
+                                previousBullet = bullet;
+                            }
+                        }
+                    })
+
+                });
+            }, 700);
+            drawnRankingLoggedIn = true;
+        }
+    });
+
+
+    var rankingOffs = document.getElementById('v-pills-rankingOffs-tab');
+    var drawnRankingOffs = false;
+    rankingOffs.addEventListener('click', function() {
+        if (!drawnRankingOffs) {
+            setTimeout(function() {
+                am4core.ready(function() {
+
+                    // Themes begin
+                    am4core.useTheme(am4themes_dataviz);
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    /**
+                     * Chart design taken from Samsung health app
+                     */
+
+                    var chart = am4core.create("chartdiv-rankingOffs", am4charts.XYChart);
+                    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                    chart.paddingRight = 40;
+
+                    chart.data = [{
+                        "name": "Monica",
+                        "steps": 38000,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/monica.jpg"
+                    }, {
+                        "name": "Joey",
+                        "steps": 40581,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/joey.jpg"
+                    }, {
+                        "name": "Ross",
+                        "steps": 58464,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/ross.jpg"
+                    }, {
+                        "name": "Phoebe",
+                        "steps": 60788,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/phoebe.jpg"
+                    }, {
+                        "name": "Rachel",
+                        "steps": 85465,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/rachel.jpg"
+                    }, {
+                        "name": "Chandler",
+                        "steps": 110000,
+                        "href": "https://www.amcharts.com/wp-content/uploads/2019/04/chandler.jpg"
+                    }];
+
+                    var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+                    categoryAxis.dataFields.category = "name";
+                    categoryAxis.renderer.grid.template.strokeOpacity = 0;
+                    categoryAxis.renderer.minGridDistance = 10;
+                    categoryAxis.renderer.labels.template.dx = -40;
+                    categoryAxis.renderer.minWidth = 120;
+                    categoryAxis.renderer.tooltip.dx = -40;
+
+                    var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+                    valueAxis.renderer.inside = true;
+                    valueAxis.renderer.labels.template.fillOpacity = 0.3;
+                    valueAxis.renderer.grid.template.strokeOpacity = 0;
+                    valueAxis.min = 0;
+                    valueAxis.cursorTooltipEnabled = false;
+                    valueAxis.renderer.baseGrid.strokeOpacity = 0;
+                    valueAxis.renderer.labels.template.dy = 20;
+
+                    var series = chart.series.push(new am4charts.ColumnSeries);
+                    series.dataFields.valueX = "steps";
+                    series.dataFields.categoryY = "name";
+                    series.tooltipText = "{valueX.value}";
+                    series.tooltip.pointerOrientation = "vertical";
+                    series.tooltip.dy = -30;
+                    series.columnsContainer.zIndex = 100;
+
+                    var columnTemplate = series.columns.template;
+                    columnTemplate.height = am4core.percent(50);
+                    columnTemplate.maxHeight = 50;
+                    columnTemplate.column.cornerRadius(60, 10, 60, 10);
+                    columnTemplate.strokeOpacity = 0;
+
+                    series.heatRules.push({
+                        target: columnTemplate,
+                        property: "fill",
+                        dataField: "valueX",
+                        min: am4core.color("red").lighten(0.5),
+                        max: am4core.color("red")
+                    });
+                    series.mainContainer.mask = undefined;
+
+                    var cursor = new am4charts.XYCursor();
+                    chart.cursor = cursor;
+                    cursor.lineX.disabled = true;
+                    cursor.lineY.disabled = true;
+                    cursor.behavior = "none";
+
+                    var bullet = columnTemplate.createChild(am4charts.CircleBullet);
+                    bullet.circle.radius = 30;
+                    bullet.valign = "middle";
+                    bullet.align = "left";
+                    bullet.isMeasured = true;
+                    bullet.interactionsEnabled = false;
+                    bullet.horizontalCenter = "right";
+                    bullet.interactionsEnabled = false;
+
+                    var hoverState = bullet.states.create("hover");
+                    var outlineCircle = bullet.createChild(am4core.Circle);
+                    outlineCircle.adapter.add("radius", function(radius, target) {
+                        var circleBullet = target.parent;
+                        return circleBullet.circle.pixelRadius + 10;
+                    })
+
+                    var image = bullet.createChild(am4core.Image);
+                    image.width = 60;
+                    image.height = 60;
+                    image.horizontalCenter = "middle";
+                    image.verticalCenter = "middle";
+                    image.propertyFields.href = "href";
+
+                    image.adapter.add("mask", function(mask, target) {
+                        var circleBullet = target.parent;
+                        return circleBullet.circle;
+                    })
+
+                    var previousBullet;
+                    chart.cursor.events.on("cursorpositionchanged", function(event) {
+                        var dataItem = series.tooltipDataItem;
+
+                        if (dataItem.column) {
+                            var bullet = dataItem.column.children.getIndex(1);
+
+                            if (previousBullet && previousBullet != bullet) {
+                                previousBullet.isHover = false;
+                            }
+
+                            if (previousBullet != bullet) {
+
+                                var hs = bullet.states.getKey("hover");
+                                hs.properties.dx = dataItem.column.pixelWidth;
+                                bullet.isHover = true;
+
+                                previousBullet = bullet;
+                            }
+                        }
+                    })
+
+                });
+            }, 700);
+            drawnRankingOffs = true;
+        }
+    });
+</script>
+
+{% endblock javascripts %}

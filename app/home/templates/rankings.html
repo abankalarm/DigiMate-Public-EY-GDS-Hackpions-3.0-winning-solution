@@ -1,0 +1,546 @@
+{% extends "layouts/adminbase.html" %} {% block title %} UI Tabs {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    #chartdiv-rankingLoggedIn,
+    #chartdiv-rankingOffs,
+    #chartdiv-loggedin {
+        width: 100%;
+        height: 600px;
+    }
+    #chartdiv-gender {
+        width: 60%;
+        height: 600px;
+        margin-bottom: 50px;
+    }
+    #chartdiv-gender-sal {
+        width: 40%;
+        height: 600px;
+        margin-bottom: 50px;
+    }
+</style>
+{% endblock stylesheets %} {% block content %}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="col-sm-12">
+            <h5 class="mt-4">Analysis</h5>
+            This dashboard allows you to look at your activity and production levels.
+            <div class="row">
+                    <div id="chartdiv-gender"></div>
+                    <div id="chartdiv-gender-sal"></div>
+            </div>
+            <!--<div id="chartdiv-gender-level"></div>-->
+            <div id="chartdiv-loggedin"></div>
+            <hr>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <li><a class="nav-link text-left active" id="v-pills-rankingLoggedIn-tab" data-toggle="pill" href="#v-pills-rankingLoggedIn" role="tab" aria-controls="v-pills-rankingLoggedIn" aria-selected="true">Ranking System LoggedIn</a></li>
+                        <li><a class="nav-link text-left" id="v-pills-rankingOffs-tab" data-toggle="pill" href="#v-pills-rankingOffs" role="tab" aria-controls="v-pills-rankingOffs" aria-selected="false">Ranking Offs</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-rankingLoggedIn" role="tabpanel" aria-labelledby="v-pills-rankingLoggedIn-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Ranking System LoggedIn</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-rankingLoggedIn"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-rankingOffs" role="tabpanel" aria-labelledby="v-pills-rankingOffs-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Ranking Offs</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-rankingOffs"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    {% endblock content %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}
+
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/dataviz.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script>
+        var allData = JSON.parse('{{allData | tojson}}');
+        console.log(allData)
+        $(document).ready(function() {
+            setTimeout(function() {
+                am4core.ready(function() {
+
+                    // Themes begin
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    // Create chart instance
+                    var chart = am4core.create("chartdiv-gender-sal", am4charts.XYChart3D);
+
+                    chart.data = []
+                    // Add data
+                    for(var i = 0; i < Object.keys(allData.gender.Gender).length; i++) {
+                        chart.data.push({
+                            "Salary": Math.round(allData.gender.AvgSalary[i]),
+                            "Gender": allData.gender.Gender[i]
+                        });
+                    }
+
+                    // Create axes
+                    let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                    categoryAxis.dataFields.category = "Gender";
+                    categoryAxis.renderer.labels.template.rotation = 270;
+                    categoryAxis.renderer.labels.template.hideOversized = false;
+                    categoryAxis.renderer.minGridDistance = 20;
+                    categoryAxis.renderer.labels.template.horizontalCenter = "right";
+                    categoryAxis.renderer.labels.template.verticalCenter = "middle";
+                    categoryAxis.tooltip.label.rotation = 270;
+                    categoryAxis.tooltip.label.horizontalCenter = "right";
+                    categoryAxis.tooltip.label.verticalCenter = "middle";
+
+                    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    valueAxis.title.text = "Gender vs Salary";
+                    valueAxis.title.fontWeight = "bold";
+
+                    // Create series
+                    var series = chart.series.push(new am4charts.ColumnSeries3D());
+                    series.dataFields.valueY = "Salary";
+                    series.dataFields.categoryX = "Gender";
+                    series.name = "Salary";
+                    series.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+                    series.columns.template.fillOpacity = .8;
+
+                    var columnTemplate = series.columns.template;
+                    columnTemplate.strokeWidth = 2;
+                    columnTemplate.strokeOpacity = 1;
+                    columnTemplate.stroke = am4core.color("#FFFFFF");
+
+                    columnTemplate.adapter.add("fill", function(fill, target) {
+                    return chart.colors.getIndex(target.dataItem.index);
+                    })
+
+                    columnTemplate.adapter.add("stroke", function(stroke, target) {
+                    return chart.colors.getIndex(target.dataItem.index);
+                    })
+
+                    chart.cursor = new am4charts.XYCursor();
+                    chart.cursor.lineX.strokeOpacity = 0;
+                    chart.cursor.lineY.strokeOpacity = 0;
+
+                    });
+                am4core.ready(function() {
+
+                    // Themes begin
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    var chart = am4core.create("chartdiv-gender", am4charts.PieChart3D);
+                    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                    chart.data = [];
+
+                    for(var i = 0; i < Object.keys(allData.gender.Gender).length; i++) {
+                        chart.data.push({
+                            Number: allData.gender.Count[i],
+                            Gender: allData.gender.Gender[i]
+                        });
+                    }
+
+                    chart.innerRadius = am4core.percent(20);
+                    chart.outerRadius = am4core.percent(50);
+                    chart.depth = 60;
+
+                    chart.legend = new am4charts.Legend();
+
+                    var series = chart.series.push(new am4charts.PieSeries3D());
+                    series.dataFields.value = "Number";
+                    series.dataFields.depthValue = "Number";
+                    series.dataFields.category = "Gender";
+                    series.slices.template.cornerRadius = 5;
+                    series.colors.step = 3;
+
+                    });
+
+                 am4core.ready(function() {
+                        // Themes begin
+                        am4core.useTheme(am4themes_animated);
+                        // Themes end
+                        // Create chart instance
+                        var chart = am4core.create("chartdiv-loggedin", am4charts.XYChart);
+                        // Add data
+                        chart.data = [];
+                        for (var i = 0; i < 12; i++) {
+                            dates = allData.companyAvg.Month[i % 12]
+                            chart.data.push({
+                                date: dates,
+                                Email: Math.round(allData.companyAvg.TotalEmail[i]),
+                                Meetings: Math.round(allData.companyAvg.TotalMeetings[i]),
+                                Issues: Math.round(allData.companyAvg.TotalIssues[i]),
+                                LoggedIn: Math.round(allData.companyAvg.TotalEmail[i]) + Math.round(allData.companyAvg.TotalMeetings[i]) + Math.round(allData.companyAvg.TotalIssues[i])
+                            })
+                        }
+
+                        // Create axes
+                        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                        //dateAxis.renderer.grid.template.location = 0;
+                        //dateAxis.renderer.minGridDistance = 30;
+
+                        var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis1.title.text = "Minutes";
+
+                        var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis2.title.text = "Work Done";
+                        valueAxis2.renderer.opposite = true;
+                        valueAxis2.renderer.grid.template.disabled = true;
+
+                        // Create series
+                        var series1 = chart.series.push(new am4charts.ColumnSeries());
+                        series1.dataFields.valueY = "Email";
+                        series1.dataFields.dateX = "date";
+                        series1.yAxis = valueAxis1;
+                        series1.name = "Email";
+                        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series1.fill = chart.colors.getIndex(0);
+                        series1.strokeWidth = 0;
+                        series1.clustered = false;
+                        series1.columns.template.width = am4core.percent(40);
+
+                        var series2 = chart.series.push(new am4charts.ColumnSeries());
+                        series2.dataFields.valueY = "Meetings";
+                        series2.dataFields.dateX = "date";
+                        series2.yAxis = valueAxis1;
+                        series2.name = "Meetings";
+                        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series2.fill = chart.colors.getIndex(0).lighten(0.5);
+                        series2.strokeWidth = 0;
+                        series2.clustered = false;
+                        series2.toBack();
+
+                        var series3 = chart.series.push(new am4charts.ColumnSeries());
+                        series3.dataFields.valueY = "Issues";
+                        series3.dataFields.dateX = "date";
+                        series3.yAxis = valueAxis1;
+                        series3.name = "Issues";
+                        series3.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series3.fill = chart.colors.getIndex(2).lighten(0.5);
+                        series3.strokeWidth = 0;
+                        series3.clustered = false;
+                        series3.toBack();
+
+                        var series4 = chart.series.push(new am4charts.LineSeries());
+                        series4.dataFields.valueY = "LoggedIn";
+                        series4.dataFields.dateX = "date";
+                        series4.name = "LoggedIn";
+                        series4.strokeWidth = 2;
+                        series4.tensionX = 0.7;
+                        series4.yAxis = valueAxis2;
+                        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY} Mintues[/]";
+
+                        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+                        bullet4.circle.radius = 3;
+                        bullet4.circle.strokeWidth = 2;
+                        bullet4.circle.fill = am4core.color("#fff");
+
+                        // Add cursor
+                        chart.cursor = new am4charts.XYCursor();
+
+                        // Add legend
+                        chart.legend = new am4charts.Legend();
+                        chart.legend.position = "top";
+
+                        // Add scrollbar
+                        chart.scrollbarX = new am4charts.XYChartScrollbar();
+                        chart.scrollbarX.series.push(series1);
+                        chart.scrollbarX.series.push(series4);
+                        chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+                    }); // end am4core.ready()
+
+                am4core.ready(function() {
+                    am4core.useTheme(am4themes_dataviz);
+                        am4core.useTheme(am4themes_animated);
+                        var chart = am4core.create("chartdiv-rankingLoggedIn", am4charts.XYChart);
+                        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                        chart.paddingRight = 40;
+
+                        chart.data = [];
+
+                        for(var i = 5; i >= 0 ; i--) {
+                            chart.data.push({
+                                'name': allData.topSixLoggedIn.username[i],
+                                'LoggedInTime': allData.topSixLoggedIn.TotalTime[i],
+                                "href": "/static/assets/images/user/avatar-" + ((i % 4) + 1) + ".jpg"
+                            })
+                        }
+
+                        var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+                        categoryAxis.dataFields.category = "name";
+                        categoryAxis.renderer.grid.template.strokeOpacity = 0;
+                        categoryAxis.renderer.minGridDistance = 10;
+                        categoryAxis.renderer.labels.template.dx = -40;
+                        categoryAxis.renderer.minWidth = 120;
+                        categoryAxis.renderer.tooltip.dx = -40;
+
+                        var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+                        valueAxis.renderer.inside = true;
+                        valueAxis.renderer.labels.template.fillOpacity = 0.3;
+                        valueAxis.renderer.grid.template.strokeOpacity = 0;
+                        valueAxis.min = 0;
+                        valueAxis.cursorTooltipEnabled = false;
+                        valueAxis.renderer.baseGrid.strokeOpacity = 0;
+                        valueAxis.renderer.labels.template.dy = 20;
+
+                        var series = chart.series.push(new am4charts.ColumnSeries);
+                        series.dataFields.valueX = "LoggedInTime";
+                        series.dataFields.categoryY = "name";
+                        series.tooltipText = "{valueX.value}";
+                        series.tooltip.pointerOrientation = "vertical";
+                        series.tooltip.dy = -30;
+                        series.columnsContainer.zIndex = 100;
+
+                        var columnTemplate = series.columns.template;
+                        columnTemplate.height = am4core.percent(50);
+                        columnTemplate.maxHeight = 50;
+                        columnTemplate.column.cornerRadius(60, 10, 60, 10);
+                        columnTemplate.strokeOpacity = 0;
+
+                        series.heatRules.push({
+                            target: columnTemplate,
+                            property: "fill",
+                            dataField: "valueX",
+                            min: am4core.color("#e5dc36"),
+                            max: am4core.color("#5faa46")
+                        });
+                        series.mainContainer.mask = undefined;
+
+                        var cursor = new am4charts.XYCursor();
+                        chart.cursor = cursor;
+                        cursor.lineX.disabled = true;
+                        cursor.lineY.disabled = true;
+                        cursor.behavior = "none";
+
+                        var bullet = columnTemplate.createChild(am4charts.CircleBullet);
+                        bullet.circle.radius = 30;
+                        bullet.valign = "middle";
+                        bullet.align = "left";
+                        bullet.isMeasured = true;
+                        bullet.interactionsEnabled = false;
+                        bullet.horizontalCenter = "right";
+                        bullet.interactionsEnabled = false;
+
+                        var hoverState = bullet.states.create("hover");
+                        var outlineCircle = bullet.createChild(am4core.Circle);
+                        outlineCircle.adapter.add("radius", function(radius, target) {
+                            var circleBullet = target.parent;
+                            return circleBullet.circle.pixelRadius + 10;
+                        })
+
+                        var image = bullet.createChild(am4core.Image);
+                        image.width = 60;
+                        image.height = 60;
+                        image.horizontalCenter = "middle";
+                        image.verticalCenter = "middle";
+                        image.propertyFields.href = "href";
+
+                        image.adapter.add("mask", function(mask, target) {
+                            var circleBullet = target.parent;
+                            return circleBullet.circle;
+                        })
+
+                        var previousBullet;
+                        chart.cursor.events.on("cursorpositionchanged", function(event) {
+                            var dataItem = series.tooltipDataItem;
+
+                            if (dataItem.column) {
+                                var bullet = dataItem.column.children.getIndex(1);
+
+                                if (previousBullet && previousBullet != bullet) {
+                                    previousBullet.isHover = false;
+                                }
+
+                                if (previousBullet != bullet) {
+
+                                    var hs = bullet.states.getKey("hover");
+                                    hs.properties.dx = dataItem.column.pixelWidth;
+                                    bullet.isHover = true;
+
+                                    previousBullet = bullet;
+                                }
+                            }
+                        })
+
+                    });
+                }, 700);
+        });
+
+
+        var rankingOffs = document.getElementById('v-pills-rankingOffs-tab');
+        var drawnRankingOffs = false;
+        rankingOffs.addEventListener('click', function() {
+            if (!drawnRankingOffs) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+
+                        // Themes begin
+                        am4core.useTheme(am4themes_dataviz);
+                        am4core.useTheme(am4themes_animated);
+                        // Themes end
+
+                        /**
+                         * Chart design taken from Samsung health app
+                         */
+
+                        var chart = am4core.create("chartdiv-rankingOffs", am4charts.XYChart);
+                        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                        chart.paddingRight = 40;
+
+                        chart.data = [];
+
+                        for(var i = 5; i >= 0 ; i--) {
+                            chart.data.push({
+                                'name': allData.topSixOffs.username[i],
+                                'Offs': allData.topSixOffs.TotalOffs[i],
+                                "href": "/static/assets/images/user/avatar-" + ((i % 4) + 1) + ".jpg"
+                            })
+                        }
+
+                        var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+                        categoryAxis.dataFields.category = "name";
+                        categoryAxis.renderer.grid.template.strokeOpacity = 0;
+                        categoryAxis.renderer.minGridDistance = 10;
+                        categoryAxis.renderer.labels.template.dx = -40;
+                        categoryAxis.renderer.minWidth = 120;
+                        categoryAxis.renderer.tooltip.dx = -40;
+
+                        var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+                        valueAxis.renderer.inside = true;
+                        valueAxis.renderer.labels.template.fillOpacity = 0.3;
+                        valueAxis.renderer.grid.template.strokeOpacity = 0;
+                        valueAxis.min = 0;
+                        valueAxis.cursorTooltipEnabled = false;
+                        valueAxis.renderer.baseGrid.strokeOpacity = 0;
+                        valueAxis.renderer.labels.template.dy = 20;
+
+                        var series = chart.series.push(new am4charts.ColumnSeries);
+                        series.dataFields.valueX = "Offs";
+                        series.dataFields.categoryY = "name";
+                        series.tooltipText = "{valueX.value}";
+                        series.tooltip.pointerOrientation = "vertical";
+                        series.tooltip.dy = -30;
+                        series.columnsContainer.zIndex = 100;
+
+                        var columnTemplate = series.columns.template;
+                        columnTemplate.height = am4core.percent(50);
+                        columnTemplate.maxHeight = 50;
+                        columnTemplate.column.cornerRadius(60, 10, 60, 10);
+                        columnTemplate.strokeOpacity = 0;
+
+                        series.heatRules.push({
+                            target: columnTemplate,
+                            property: "fill",
+                            dataField: "valueX",
+                            min: am4core.color("red").lighten(0.5),
+                            max: am4core.color("red")
+                        });
+                        series.mainContainer.mask = undefined;
+
+                        var cursor = new am4charts.XYCursor();
+                        chart.cursor = cursor;
+                        cursor.lineX.disabled = true;
+                        cursor.lineY.disabled = true;
+                        cursor.behavior = "none";
+
+                        var bullet = columnTemplate.createChild(am4charts.CircleBullet);
+                        bullet.circle.radius = 30;
+                        bullet.valign = "middle";
+                        bullet.align = "left";
+                        bullet.isMeasured = true;
+                        bullet.interactionsEnabled = false;
+                        bullet.horizontalCenter = "right";
+                        bullet.interactionsEnabled = false;
+
+                        var hoverState = bullet.states.create("hover");
+                        var outlineCircle = bullet.createChild(am4core.Circle);
+                        outlineCircle.adapter.add("radius", function(radius, target) {
+                            var circleBullet = target.parent;
+                            return circleBullet.circle.pixelRadius + 10;
+                        })
+
+                        var image = bullet.createChild(am4core.Image);
+                        image.width = 60;
+                        image.height = 60;
+                        image.horizontalCenter = "middle";
+                        image.verticalCenter = "middle";
+                        image.propertyFields.href = "href";
+
+                        image.adapter.add("mask", function(mask, target) {
+                            var circleBullet = target.parent;
+                            return circleBullet.circle;
+                        })
+
+                        var previousBullet;
+                        chart.cursor.events.on("cursorpositionchanged", function(event) {
+                            var dataItem = series.tooltipDataItem;
+
+                            if (dataItem.column) {
+                                var bullet = dataItem.column.children.getIndex(1);
+
+                                if (previousBullet && previousBullet != bullet) {
+                                    previousBullet.isHover = false;
+                                }
+
+                                if (previousBullet != bullet) {
+
+                                    var hs = bullet.states.getKey("hover");
+                                    hs.properties.dx = dataItem.column.pixelWidth;
+                                    bullet.isHover = true;
+
+                                    previousBullet = bullet;
+                                }
+                            }
+                        })
+
+                    });
+                }, 700);
+                drawnRankingOffs = true;
+            }
+        });
+    </script>
+
+    {% endblock javascripts %}

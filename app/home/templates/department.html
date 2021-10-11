@@ -1,0 +1,1890 @@
+{% extends "layouts/adminbase.html" %} {% block title %} UI Tabs {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    #chartdiv-loggedin-t,
+    #chartdiv-loggedin-h,
+    #chartdiv-loggedin-m,
+    #chartdiv-loggedin-s,
+    #chartdiv-loggedin-p,
+    #chartdiv-meetings,
+    #chartdiv-email,
+    #chartdiv-issues,
+    #chartdiv-offs,
+    #chartdiv-rankingLoggedIn,
+    #chartdiv-rankingOffs {
+        width: 100%;
+        height: 600px;
+    }
+</style>
+{% endblock stylesheets %} {% block content %}
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <div class="col-sm-12">
+            <h5 class="mt-4">Analysis</h5>
+            This dashboard allows you to look at Department Wise activity and production levels.
+            <hr>
+            <div class="row">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-hdept-tab" data-toggle="pill" href="#pills-hdept" role="tab" aria-controls="pills-hdept" aria-selected="true">HR Department</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-tdept-tab" data-toggle="pill" href="#pills-tdept" role="tab" aria-controls="pills-tdept" aria-selected="false">Tech Department</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-mdept-tab" data-toggle="pill" href="#pills-mdept" role="tab" aria-controls="pills-mdept" aria-selected="false">Marketing Department</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-pdept-tab" data-toggle="pill" href="#pills-pdept" role="tab" aria-controls="pills-pdept" aria-selected="false">Purchase Department</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-sdept-tab" data-toggle="pill" href="#pills-sdept" role="tab" aria-controls="pills-sdept" aria-selected="false">Sales Department</a>
+                    </li>
+                </ul>
+            </div>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-hdept" role="tabpanel" aria-labelledby="pills-hdept-tab">
+                        <div id = "chartdiv-loggedin-h"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-tdept" role="tabpanel" aria-labelledby="pills-tdept-tab">
+                        <div id = "chartdiv-loggedin-t"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-mdept" role="tabpanel" aria-labelledby="pills-mdept-tab">
+                        <div id = "chartdiv-loggedin-m"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-pdept" role="tabpanel" aria-labelledby="pills-pdept-tab">
+                        <div id = "chartdiv-loggedin-p"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-sdept" role="tabpanel" aria-labelledby="pills-sdept-tab">
+                        <div id = "chartdiv-loggedin-s"></div>
+                    </div>
+                </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+                        <li><a class="nav-link text-left active" id="v-pills-email-tab" data-toggle="pill" href="#v-pills-email" role="tab" aria-controls="v-pills-email" aria-selected="true">Emails </a></li>
+
+                        <li><a class="nav-link text-left" id="v-pills-meetings-tab" data-toggle="pill" href="#v-pills-meetings" role="tab" aria-controls="v-pills-meetings" aria-selected="false">Meetings </a></li>
+                        
+
+                        <li><a class="nav-link text-left" id="v-pills-issues-tab" data-toggle="pill" href="#v-pills-issues" role="tab" aria-controls="v-pills-issues" aria-selected="false">Working On Issues</a></li>
+
+                        <!--<li><a class="nav-link text-left" id="v-pills-loggedin-tab" data-toggle="pill" href="#v-pills-loggedin" role="tab" aria-controls="v-pills-loggedin" aria-selected="false">System LoggedIn Time</a></li>-->
+                        <li><a class="nav-link text-left" id="v-pills-offs-tab" data-toggle="pill" href="#v-pills-offs" role="tab" aria-controls="v-pills-offs" aria-selected="false">Offs Last Year</a></li>
+                        <!--<li><a class="nav-link text-left" id="v-pills-rankingLoggedIn-tab" data-toggle="pill" href="#v-pills-rankingLoggedIn" role="tab" aria-controls="v-pills-rankingLoggedIn" aria-selected="false">Ranking System LoggedIn</a></li>
+                        <li><a class="nav-link text-left" id="v-pills-rankingOffs-tab" data-toggle="pill" href="#v-pills-rankingOffs" role="tab" aria-controls="v-pills-rankingOffs" aria-selected="false">Ranking Offs</a></li>-->
+                    </ul>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        
+                        <div class="tab-pane fade show active" id="v-pills-email" role="tabpanel" aria-labelledby="v-pills-email-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Time Spent on Emails comparison with Company Average</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-email"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-meetings" role="tabpanel" aria-labelledby="v-pills-meetings-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Time Spent on Meetings comparison with Company Average</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-meetings"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-issues" role="tabpanel" aria-labelledby="v-pills-issues-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Time Spent on Resolving Issues comparison with Company Average</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-issues"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<div class="tab-pane fade" id="v-pills-loggedin" role="tabpanel" aria-labelledby="v-pills-loggedin-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="col-xl-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>System LoggedIn Time</h5>
+                                            </div>
+                                            <div class="card-block">
+                                                <div id="chartdiv-loggedin"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
+                        <div class="tab-pane fade" id="v-pills-offs" role="tabpanel" aria-labelledby="v-pills-offs-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Offs Last Year comparison with Company Average</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-offs"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!--<div class="tab-pane fade" id="v-pills-rankingLoggedIn" role="tabpanel" aria-labelledby="v-pills-rankingLoggedIn-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Ranking System LoggedIn</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-rankingLoggedIn"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-rankingOffs" role="tabpanel" aria-labelledby="v-pills-rankingOffs-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Ranking Offs</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-rankingOffs"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    {% endblock content %}
+
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}
+
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/dataviz.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script>
+        var allData = JSON.parse('{{allData | tojson}}');
+        console.log(allData)
+        $(document).ready(function() {
+            setTimeout(function() {
+
+                am4core.ready(function() {
+                        // Themes begin
+                        am4core.useTheme(am4themes_animated);
+                        // Themes end
+                        // Create chart instance
+                        var chart = am4core.create("chartdiv-loggedin-h", am4charts.XYChart);
+                        // Add data
+                        chart.data = [];
+                        for (var i = 0; i < 12; i++) {
+                            dates = allData.monthWise.HR.Month[i]
+                            chart.data.push({
+                                date: dates,
+                                Email: allData.monthWise.HR.TotalEmail[i],
+                                Meetings: allData.monthWise.HR.TotalMeetings[i],
+                                Issues: allData.monthWise.HR.TotalIssues[i],
+                                LoggedIn: allData.monthWise.HR.TotalEmail[i] + allData.monthWise.HR.TotalMeetings[i] + allData.monthWise.HR.TotalIssues[i]
+                            })
+                        }
+
+                        // Create axes
+                        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                        //dateAxis.renderer.grid.template.location = 0;
+                        //dateAxis.renderer.minGridDistance = 30;
+
+                        var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis1.title.text = "Minutes";
+
+                        var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis2.title.text = "Work Done";
+                        valueAxis2.renderer.opposite = true;
+                        valueAxis2.renderer.grid.template.disabled = true;
+
+                        // Create series
+                        var series1 = chart.series.push(new am4charts.ColumnSeries());
+                        series1.dataFields.valueY = "Email";
+                        series1.dataFields.dateX = "date";
+                        series1.yAxis = valueAxis1;
+                        series1.name = "Email";
+                        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series1.fill = chart.colors.getIndex(0);
+                        series1.strokeWidth = 0;
+                        series1.clustered = false;
+                        series1.columns.template.width = am4core.percent(40);
+
+                        var series2 = chart.series.push(new am4charts.ColumnSeries());
+                        series2.dataFields.valueY = "Meetings";
+                        series2.dataFields.dateX = "date";
+                        series2.yAxis = valueAxis1;
+                        series2.name = "Meetings";
+                        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series2.fill = chart.colors.getIndex(0).lighten(0.5);
+                        series2.strokeWidth = 0;
+                        series2.clustered = false;
+                        series2.toBack();
+
+                        var series3 = chart.series.push(new am4charts.ColumnSeries());
+                        series3.dataFields.valueY = "Issues";
+                        series3.dataFields.dateX = "date";
+                        series3.yAxis = valueAxis1;
+                        series3.name = "Issues";
+                        series3.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series3.fill = chart.colors.getIndex(2).lighten(0.5);
+                        series3.strokeWidth = 0;
+                        series3.clustered = false;
+                        series3.toBack();
+
+                        var series4 = chart.series.push(new am4charts.LineSeries());
+                        series4.dataFields.valueY = "LoggedIn";
+                        series4.dataFields.dateX = "date";
+                        series4.name = "LoggedIn";
+                        series4.strokeWidth = 2;
+                        series4.tensionX = 0.7;
+                        series4.yAxis = valueAxis2;
+                        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY} Mintues[/]";
+
+                        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+                        bullet4.circle.radius = 3;
+                        bullet4.circle.strokeWidth = 2;
+                        bullet4.circle.fill = am4core.color("#fff");
+
+                        // Add cursor
+                        chart.cursor = new am4charts.XYCursor();
+
+                        // Add legend
+                        chart.legend = new am4charts.Legend();
+                        chart.legend.position = "top";
+
+                        // Add scrollbar
+                        chart.scrollbarX = new am4charts.XYChartScrollbar();
+                        chart.scrollbarX.series.push(series1);
+                        chart.scrollbarX.series.push(series4);
+                        chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+                    }); // end am4core.ready()
+
+                am4core.ready(function() {
+                // Themes begin
+                    var chart = am4core.create("chartdiv-email", am4charts.XYChart);
+
+                    chart.colors.step = 2;
+
+                    // Add data
+                    chart.data = generateChartData();
+
+                    // Create axes
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.renderer.minGridDistance = 50;
+
+                    //H
+
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    if(chart.yAxes.indexOf(valueAxis) != 0){
+                        valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
+                    }
+                        
+                        
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "EmailH";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Email Time in HR: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                    //T
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "EmailT";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Email Time in Tech: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    //P
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "EmailP";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Email Time in Purchasing: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    //M
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "EmailM";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Email Time in Marketing: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+
+                    //S
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "EmailS";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Email Time in Sales: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+
+                    //C
+
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "EmailC";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Email Time in Company Average: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    // Add legend
+                    //chart.legend = new am4charts.Legend();
+
+                    // Add cursor
+                    chart.cursor = new am4charts.XYCursor();
+
+                    // generate some random data, quite different range
+                    function generateChartData() {
+                        var chartData = [];
+                        for(var i = 0; i < 12; i++) {
+                            dates = allData.monthWiseAvgPerPerson.HR.Month[i];
+                            emailH = allData.monthWiseAvgPerPerson.HR.TotalEmail[i];
+                            emailP = allData.monthWiseAvgPerPerson.Purchasing.TotalEmail[i];
+                            emailT = allData.monthWiseAvgPerPerson.Technology.TotalEmail[i];
+                            emailS = allData.monthWiseAvgPerPerson.Sales.TotalEmail[i];
+                            emailM = allData.monthWiseAvgPerPerson.Marketing.TotalEmail[i];
+                            emailC = allData.companyAvg.TotalEmail[i];
+                            chartData.push({
+                                Month: dates, 
+                                EmailH: Math.round(emailH), 
+                                EmailP: Math.round(emailP), 
+                                EmailT: Math.round(emailT), 
+                                EmailS: Math.round(emailS), 
+                                EmailM: Math.round(emailM),
+                                EmailC: Math.round(emailC)
+                            });
+                        }
+                        console.log(chartData);
+                        return chartData;
+                    }  
+                });
+            }, 700);
+        });
+
+        var meetings = document.getElementById('v-pills-meetings-tab');
+        var drawnMeetings = false;
+
+        meetings.addEventListener('click', function() {
+            if (!drawnMeetings) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        // Themes begin
+                        var chart = am4core.create("chartdiv-meetings", am4charts.XYChart);
+                    console.log(allData)
+
+                    chart.colors.step = 2;
+
+                    // Add data
+                    chart.data = generateChartData();
+
+                    // Create axes
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.renderer.minGridDistance = 50;
+
+                    //H
+
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    if(chart.yAxes.indexOf(valueAxis) != 0){
+                        valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
+                    }
+                        
+                        
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "MeetH";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Meetings Time in HR: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                    //T
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "MeetT";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Meetings Time in Tech: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    //P
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "MeetP";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Meetings Time in Purchasing: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    //M
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "MeetM";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Meetings Time in Marketing: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+
+                    //S
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "MeetS";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Meetings Time in Sales: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+
+                    //C
+
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "MeetC";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Meetings Time in Company Average: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    // Add legend
+                    //chart.legend = new am4charts.Legend();
+
+                    // Add cursor
+                    chart.cursor = new am4charts.XYCursor();
+
+                    // generate some random data, quite different range
+                    function generateChartData() {
+                        var chartData = [];
+                        for(var i = 0; i < 12; i++) {
+                            dates = allData.monthWiseAvgPerPerson.HR.Month[i];
+                            meetH = allData.monthWiseAvgPerPerson.HR.TotalMeetings[i];
+                            meetP = allData.monthWiseAvgPerPerson.Purchasing.TotalMeetings[i];
+                            meetT = allData.monthWiseAvgPerPerson.Technology.TotalMeetings[i];
+                            meetS = allData.monthWiseAvgPerPerson.Sales.TotalMeetings[i];
+                            meetM = allData.monthWiseAvgPerPerson.Marketing.TotalMeetings[i];
+                            meetC = allData.companyAvg.TotalMeetings[i];
+                            chartData.push({
+                                Month: dates, 
+                                MeetH: Math.round(meetH), 
+                                MeetP: Math.round(meetP), 
+                                MeetT: Math.round(meetT), 
+                                MeetS: Math.round(meetS), 
+                                MeetM: Math.round(meetM),
+                                MeetC: Math.round(meetC)
+                            })
+                        }
+                        return chartData;
+                    }
+                });
+                }, 700);
+                drawnMeetings = true;
+            }
+        });
+
+        var issues = document.getElementById('v-pills-issues-tab');
+        var drawnIssues = false;
+        issues.addEventListener('click', function() {
+            if (!drawnIssues) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        var chart = am4core.create("chartdiv-issues", am4charts.XYChart);
+                    console.log(allData)
+
+                    chart.colors.step = 2;
+
+                    // Add data
+                    chart.data = generateChartData();
+
+                    // Create axes
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.renderer.minGridDistance = 50;
+
+                    //H
+
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    if(chart.yAxes.indexOf(valueAxis) != 0){
+                        valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
+                    }
+                        
+                        
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "IssueH";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Working On Issues Time in HR: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                    //T
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "IssueT";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Working On Issues in Tech: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    //P
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "IssueP";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Working On Issues  Time in Purchasing: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    //M
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "IssueM";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Working On Issues  Time in Marketing: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+
+                    //S
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "IssueS";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Working On Issues  Time in Sales: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+
+                    //C
+
+
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    var series = chart.series.push(new am4charts.LineSeries());
+                    series.dataFields.valueY = "IssueC";
+                    series.dataFields.dateX = "Month";
+                    series.strokeWidth = 2;
+                    series.yAxis = valueAxis;
+                    series.name = name;
+                    series.tooltipText = "Working On Issues  Time in Company Average: [bold]{valueY}[/]";
+                    series.tensionX = 0.8;
+                    series.showOnInit = true;
+                        
+                        
+                    var interfaceColors = new am4core.InterfaceColorSet();
+
+                    var bullet = series.bullets.push(new am4charts.Bullet());
+                    bullet.width = 12;
+                    bullet.height = 12;
+                    bullet.horizontalCenter = "middle";
+                    bullet.verticalCenter = "middle";
+                             
+                    var triangle = bullet.createChild(am4core.Triangle);
+                    triangle.stroke = interfaceColors.getFor("background");
+                    triangle.strokeWidth = 2;
+                    triangle.direction = "top";
+                    triangle.width = 12;
+                    triangle.height = 12;
+
+                    valueAxis.renderer.line.strokeOpacity = 1;
+                    valueAxis.renderer.line.strokeWidth = 2;
+                    valueAxis.renderer.line.stroke = series.stroke;
+                    valueAxis.renderer.labels.template.fill = series.stroke;
+                    valueAxis.renderer.opposite = true;
+
+                    // Add legend
+                    //chart.legend = new am4charts.Legend();
+
+                    // Add cursor
+                    chart.cursor = new am4charts.XYCursor();
+
+                        // generate some random data, quite different range
+                        function generateChartData() {
+                            var chartData = [];
+                            for(var i = 0; i < 12; i++) {
+                                dates = allData.monthWiseAvgPerPerson.HR.Month[i];
+                                issueH = allData.monthWiseAvgPerPerson.HR.TotalIssues[i];
+                                issueP = allData.monthWiseAvgPerPerson.Purchasing.TotalIssues[i];
+                                issueT = allData.monthWiseAvgPerPerson.Technology.TotalIssues[i];
+                                issueS = allData.monthWiseAvgPerPerson.Sales.TotalIssues[i];
+                                issueM = allData.monthWiseAvgPerPerson.Marketing.TotalIssues[i];
+                                issueC = allData.companyAvg.TotalIssues[i];
+                                chartData.push({
+                                    Month: dates, 
+                                    IssueH: Math.round(issueH), 
+                                    IssueP: Math.round(issueP), 
+                                    IssueT: Math.round(issueT), 
+                                    IssueS: Math.round(issueS), 
+                                    IssueM: Math.round(issueM),
+                                    IssueC: Math.round(issueC)
+                                })
+                            }
+                            return chartData;
+                        }
+                    });
+                }, 700);
+                drawnIssues = true;
+            }
+        });
+
+        var offs = document.getElementById('v-pills-offs-tab');
+        var drawnOffs = false;
+        offs.addEventListener('click', function() {
+            if (!drawnOffs) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        am4core.useTheme(am4themes_animated);
+                        var chart = am4core.create("chartdiv-offs", am4charts.RadarChart);
+                        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                        chart.data = []
+                        for (var i = 0; i < 12; i++) {
+                            dates = allData.monthWiseAvgPerPerson.HR.Month[i].split("-");
+                            chart.data.push({
+                                Month: dates[1] + "-" + dates[0],
+                                OffsSales:  allData.monthWiseAvgPerPerson.Sales.TotalOffs[i],
+                                OffsPurchasing:  allData.monthWiseAvgPerPerson.Purchasing.TotalOffs[i],
+                                OffsTech:  allData.monthWiseAvgPerPerson.Technology.TotalOffs[i],
+                                OffsHR:  allData.monthWiseAvgPerPerson.HR.TotalOffs[i],
+                                OffsMarketing:  allData.monthWiseAvgPerPerson.Marketing.TotalOffs[i],
+                            })
+                        }
+
+                        chart.padding(20, 20, 20, 20);
+
+                        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                        categoryAxis.dataFields.category = "Month";
+                        categoryAxis.renderer.labels.template.location = 0.5;
+                        categoryAxis.renderer.tooltipLocation = 0.5;
+
+                        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis.tooltip.disabled = true;
+                        valueAxis.renderer.labels.template.horizontalCenter = "left";
+                        valueAxis.min = 0;
+
+                        var series1 = chart.series.push(new am4charts.RadarColumnSeries());
+                        series1.columns.template.tooltipText = "{name}: {valueY.value}";
+                        series1.columns.template.width = am4core.percent(80);
+                        series1.name = "Offs in Marketing";
+                        series1.dataFields.categoryX = "Month";
+                        series1.dataFields.valueY = "OffsMarketing";
+                        series1.stacked = true;
+
+                        var series2 = chart.series.push(new am4charts.RadarColumnSeries());
+                        series2.columns.template.tooltipText = "{name}: {valueY.value}";
+                        series2.columns.template.width = am4core.percent(80);
+                        series2.name = "Offs in Sales";
+                        series2.dataFields.categoryX = "Month";
+                        series2.dataFields.valueY = "OffsSales";
+                        series2.stacked = true;
+
+                        var series3 = chart.series.push(new am4charts.RadarColumnSeries());
+                        series3.columns.template.tooltipText = "{name}: {valueY.value}";
+                        series3.columns.template.width = am4core.percent(80);
+                        series3.name = "Offs in Purchasing";
+                        series3.dataFields.categoryX = "Month";
+                        series3.dataFields.valueY = "OffsPurchasing";
+                        series3.stacked = true;
+
+                        var series4 = chart.series.push(new am4charts.RadarColumnSeries());
+                        series4.columns.template.tooltipText = "{name}: {valueY.value}";
+                        series4.columns.template.width = am4core.percent(80);
+                        series4.name = "Offs in HR";
+                        series4.dataFields.categoryX = "Month";
+                        series4.dataFields.valueY = "OffsHR";
+                        series4.stacked = true;
+
+                        var series5 = chart.series.push(new am4charts.RadarColumnSeries());
+                        series5.columns.template.tooltipText = "{name}: {valueY.value}";
+                        series5.columns.template.width = am4core.percent(80);
+                        series5.name = "Offs in Tech";
+                        series5.dataFields.categoryX = "Month";
+                        series5.dataFields.valueY = "OffsTech";
+                        series5.stacked = true;
+
+                        chart.seriesContainer.zIndex = -1;
+
+                        chart.scrollbarX = new am4core.Scrollbar();
+                        chart.scrollbarX.exportable = false;
+                        chart.scrollbarY = new am4core.Scrollbar();
+                        chart.scrollbarY.exportable = false;
+
+                        chart.cursor = new am4charts.RadarCursor();
+                        chart.cursor.xAxis = categoryAxis;
+                        chart.cursor.fullWidthXLine = true;
+                        chart.cursor.lineX.strokeOpacity = 0;
+                        chart.cursor.lineX.fillOpacity = 0.1;
+                        chart.cursor.lineX.fill = am4core.color("#000000");
+
+                    }); // end am4core.ready()
+                }, 700);
+                drawnOffs = true;
+            }
+        });
+
+        var loggedInT = document.getElementById('pills-tdept-tab');
+        var drawnLoggedInT = false;
+        loggedInT.addEventListener('click', function() {
+            if (!drawnLoggedInT) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        // Themes begin
+                        am4core.useTheme(am4themes_animated);
+                        // Themes end
+                        // Create chart instance
+                        var chart = am4core.create("chartdiv-loggedin-t", am4charts.XYChart);
+                        // Add data
+                        chart.data = [];
+                        for (var i = 0; i < 12; i++) {
+                            dates = allData.monthWise.Technology.Month[i]
+                            chart.data.push({
+                                date: dates,
+                                Email: allData.monthWise.Technology.TotalEmail[i],
+                                Meetings: allData.monthWise.Technology.TotalMeetings[i],
+                                Issues: allData.monthWise.Technology.TotalIssues[i],
+                                LoggedIn: allData.monthWise.Technology.TotalEmail[i] + allData.monthWise.Technology.TotalMeetings[i] + allData.monthWise.Technology.TotalIssues[i]
+                            })
+                        }
+
+                        // Create axes
+                        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                        //dateAxis.renderer.grid.template.location = 0;
+                        //dateAxis.renderer.minGridDistance = 30;
+
+                        var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis1.title.text = "Minutes";
+
+                        var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis2.title.text = "Work Done";
+                        valueAxis2.renderer.opposite = true;
+                        valueAxis2.renderer.grid.template.disabled = true;
+
+                        // Create series
+                        var series1 = chart.series.push(new am4charts.ColumnSeries());
+                        series1.dataFields.valueY = "Email";
+                        series1.dataFields.dateX = "date";
+                        series1.yAxis = valueAxis1;
+                        series1.name = "Email";
+                        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series1.fill = chart.colors.getIndex(0);
+                        series1.strokeWidth = 0;
+                        series1.clustered = false;
+                        series1.columns.template.width = am4core.percent(40);
+
+                        var series2 = chart.series.push(new am4charts.ColumnSeries());
+                        series2.dataFields.valueY = "Meetings";
+                        series2.dataFields.dateX = "date";
+                        series2.yAxis = valueAxis1;
+                        series2.name = "Meetings";
+                        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series2.fill = chart.colors.getIndex(0).lighten(0.5);
+                        series2.strokeWidth = 0;
+                        series2.clustered = false;
+                        series2.toBack();
+
+                        var series3 = chart.series.push(new am4charts.ColumnSeries());
+                        series3.dataFields.valueY = "Issues";
+                        series3.dataFields.dateX = "date";
+                        series3.yAxis = valueAxis1;
+                        series3.name = "Issues";
+                        series3.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series3.fill = chart.colors.getIndex(2).lighten(0.5);
+                        series3.strokeWidth = 0;
+                        series3.clustered = false;
+                        series3.toBack();
+
+                        var series4 = chart.series.push(new am4charts.LineSeries());
+                        series4.dataFields.valueY = "LoggedIn";
+                        series4.dataFields.dateX = "date";
+                        series4.name = "LoggedIn";
+                        series4.strokeWidth = 2;
+                        series4.tensionX = 0.7;
+                        series4.yAxis = valueAxis2;
+                        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY} Mintues[/]";
+
+                        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+                        bullet4.circle.radius = 3;
+                        bullet4.circle.strokeWidth = 2;
+                        bullet4.circle.fill = am4core.color("#fff");
+
+                        // Add cursor
+                        chart.cursor = new am4charts.XYCursor();
+
+                        // Add legend
+                        chart.legend = new am4charts.Legend();
+                        chart.legend.position = "top";
+
+                        // Add scrollbar
+                        chart.scrollbarX = new am4charts.XYChartScrollbar();
+                        chart.scrollbarX.series.push(series1);
+                        chart.scrollbarX.series.push(series4);
+                        chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+                    }); // end am4core.ready()
+                }, 700);
+                drawnLoggedInT = true;
+            }
+        });
+
+
+        var loggedInM = document.getElementById('pills-mdept-tab');
+        var drawnLoggedInM = false;
+        loggedInM.addEventListener('click', function() {
+            if (!drawnLoggedInM) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        // Themes begin
+                        am4core.useTheme(am4themes_animated);
+                        // Themes end
+                        // Create chart instance
+                        var chart = am4core.create("chartdiv-loggedin-m", am4charts.XYChart);
+                        // Add data
+                        chart.data = [];
+                        for (var i = 0; i < 12; i++) {
+                            dates = allData.monthWise.Marketing.Month[i]
+                            chart.data.push({
+                                date: dates,
+                                Email: allData.monthWise.Marketing.TotalEmail[i],
+                                Meetings: allData.monthWise.Marketing.TotalMeetings[i],
+                                Issues: allData.monthWise.Marketing.TotalIssues[i],
+                                LoggedIn: allData.monthWise.Marketing.TotalEmail[i] + allData.monthWise.Marketing.TotalMeetings[i % 12] + allData.monthWise.Marketing.TotalIssues[i % 12]
+                            })
+                        }
+
+                        // Create axes
+                        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                        //dateAxis.renderer.grid.template.location = 0;
+                        //dateAxis.renderer.minGridDistance = 30;
+
+                        var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis1.title.text = "Minutes";
+
+                        var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis2.title.text = "Work Done";
+                        valueAxis2.renderer.opposite = true;
+                        valueAxis2.renderer.grid.template.disabled = true;
+
+                        // Create series
+                        var series1 = chart.series.push(new am4charts.ColumnSeries());
+                        series1.dataFields.valueY = "Email";
+                        series1.dataFields.dateX = "date";
+                        series1.yAxis = valueAxis1;
+                        series1.name = "Email";
+                        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series1.fill = chart.colors.getIndex(0);
+                        series1.strokeWidth = 0;
+                        series1.clustered = false;
+                        series1.columns.template.width = am4core.percent(40);
+
+                        var series2 = chart.series.push(new am4charts.ColumnSeries());
+                        series2.dataFields.valueY = "Meetings";
+                        series2.dataFields.dateX = "date";
+                        series2.yAxis = valueAxis1;
+                        series2.name = "Meetings";
+                        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series2.fill = chart.colors.getIndex(0).lighten(0.5);
+                        series2.strokeWidth = 0;
+                        series2.clustered = false;
+                        series2.toBack();
+
+                        var series3 = chart.series.push(new am4charts.ColumnSeries());
+                        series3.dataFields.valueY = "Issues";
+                        series3.dataFields.dateX = "date";
+                        series3.yAxis = valueAxis1;
+                        series3.name = "Issues";
+                        series3.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series3.fill = chart.colors.getIndex(2).lighten(0.5);
+                        series3.strokeWidth = 0;
+                        series3.clustered = false;
+                        series3.toBack();
+
+                        var series4 = chart.series.push(new am4charts.LineSeries());
+                        series4.dataFields.valueY = "LoggedIn";
+                        series4.dataFields.dateX = "date";
+                        series4.name = "LoggedIn";
+                        series4.strokeWidth = 2;
+                        series4.tensionX = 0.7;
+                        series4.yAxis = valueAxis2;
+                        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY} Mintues[/]";
+
+                        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+                        bullet4.circle.radius = 3;
+                        bullet4.circle.strokeWidth = 2;
+                        bullet4.circle.fill = am4core.color("#fff");
+
+                        // Add cursor
+                        chart.cursor = new am4charts.XYCursor();
+
+                        // Add legend
+                        chart.legend = new am4charts.Legend();
+                        chart.legend.position = "top";
+
+                        // Add scrollbar
+                        chart.scrollbarX = new am4charts.XYChartScrollbar();
+                        chart.scrollbarX.series.push(series1);
+                        chart.scrollbarX.series.push(series4);
+                        chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+                    }); // end am4core.ready()
+                }, 700);
+                drawnLoggedInM = true;
+            }
+        });
+
+
+        var loggedInP = document.getElementById('pills-pdept-tab');
+        var drawnLoggedInP = false;
+        loggedInP.addEventListener('click', function() {
+            if (!drawnLoggedInP) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        // Themes begin
+                        am4core.useTheme(am4themes_animated);
+                        // Themes end
+                        // Create chart instance
+                        var chart = am4core.create("chartdiv-loggedin-p", am4charts.XYChart);
+                        // Add data
+                        chart.data = [];
+                        for (var i = 0; i < 12; i++) {
+                            dates = allData.monthWise.Purchasing.Month[i]
+                            chart.data.push({
+                                date: dates,
+                                Email: allData.monthWise.Purchasing.TotalEmail[i],
+                                Meetings: allData.monthWise.Purchasing.TotalMeetings[i],
+                                Issues: allData.monthWise.Purchasing.TotalIssues[i],
+                                LoggedIn: allData.monthWise.Purchasing.TotalEmail[i] + allData.monthWise.Purchasing.TotalMeetings[i] + allData.monthWise.Purchasing.TotalIssues[i]
+                            })
+                        }
+
+                        // Create axes
+                        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                        //dateAxis.renderer.grid.template.location = 0;
+                        //dateAxis.renderer.minGridDistance = 30;
+
+                        var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis1.title.text = "Minutes";
+
+                        var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis2.title.text = "Work Done";
+                        valueAxis2.renderer.opposite = true;
+                        valueAxis2.renderer.grid.template.disabled = true;
+
+                        // Create series
+                        var series1 = chart.series.push(new am4charts.ColumnSeries());
+                        series1.dataFields.valueY = "Email";
+                        series1.dataFields.dateX = "date";
+                        series1.yAxis = valueAxis1;
+                        series1.name = "Email";
+                        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series1.fill = chart.colors.getIndex(0);
+                        series1.strokeWidth = 0;
+                        series1.clustered = false;
+                        series1.columns.template.width = am4core.percent(40);
+
+                        var series2 = chart.series.push(new am4charts.ColumnSeries());
+                        series2.dataFields.valueY = "Meetings";
+                        series2.dataFields.dateX = "date";
+                        series2.yAxis = valueAxis1;
+                        series2.name = "Meetings";
+                        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series2.fill = chart.colors.getIndex(0).lighten(0.5);
+                        series2.strokeWidth = 0;
+                        series2.clustered = false;
+                        series2.toBack();
+
+                        var series3 = chart.series.push(new am4charts.ColumnSeries());
+                        series3.dataFields.valueY = "Issues";
+                        series3.dataFields.dateX = "date";
+                        series3.yAxis = valueAxis1;
+                        series3.name = "Issues";
+                        series3.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series3.fill = chart.colors.getIndex(2).lighten(0.5);
+                        series3.strokeWidth = 0;
+                        series3.clustered = false;
+                        series3.toBack();
+
+                        var series4 = chart.series.push(new am4charts.LineSeries());
+                        series4.dataFields.valueY = "LoggedIn";
+                        series4.dataFields.dateX = "date";
+                        series4.name = "LoggedIn";
+                        series4.strokeWidth = 2;
+                        series4.tensionX = 0.7;
+                        series4.yAxis = valueAxis2;
+                        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY} Mintues[/]";
+
+                        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+                        bullet4.circle.radius = 3;
+                        bullet4.circle.strokeWidth = 2;
+                        bullet4.circle.fill = am4core.color("#fff");
+
+                        // Add cursor
+                        chart.cursor = new am4charts.XYCursor();
+
+                        // Add legend
+                        chart.legend = new am4charts.Legend();
+                        chart.legend.position = "top";
+
+                        // Add scrollbar
+                        chart.scrollbarX = new am4charts.XYChartScrollbar();
+                        chart.scrollbarX.series.push(series1);
+                        chart.scrollbarX.series.push(series4);
+                        chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+                    }); // end am4core.ready()
+                }, 700);
+                drawnLoggedInP = true;
+            }
+        });
+
+
+        var loggedInS = document.getElementById('pills-sdept-tab');
+        var drawnLoggedInS = false;
+        loggedInS.addEventListener('click', function() {
+            if (!drawnLoggedInS) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        // Themes begin
+                        am4core.useTheme(am4themes_animated);
+                        // Themes end
+                        // Create chart instance
+                        var chart = am4core.create("chartdiv-loggedin-s", am4charts.XYChart);
+                        // Add data
+                        chart.data = [];
+                        for (var i =0; i < 12; i++) {
+                            dates = allData.monthWise.Sales.Month[i]
+                            chart.data.push({
+                                date: dates,
+                                Email: allData.monthWise.Sales.TotalEmail[i],
+                                Meetings:allData.monthWise.Sales.TotalMeetings[i],
+                                Issues: allData.monthWise.Sales.TotalIssues[i],
+                                LoggedIn: allData.monthWise.Sales.TotalEmail[i] + allData.monthWise.Sales.TotalMeetings[i] + allData.monthWise.Sales.TotalIssues[i]
+                            })
+                        }
+
+                        // Create axes
+                        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                        //dateAxis.renderer.grid.template.location = 0;
+                        //dateAxis.renderer.minGridDistance = 30;
+
+                        var valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis1.title.text = "Minutes";
+
+                        var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+                        valueAxis2.title.text = "Work Done";
+                        valueAxis2.renderer.opposite = true;
+                        valueAxis2.renderer.grid.template.disabled = true;
+
+                        // Create series
+                        var series1 = chart.series.push(new am4charts.ColumnSeries());
+                        series1.dataFields.valueY = "Email";
+                        series1.dataFields.dateX = "date";
+                        series1.yAxis = valueAxis1;
+                        series1.name = "Email";
+                        series1.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series1.fill = chart.colors.getIndex(0);
+                        series1.strokeWidth = 0;
+                        series1.clustered = false;
+                        series1.columns.template.width = am4core.percent(40);
+
+                        var series2 = chart.series.push(new am4charts.ColumnSeries());
+                        series2.dataFields.valueY = "Meetings";
+                        series2.dataFields.dateX = "date";
+                        series2.yAxis = valueAxis1;
+                        series2.name = "Meetings";
+                        series2.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series2.fill = chart.colors.getIndex(0).lighten(0.5);
+                        series2.strokeWidth = 0;
+                        series2.clustered = false;
+                        series2.toBack();
+
+                        var series3 = chart.series.push(new am4charts.ColumnSeries());
+                        series3.dataFields.valueY = "Issues";
+                        series3.dataFields.dateX = "date";
+                        series3.yAxis = valueAxis1;
+                        series3.name = "Issues";
+                        series3.tooltipText = "{name}\n[bold font-size: 20]{valueY} Minutes[/]";
+                        series3.fill = chart.colors.getIndex(2).lighten(0.5);
+                        series3.strokeWidth = 0;
+                        series3.clustered = false;
+                        series3.toBack();
+
+                        var series4 = chart.series.push(new am4charts.LineSeries());
+                        series4.dataFields.valueY = "LoggedIn";
+                        series4.dataFields.dateX = "date";
+                        series4.name = "LoggedIn";
+                        series4.strokeWidth = 2;
+                        series4.tensionX = 0.7;
+                        series4.yAxis = valueAxis2;
+                        series4.tooltipText = "{name}\n[bold font-size: 20]{valueY} Mintues[/]";
+
+                        var bullet4 = series4.bullets.push(new am4charts.CircleBullet());
+                        bullet4.circle.radius = 3;
+                        bullet4.circle.strokeWidth = 2;
+                        bullet4.circle.fill = am4core.color("#fff");
+
+                        // Add cursor
+                        chart.cursor = new am4charts.XYCursor();
+
+                        // Add legend
+                        chart.legend = new am4charts.Legend();
+                        chart.legend.position = "top";
+
+                        // Add scrollbar
+                        chart.scrollbarX = new am4charts.XYChartScrollbar();
+                        chart.scrollbarX.series.push(series1);
+                        chart.scrollbarX.series.push(series4);
+                        chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+                    }); // end am4core.ready()
+                }, 700);
+                drawnLoggedInS = true;
+            }
+        });
+
+    </script>
+
+    {% endblock javascripts %}

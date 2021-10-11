@@ -1,0 +1,11 @@
+{
+    "name": "DigiMate",
+    "mastertemplate": "",
+    "version": "1.0.0",
+    "description": "your own digital mate",
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "dependencies": {},
+    "devDependencies": {}
+}
