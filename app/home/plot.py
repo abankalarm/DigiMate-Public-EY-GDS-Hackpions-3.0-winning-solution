@@ -105,17 +105,24 @@ def clevel(G,nodes,recommended,Graph):
     if(common):
       linkWith=list(common)  
     
-    Graph.append({"name":node,"value":20,"linkWith":linkWith })
-    children=[]
+    Graph.append({"name":node,"value":15,"linkWith":linkWith })
+    
     linkWith=[]
-    i=0
+    notlist=[]
     for x in common:
+      children=[]
       if x not in done:
-        for y in G.neighbors(x):
+        ch=list(G.neighbors(x))
+        print("@@@@@@@@@@@",x,ch)
+        i=0
+        for y in ch:
           if y in common:
             linkWith.append(y)
+          elif y in notlist:
+            continue
           elif y !=node :
             i+=1
+            notlist.append(y)
             children.append({"name":y,"value":5})
             if i>7:
               break
