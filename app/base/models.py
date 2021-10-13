@@ -3,7 +3,7 @@
 from sqlalchemy.sql.elements import Null
 from sqlalchemy.sql.sqltypes import Date
 from flask_login import UserMixin
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String , JSON
 #from sqlalchemy import Binary
 from app import db, login_manager
 #from sqlalchemy import Binary
@@ -28,6 +28,7 @@ class User(db.Model, UserMixin):
     skills3 = Column(String)
     skills4 = Column(String)
     skills5 = Column(String)
+    skills= Column(JSON)
     Gender = Column(String)
     MaritalStatus = Column(String)
     PercentSalaryHike = Column(String)
@@ -41,8 +42,9 @@ class User(db.Model, UserMixin):
     rating = Column(String)
     onsite = Column(String)
     salary = Column(String)
-    heightandweight = Column(String)
-
+    height = Column(String)
+    weight = Column(String)
+    SkillPointEarned=Column(String)
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
             # depending on whether value is an iterable or not, we must

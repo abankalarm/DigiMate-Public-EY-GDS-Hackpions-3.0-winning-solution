@@ -97,8 +97,7 @@ def index():
                             inEvent.append(event)
                             events.remove(event)
                     events=sorted(events, key=lambda x: datetime.datetime.strptime(x["Start"], "%Y-%m-%d"))
-                    print("here")
-                    print(events)
+                   
                     break
 
 
@@ -256,9 +255,19 @@ def root():
             r3 = row.skills3
             r4 = row.skills4
             r5 = row.skills5
+            dept=row.department
+            jlevel=row.job_level
     #G = GraphG(r1,r2,r3,r4,r5)
-    recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
-    print(recom)
+    jlist=[]
+    for row in User.query.filter_by(job_level=str(int(jlevel)+1) , department=dept).all():
+        jlist.extend([row.skills1, row.skills2, row.skills3,row.skills4,row.skills5])
+    print(jlist)
+
+    #TODO get skills of higher job level
+    #df=dfActivity.loc[dfActivity["Dept"]==dept and dfActivity["Dept"]==jlevel+1  ].to()
+    
+    recom,Graph=getRecommendations(r1,r2,r3,r4,r5,jlist)
+
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
 
 # @blueprint.route('/plot')
@@ -337,10 +346,10 @@ def route_work_one():
     if request.method == 'POST':
         username = request.form["username"]
         print(username)
-        print(dfEmployee)
+       
         row=dfEmployee.loc[dfEmployee["username"]==username].to_dict("records")[0]
-        print(row)
-        print(row["dob"])
+     
+      
         dob = row["dob"]
         department = row["Dept"]
         Gender = row["Gender"]
@@ -411,7 +420,7 @@ def route_work_one():
                     test[i] = [codes[i][employee[i]]]
             else:
                 test[i] = [employee[i]]
-        print("here")
+       
         lstring=["Poor","Average","Good","Great","Excelent"]
         if(getJobSatisfaction(test)[0]==0):
             js="Not Satisfied"
@@ -477,7 +486,7 @@ def sync_function():
         diction=diction.to_dict('records')
         if(len(diction)>0):
             diction=diction[0]
-            print(type(diction["username"]),diction["username"])
+
             row.extra = diction["fullname"]
             row.Gender = diction["Gender"]
             row.MaritalStatus = diction["MaritalStatus"]
@@ -506,7 +515,7 @@ def route_enterEmployeeCsv():
         # save the single "profile" file
         csvFile = request.files['Csv']
         dfCsv = pd.read_csv(csvFile)
-        print(dfCsv)
+   
         for row in User.query.all():
             username = row.username
             print(username)
@@ -514,7 +523,7 @@ def route_enterEmployeeCsv():
             diction=diction.to_dict('records')
             if(len(diction)>0):
                 diction=diction[0]
-                print(type(diction["username"]),diction["username"])
+       
                 row.extra = diction["fullname"]
                 row.Gender = diction["Gender"]
                 row.MaritalStatus = diction["MaritalStatus"]
