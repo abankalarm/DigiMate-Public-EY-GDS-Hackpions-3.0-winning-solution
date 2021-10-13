@@ -39,20 +39,14 @@ def clevel(G,nodes,recommended,Graph):
         Graph.append({"name":x,"value":10,"linkWith":linkWith,"children":children  })
         done.append(x)
     
-def getRecommendations(r1,r2,r3,r4,r5,flatJlist):
+def getRecommendations(ilist,flatJlist):
 
   G = nx.read_gpickle("graph.gpickle")
   alreadyRecommend=[]
-  if r1!="None":
-    alreadyRecommend.append(r1)
-  if r2!="None":
-    alreadyRecommend.append(r2)
-  if r3!="None":
-    alreadyRecommend.append(r3)
-  if r4!="None":
-    alreadyRecommend.append(r4)
-  if r5!="None":
-    alreadyRecommend.append(r5)
+  for r in ilist:
+    if r!="None":
+      alreadyRecommend.append(r)
+
   #alreadyRecommend.extend(skills)
   #print(alreadyRecommend)
   Graph=[]

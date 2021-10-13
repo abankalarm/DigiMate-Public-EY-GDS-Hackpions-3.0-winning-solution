@@ -19,6 +19,7 @@ from datetime import date
 from app.base.models import User
 import ast
 import datetime
+import json
 import sqlite3
 pysqldf = lambda q: sqldf(q, globals())
 
@@ -37,9 +38,8 @@ def index():
         username = row.username
         department = row.department
         job_level = row.job_level
-        skill1 = row.skills1
-        skill2 = row.skills2
-        skill3 = row.skills3
+        res=json.loads(row.skills)
+        res=res["skills"]
 
     events=[]
     temp=[]
@@ -161,7 +161,7 @@ def index():
     allDataSupplied['LoggedInThisMonth'] = EmployeeDetails['SystemLoggedInTime'][11]
     allDataSupplied['LoggedInLastMonth'] = EmployeeDetails['SystemLoggedInTime'][10]
 
-    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = skill1, skill2 = skill2, skill3 = skill3, allData = allDataSupplied)
+    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied)
 
 @blueprint.route('/<template>')
 @login_required
@@ -250,23 +250,19 @@ def route_health_individual():
 @blueprint.route('/plots')
 def root():
     for row in User.query.filter_by(id=current_user.get_id()).all():
-            r1 = row.skills1
-            r2 = row.skills2
-            r3 = row.skills3
-            r4 = row.skills4
-            r5 = row.skills5
+
+            res=json.loads(row.skills)
             dept=row.department
             jlevel=row.job_level
     #G = GraphG(r1,r2,r3,r4,r5)
+    print(res,type(res))
     jlist=[]
     for row in User.query.filter_by(job_level=str(int(jlevel)+1) , department=dept).all():
-        jlist.extend([row.skills1, row.skills2, row.skills3,row.skills4,row.skills5])
-    print(jlist)
+        temp=json.loads(row.skills)
+        jlist.extend(temp["skills"])
 
-    #TODO get skills of higher job level
-    #df=dfActivity.loc[dfActivity["Dept"]==dept and dfActivity["Dept"]==jlevel+1  ].to()
     
-    recom,Graph=getRecommendations(r1,r2,r3,r4,r5,jlist)
+    recom,Graph=getRecommendations(res["skills"],jlist)
 
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
 

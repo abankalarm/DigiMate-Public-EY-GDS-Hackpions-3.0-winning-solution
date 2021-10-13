@@ -16,16 +16,16 @@ li=pd.read_csv("./CSVs/EmployeesIncludedDataset.csv", converters={'skills':pd.ev
 #print(li)
 sqlite_insert_with_param = """INSERT INTO User 
     (
-    id,username,email,password,dob,department,skills,skills1,skills2,skills3,skills4,skills5,Gender,MaritalStatus,PercentSalaryHike,StockOptionLevel,extra,YearsAtCompany,YearsInCurrentRole,education,recruitment_type,job_level,rating,onsite,salary,height,weight,SkillPointEarned
+    id,username,email,password,dob,department,skills,Gender,MaritalStatus,PercentSalaryHike,StockOptionLevel,extra,YearsAtCompany,YearsInCurrentRole,education,recruitment_type,job_level,rating,onsite,salary,height,weight,SkillPointEarned
     ) 
-                          VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,?,?);"""
+                          VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,?,?);"""
 for l in range(len(li)):
     i=l+2
     #print(i)
     da=li[l]
     # for x in da:
     #     print(x,type(da[x]))
-    data_tuple =(i,da['username'],da['email'],hash_pass( da['username'] ),da['dob'],da['Dept'],json.dumps({"skills":da['skills']}),da['skills'][0],da['skills'][1],da['skills'][2],da['skills'][3],da['skills'][4],da['Gender'],da['MaritalStatus'],str(da['PercentSalaryHike']),str(da['StockOptionLevel']),da['fullname'],str(da['YearsAtCompany']),str(da['YearsInCurrentRole']),da['education'],da['recruitment_type'],str(da['job_level']),str(da['rating']),str(da['onsite']),str(da['salary']),str(da['height']),str(da['weight']),str(da['SkillPointEarned']))
+    data_tuple =(i,da['username'],da['email'],hash_pass( da['username'] ),da['dob'],da['Dept'],str(json.dumps({"skills":da['skills']})),da['Gender'],da['MaritalStatus'],str(da['PercentSalaryHike']),str(da['StockOptionLevel']),da['fullname'],str(da['YearsAtCompany']),str(da['YearsInCurrentRole']),da['education'],da['recruitment_type'],str(da['job_level']),str(da['rating']),str(da['onsite']),str(da['salary']),str(da['height']),str(da['weight']),str(da['SkillPointEarned']))
     #print(len(data_tuple))
     cursor=con.cursor()
     cursor.execute(sqlite_insert_with_param, data_tuple)
