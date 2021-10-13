@@ -249,17 +249,22 @@ def route_health_individual():
 #employee basically skill groaph
 @blueprint.route('/plots')
 def root():
+    flag=True
     for row in User.query.filter_by(id=current_user.get_id()).all():
 
             res=json.loads(row.skills)
-            dept=row.department
-            jlevel=row.job_level
+            try:
+                dept=row.department
+                jlevel=row.job_level
+            except :
+                flag=false
     #G = GraphG(r1,r2,r3,r4,r5)
     print(res,type(res))
     jlist=[]
-    for row in User.query.filter_by(job_level=str(int(jlevel)+1) , department=dept).all():
-        temp=json.loads(row.skills)
-        jlist.extend(temp["skills"])
+    if flag:
+        for row in User.query.filter_by(job_level=str(int(jlevel)+1) , department=dept).all():
+            temp=json.loads(row.skills)
+            jlist.extend(temp["skills"])
 
     
     recom,Graph=getRecommendations(res["skills"],jlist)
@@ -498,7 +503,8 @@ def sync_function():
             row.department = diction["Dept"]
             row.salary = diction["salary"]
             row.dob = diction["dob"]
-            row.heightandweight = str(diction["height"]) + " " + str(diction["weight"])
+            row.height =str(diction["height"])
+            row.weight = str(diction["weight"])
             #row.heightandweight = Column(String)
             db.session.commit()
     return redirect("/page-404.html", code=200)
