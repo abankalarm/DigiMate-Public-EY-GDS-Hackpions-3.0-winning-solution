@@ -3,6 +3,10 @@ from sqlalchemy.sql.functions import user
 from app.home.plot import *
 from app.home.predictions import *
 from app.home import blueprint
+import os
+import pathlib
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 from app import login_manager, db
@@ -35,11 +39,14 @@ dfEmployee['dob'] = pd.to_datetime(dfEmployee['dob'], format = "%d-%m-%Y")
 def getThought():
 
     url = "https://zenquotes.io/api/random"
-
-
-
     response = requests.request("GET", url)
     return response.json()[0]["q"]
+
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] == "pdf"
+
 
 @blueprint.route('/index',methods=["GET","POST"])
 @login_required
@@ -67,7 +74,7 @@ def index():
         if(datetime.datetime.strptime(event ["Start"], "%Y-%m-%d") <datetime.datetime.today() ):
             temp.remove(event)
     events=temp.copy()
-    print(temp)
+
     for event in temp:
         if username in event['Attending']:
             inEvent.append(event)
@@ -142,7 +149,7 @@ def index():
 
     
     
-    print(current_user.get_id())
+
     if int(current_user.get_id()) == 1:
         allDataSupplied = {
             'numberOfEmployees': {},
@@ -259,8 +266,29 @@ def route_health_individual():
 
 
 #employee basically skill groaph
-@blueprint.route('/plots')
+@blueprint.route('/plots',methods=["GET","POST"])
 def root():
+    
+    
+    if request.method == 'POST':
+        print("here")
+        if 'pdf-file' not in request.files:
+            #flash('No pdf file')
+            return redirect(request.url)
+        pdf = request.files['pdf-file']
+        if pdf.filename == '':
+            return redirect(request.url)
+        if pdf and allowed_file(pdf.filename):
+            #TODO increase score
+            print(pdf.filename)
+            for row in User.query.filter_by(id=current_user.get_id()).all():
+                username = row.username
+            pathlib.Path("Certificates/"+username).mkdir(parents=True, exist_ok=True)
+            pdf.save( "Certificates/"+username+"/"+pdf.filename)
+        
+            print("score+")
+        
+    
     flag=True
     for row in User.query.filter_by(id=current_user.get_id()).all():
 
@@ -271,7 +299,7 @@ def root():
             except :
                 flag=false
     #G = GraphG(r1,r2,r3,r4,r5)
-    print(res,type(res))
+
     jlist=[]
     if flag:
         for row in User.query.filter_by(job_level=str(int(jlevel)+1) , department=dept).all():
@@ -279,7 +307,7 @@ def root():
             jlist.extend(temp["skills"])
 
     
-    recom,Graph=getRecommendations(res["skills"],jlist)
+    crecom,recom,Graph=getRecommendations(res["skills"],jlist)
 
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
 
@@ -289,7 +317,7 @@ def oneskill(template):
     allDataSupplied = {
         'name': template
     }
-    print(allDataSupplied)
+
     #for row in User.query.filter_by(id=current_user.get_id()).all():
     #        r1 = row.skills1
     #        r2 = row.skills2
@@ -382,7 +410,7 @@ def route_work_one():
     
     if request.method == 'POST':
         username = request.form["username"]
-        print(username)
+    
        
         row=dfEmployee.loc[dfEmployee["username"]==username].to_dict("records")[0]
      

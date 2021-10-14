@@ -15,10 +15,9 @@ __pycache__/
 env
 venv
 
-keys.py
 # other
 .DS_Store
-
+Certificates/
 # sphinx docs 
 _build
 _static
