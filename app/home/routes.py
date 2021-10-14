@@ -637,17 +637,20 @@ def getcourse():
     query = "excel"
     r = requests.get('https://api.coursera.org/api/courses.v1?q=search&query='+query+'&includes=instructorIds,partnerIds&fields=instructorIds,previewLink,name,photoUrl,previewLink,links,partnerIds')
     j = r.json()
+    allData={}
+    allData["c1"]={
+        "name": j['elements'][0]['name'],
+        "img" : j['elements'][0]['photoUrl'],
+        "url" : 'https://www.coursera.org/learn/'+j['elements'][0]['slug'],
+        "author" : j['linked']['partners.v1'][0]['name']
+    }
+    allData["c2"]={
+        "name": j['elements'][1]['name'],
+        "img" : j['elements'][1]['photoUrl'],
+        "url" : 'https://www.coursera.org/learn/'+j['elements'][1]['slug'],
+        "author" : j['linked']['partners.v1'][1]['name']
+    }
 
-    ceraName1 = j['elements'][0]['name']
-    ceraImg1 = j['elements'][0]['photoUrl']
-    ceraLink1 = 'https://www.coursera.org/learn/'+j['elements'][0]['slug']
-    Author1 = j['linked']['partners.v1'][0]['name']
-    print(ceraName1 + "\n" + ceraImg1 + " \n " + ceraLink1 + " \n " +Author1)
-
-    ceraName2 = j['elements'][1]['name']
-    ceraImg2 = j['elements'][1]['photoUrl']
-    ceraLink2 = 'https://www.coursera.org/learn/'+j['elements'][1]['slug']
-    Author2 = j['linked']['partners.v1'][1]['name']
 
     url = 'https://www.udemy.com/api-2.0/search-courses/recommendation/?course_badge=beginners_choice&page_size=5&skip_price=true&q='+query
     headers = {'content-type': 'application/json','Referer': 'https://10.10.10.10/courses/search/'}
@@ -655,16 +658,18 @@ def getcourse():
     r1 = requests.get(url, headers=headers)
     j1 = r1.json()
 
-    uName1 = j1['courses'][0]['title']
-    uImage1 = j1['courses'][0]['image_100x100']
-    uLink1 = 'https://www.udemy.com'+j1['courses'][0]['url']
-    uAuthor1 = j1['courses'][0]['visible_instructors'][0]['display_name']
+    allData["u1"]={
+        "name": j1['courses'][0]['title'],
+        "img" : j1['courses'][0]['image_100x100'],
+        "url" : 'https://www.udemy.com'+j1['courses'][0]['url'],
+        "author" :  j1['courses'][0]['visible_instructors'][0]['display_name']
+    }
+    allData["u2"]={
+        "name": j1['courses'][1]['title'],
+        "img" : j1['courses'][1]['image_100x100'],
+        "url" : 'https://www.udemy.com'+j1['courses'][1]['url'],
+        "author" :  j1['courses'][1]['visible_instructors'][0]['display_name']
+    }
+    print(allData)
 
-    uName2 = j1['courses'][0]['title']
-    uImage2 = j1['courses'][0]['image_100x100']
-    uLink2 = 'https://www.udemy.com'+j1['courses'][0]['url']
-    uAuthor2 = j1['courses'][0]['visible_instructors'][0]['display_name']
-
-    print(uName1 + "\n" + uImage1 + " \n " + uLink1 + " \n " +uAuthor1)
-
-    return render_template('course.html', segment = get_segment(request), allData=allDataSupplied)
+    return render_template('course.html', segment = get_segment(request), allData=allData)
