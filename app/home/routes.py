@@ -3,6 +3,10 @@ from sqlalchemy.sql.functions import user
 from app.home.plot import *
 from app.home.predictions import *
 from app.home import blueprint
+import os
+import pathlib
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
 from flask import render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 from app import login_manager, db
@@ -36,11 +40,14 @@ dfEmployee['dob'] = pd.to_datetime(dfEmployee['dob'], format = "%d-%m-%Y")
 def getThought():
 
     url = "https://zenquotes.io/api/random"
-
-
-
     response = requests.request("GET", url)
     return response.json()[0]["q"]
+
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1] == "pdf"
+
 
 @blueprint.route('/index',methods=["GET","POST"])
 @login_required
@@ -68,7 +75,7 @@ def index():
         if(datetime.datetime.strptime(event ["Start"], "%Y-%m-%d") <datetime.datetime.today() ):
             temp.remove(event)
     events=temp.copy()
-    print(temp)
+
     for event in temp:
         if username in event['Attending']:
             inEvent.append(event)
@@ -143,7 +150,7 @@ def index():
 
     
     
-    print(current_user.get_id())
+
     if int(current_user.get_id()) == 1:
         allDataSupplied = {
             'numberOfEmployees': {},
@@ -260,8 +267,30 @@ def route_health_individual():
 
 
 #employee basically skill groaph
-@blueprint.route('/plots')
+@blueprint.route('/plots',methods=["GET","POST"])
 def root():
+    
+    
+    if request.method == 'POST':
+        print("here")
+        if 'pdf-file' not in request.files:
+            #flash('No pdf file')
+            return redirect(request.url)
+        pdf = request.files['pdf-file']
+        if pdf.filename == '':
+            return redirect(request.url)
+        if pdf and allowed_file(pdf.filename):
+            #TODO increase score
+            print(pdf.filename)
+            for row in User.query.filter_by(id=current_user.get_id()).all():
+                username = row.username
+                row.SkillPointEarned=str(int(row.SkillPointEarned)+100)
+            pathlib.Path("Certificates/"+username).mkdir(parents=True, exist_ok=True)
+            pdf.save( "Certificates/"+username+"/"+pdf.filename)
+        
+            print("score+")
+        
+    
     flag=True
     for row in User.query.filter_by(id=current_user.get_id()).all():
 
@@ -272,7 +301,7 @@ def root():
             except :
                 flag=false
     #G = GraphG(r1,r2,r3,r4,r5)
-    print(res,type(res))
+
     jlist=[]
     if flag:
         for row in User.query.filter_by(job_level=str(int(jlevel)+1) , department=dept).all():
@@ -280,7 +309,7 @@ def root():
             jlist.extend(temp["skills"])
 
     
-    recom,Graph=getRecommendations(res["skills"],jlist)
+    crecom,recom,Graph=getRecommendations(res["skills"],jlist)
 
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
 
@@ -290,7 +319,7 @@ def oneskill(template):
     allDataSupplied = {
         'name': template
     }
-    print(allDataSupplied)
+
     #for row in User.query.filter_by(id=current_user.get_id()).all():
     #        r1 = row.skills1
     #        r2 = row.skills2
@@ -383,7 +412,7 @@ def route_work_one():
     
     if request.method == 'POST':
         username = request.form["username"]
-        print(username)
+    
        
         row=dfEmployee.loc[dfEmployee["username"]==username].to_dict("records")[0]
      
@@ -608,17 +637,20 @@ def getcourse():
     query = "excel"
     r = requests.get('https://api.coursera.org/api/courses.v1?q=search&query='+query+'&includes=instructorIds,partnerIds&fields=instructorIds,previewLink,name,photoUrl,previewLink,links,partnerIds')
     j = r.json()
+    allData={}
+    allData["c1"]={
+        "name": j['elements'][0]['name'],
+        "img" : j['elements'][0]['photoUrl'],
+        "url" : 'https://www.coursera.org/learn/'+j['elements'][0]['slug'],
+        "author" : j['linked']['partners.v1'][0]['name']
+    }
+    allData["c2"]={
+        "name": j['elements'][1]['name'],
+        "img" : j['elements'][1]['photoUrl'],
+        "url" : 'https://www.coursera.org/learn/'+j['elements'][1]['slug'],
+        "author" : j['linked']['partners.v1'][1]['name']
+    }
 
-    ceraName1 = j['elements'][0]['name']
-    ceraImg1 = j['elements'][0]['photoUrl']
-    ceraLink1 = 'https://www.coursera.org/learn/'+j['elements'][0]['slug']
-    Author1 = j['linked']['partners.v1'][0]['name']
-    print(ceraName1 + "\n" + ceraImg1 + " \n " + ceraLink1 + " \n " +Author1)
-
-    ceraName2 = j['elements'][1]['name']
-    ceraImg2 = j['elements'][1]['photoUrl']
-    ceraLink2 = 'https://www.coursera.org/learn/'+j['elements'][1]['slug']
-    Author2 = j['linked']['partners.v1'][1]['name']
 
     url = 'https://www.udemy.com/api-2.0/search-courses/recommendation/?course_badge=beginners_choice&page_size=5&skip_price=true&q='+query
     headers = {'content-type': 'application/json','Referer': 'https://10.10.10.10/courses/search/'}
@@ -626,6 +658,7 @@ def getcourse():
     r1 = requests.get(url, headers=headers)
     j1 = r1.json()
 
+<<<<<<< HEAD
     uName1 = j1['courses'][0]['title']
     uImage1 = j1['courses'][0]['image_100x100']
     uLink1 = 'https://www.udemy.com'+j1['courses'][0]['url']
@@ -660,3 +693,20 @@ def profile(template):
     #recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
     #print(recom)
     return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
+=======
+    allData["u1"]={
+        "name": j1['courses'][0]['title'],
+        "img" : j1['courses'][0]['image_100x100'],
+        "url" : 'https://www.udemy.com'+j1['courses'][0]['url'],
+        "author" :  j1['courses'][0]['visible_instructors'][0]['display_name']
+    }
+    allData["u2"]={
+        "name": j1['courses'][1]['title'],
+        "img" : j1['courses'][1]['image_100x100'],
+        "url" : 'https://www.udemy.com'+j1['courses'][1]['url'],
+        "author" :  j1['courses'][1]['visible_instructors'][0]['display_name']
+    }
+    print(allData)
+
+    return render_template('course.html', segment = get_segment(request), allData=allData)
+>>>>>>> 833162dac8771d71bd45ebee02aa8a4f40d810cf

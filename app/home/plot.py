@@ -54,7 +54,7 @@ def getRecommendations(ilist,flatJlist):
   temp1={}
   #flatJlist = [j for sub in jlist for j in sub]
   counter = Counter(flatJlist)
-  print(counter)
+
   klist=counter.keys()
   for node in alreadyRecommend:
       l1=list(G.neighbors(node))
@@ -70,9 +70,9 @@ def getRecommendations(ilist,flatJlist):
   recommend=list(dict(sorted(temp.items(), key=lambda item: item[1],reverse=True)).keys())[:5]
   #TODO return
   crecommend=list(dict(sorted(temp1.items(), key=lambda item: item[1],reverse=True)).keys())[:5]
-  print(crecommend)
+
   l=recommend.copy()
   clevel(G,alreadyRecommend,recommend,Graph)
   #print(Graph)
 
-  return l,Graph
+  return crecommend,l,Graph
