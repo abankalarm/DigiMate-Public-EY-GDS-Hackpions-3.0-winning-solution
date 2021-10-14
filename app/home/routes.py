@@ -261,6 +261,30 @@ def root():
     print(recom)
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
 
+
+@blueprint.route('/plots/<template>')
+def oneskill(template):
+    allDataSupplied = {
+        'name': template
+    }
+    print(allDataSupplied)
+    #for row in User.query.filter_by(id=current_user.get_id()).all():
+    #        r1 = row.skills1
+    #        r2 = row.skills2
+    #        r3 = row.skills3
+    #        r4 = row.skills4
+    #        r5 = row.skills5
+    #G = GraphG(r1,r2,r3,r4,r5)
+    #recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
+    #print(recom)
+    return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
+
+
+@blueprint.route('/bot')
+def bot():
+    return render_template('bot.html', segment = get_segment(request))
+
+
 # @blueprint.route('/plot')
 # def plot():
 #     for row in User.query.filter_by(id=current_user.get_id()).all():

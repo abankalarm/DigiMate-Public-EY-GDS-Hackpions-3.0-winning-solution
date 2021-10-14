@@ -26,6 +26,10 @@
             <h5 class="mt-4">Analysis</h5>
             This dashboard allows you to look at your activity and production levels.
             <hr>
+            <b><h6 id="reco1"></b></h6><br>
+            <b><h6 id="reco2"></b></h6><br>
+            <b><h6 id="reco3"></b></h6><br>
+            <b><h6 id="reco4"></b></h6><br>
             <div id="chartdiv-loggedin"></div>
             <div class="row">
                 <div class="col-md-3 col-sm-12">
@@ -36,8 +40,6 @@
                         <li><a class="nav-link text-left" id="v-pills-meetings-tab" data-toggle="pill" href="#v-pills-meetings" role="tab" aria-controls="v-pills-meetings" aria-selected="false">Meetings</a></li>
 
                         <li><a class="nav-link text-left" id="v-pills-issues-tab" data-toggle="pill" href="#v-pills-issues" role="tab" aria-controls="v-pills-issues" aria-selected="false">Working On Issues</a></li>
-
-                        <!--<li><a class="nav-link text-left" id="v-pills-loggedin-tab" data-toggle="pill" href="#v-pills-loggedin" role="tab" aria-controls="v-pills-loggedin" aria-selected="false">System LoggedIn Time</a></li>-->
                         
                         <li><a class="nav-link text-left" id="v-pills-offs-tab" data-toggle="pill" href="#v-pills-offs" role="tab" aria-controls="v-pills-offs" aria-selected="false">Offs Last Year</a></li>
 
@@ -161,6 +163,15 @@
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
     <script>
         var allData = JSON.parse('{{allData | tojson}}');
+        var reco1 = document.getElementById("reco1");
+        var reco2 = document.getElementById("reco2");
+        var reco3 = document.getElementById("reco3");
+        var reco4 = document.getElementById("reco4");
+
+        var wereco1 = "";
+        var wereco2 = "";
+        var wereco3 = "";
+        var wereco4 = "";
         $(document).ready(function() {
             setTimeout(function() {
 
@@ -172,6 +183,14 @@
                         var chart = am4core.create("chartdiv-loggedin", am4charts.XYChart);
                         // Add data
                         chart.data = [];
+
+                        empSumE = 0;
+                        empSumM = 0;
+                        empSumW = 0;
+
+                        deptSumE = 0;
+                        deptSumM = 0;
+                        deptSumW = 0;
                         for (var i = 0; i < 12; i++) {
                             dates = allData.deptAvg.Month[i];
                             chart.data.push({
@@ -180,8 +199,44 @@
                                 Meetings: allData.monthWise.Meetings[i],
                                 Issues: allData.monthWise.WorkingOnIssues[i],
                                 LoggedIn: allData.monthWise.Email[i] + allData.monthWise.Meetings[i] + allData.monthWise.WorkingOnIssues[i]
-                            })
+                            });
+                            empSumE += allData.monthWise.Email[i];
+                            empSumM += allData.monthWise.Meetings[i];
+                            empSumW += allData.monthWise.WorkingOnIssues[i];
+
+                            deptSumE += allData.deptAvg.Email[i];
+                            deptSumM += allData.deptAvg.Meetings[i];
+                            deptSumW += allData.deptAvg.WorkingOnIssues[i];
                         }
+
+                        if(empSumE > deptSumE) {
+                            wereco1 += "You spent more time on emails than your department average last year.\n";
+                        } else {
+                            wereco1 += "You spent less time on emails than your department average last year.\n"
+                        }
+
+                        if(empSumM > deptSumM) {
+                            wereco2 += "You spent more time on meetings than your department average last year.\n";
+                        } else {
+                            wereco2 += "You spent less time on meetings than your department average last year.\n"
+                        }
+
+                        if(empSumW > deptSumW) {
+                            wereco3 += "You spent more time working on issues than your department average last year.\n";
+                        } else {
+                            wereco3 += "You spent less time working on issues than your department average last year.\n"
+                        }
+
+                        if(empSumW + empSumM + empSumE > deptSumW + deptSumE + deptSumM) {
+                            wereco4 += "Overall, you spent more time on the system than your department average last year.";
+                        } else {
+                            wereco4 += "Overall, you spent less time on the system than your department average last year."
+                        }
+
+                        reco1.innerHTML = wereco1;
+                        reco2.innerHTML = wereco2;
+                        reco3.innerHTML = wereco3;
+                        reco4.innerHTML = wereco4;
 
                         // Create axes
                         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
