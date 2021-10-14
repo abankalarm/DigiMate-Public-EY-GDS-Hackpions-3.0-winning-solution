@@ -636,6 +636,27 @@ def getcourse():
     uLink2 = 'https://www.udemy.com'+j1['courses'][0]['url']
     uAuthor2 = j1['courses'][0]['visible_instructors'][0]['display_name']
 
+    
     print(uName1 + "\n" + uImage1 + " \n " + uLink1 + " \n " +uAuthor1)
 
     return render_template('course.html', segment = get_segment(request), allData=allDataSupplied)
+
+
+@blueprint.route('/profile/<template>')
+def profile(template):
+    username = template
+
+    allDataSupplied = {
+        'name': template
+    }
+    print(allDataSupplied)
+    #for row in User.query.filter_by(id=current_user.get_id()).all():
+    #        r1 = row.skills1
+    #        r2 = row.skills2
+    #        r3 = row.skills3
+    #        r4 = row.skills4
+    #        r5 = row.skills5
+    #G = GraphG(r1,r2,r3,r4,r5)
+    #recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
+    #print(recom)
+    return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
