@@ -15,6 +15,7 @@ from bokeh.sampledata.iris import flowers
 import pandas as pd
 import csv
 from pandasql import sqldf
+import requests
 from datetime import date
 from app.base.models import User
 import ast
@@ -32,6 +33,15 @@ dfActivity['Month'] = pd.to_datetime(dfActivity['Month'], format = "%d-%m-%Y")
 dfHealth['ActivityDate'] = pd.to_datetime(dfHealth['ActivityDate'], format = "%d-%m-%Y")
 dfEmployee['dob'] = pd.to_datetime(dfEmployee['dob'], format = "%d-%m-%Y")
 
+def getThought():
+
+    url = "https://zenquotes.io/api/random"
+
+
+
+    response = requests.request("GET", url)
+    return response.json()[0]["q"]
+
 @blueprint.route('/index',methods=["GET","POST"])
 @login_required
 def index():
@@ -40,8 +50,10 @@ def index():
         department = row.department
         job_level = row.job_level
         res=json.loads(row.skills)
-        res=res["skills"]
-
+        res=res["skills"]  
+    #TODO use thoughtgit
+    thought=getThought()
+    print(thought)
     events=[]
     temp=[]
     with open('CSVs/Events.csv','r') as data:
@@ -271,6 +283,30 @@ def root():
     recom,Graph=getRecommendations(res["skills"],jlist)
 
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
+
+
+@blueprint.route('/plots/<template>')
+def oneskill(template):
+    allDataSupplied = {
+        'name': template
+    }
+    print(allDataSupplied)
+    #for row in User.query.filter_by(id=current_user.get_id()).all():
+    #        r1 = row.skills1
+    #        r2 = row.skills2
+    #        r3 = row.skills3
+    #        r4 = row.skills4
+    #        r5 = row.skills5
+    #G = GraphG(r1,r2,r3,r4,r5)
+    #recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
+    #print(recom)
+    return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
+
+
+@blueprint.route('/bot')
+def bot():
+    return render_template('bot.html', segment = get_segment(request))
+
 
 # @blueprint.route('/plot')
 # def plot():
