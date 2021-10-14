@@ -658,7 +658,6 @@ def getcourse():
     r1 = requests.get(url, headers=headers)
     j1 = r1.json()
 
-<<<<<<< HEAD
     uName1 = j1['courses'][0]['title']
     uImage1 = j1['courses'][0]['image_100x100']
     uLink1 = 'https://www.udemy.com'+j1['courses'][0]['url']
@@ -693,20 +692,3 @@ def profile(template):
     #recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
     #print(recom)
     return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
-=======
-    allData["u1"]={
-        "name": j1['courses'][0]['title'],
-        "img" : j1['courses'][0]['image_100x100'],
-        "url" : 'https://www.udemy.com'+j1['courses'][0]['url'],
-        "author" :  j1['courses'][0]['visible_instructors'][0]['display_name']
-    }
-    allData["u2"]={
-        "name": j1['courses'][1]['title'],
-        "img" : j1['courses'][1]['image_100x100'],
-        "url" : 'https://www.udemy.com'+j1['courses'][1]['url'],
-        "author" :  j1['courses'][1]['visible_instructors'][0]['display_name']
-    }
-    print(allData)
-
-    return render_template('course.html', segment = get_segment(request), allData=allData)
->>>>>>> 833162dac8771d71bd45ebee02aa8a4f40d810cf
