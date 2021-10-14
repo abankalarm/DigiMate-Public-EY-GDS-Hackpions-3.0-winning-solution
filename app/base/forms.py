@@ -6,7 +6,6 @@ from wtforms.validators import InputRequired, Email, DataRequired
 
 ## login and registration
 
-skills_options = ['hak','super stupid','haha']
 
 class LoginForm(FlaskForm):
     username = TextField    ('Username', id='username_login'   , validators=[DataRequired()])

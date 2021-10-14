@@ -19,6 +19,7 @@ from datetime import date
 from app.base.models import User
 import ast
 import datetime
+import json
 import sqlite3
 pysqldf = lambda q: sqldf(q, globals())
 
@@ -37,9 +38,8 @@ def index():
         username = row.username
         department = row.department
         job_level = row.job_level
-        skill1 = row.skills1
-        skill2 = row.skills2
-        skill3 = row.skills3
+        res=json.loads(row.skills)
+        res=res["skills"]
 
     events=[]
     temp=[]
@@ -97,8 +97,7 @@ def index():
                             inEvent.append(event)
                             events.remove(event)
                     events=sorted(events, key=lambda x: datetime.datetime.strptime(x["Start"], "%Y-%m-%d"))
-                    print("here")
-                    print(events)
+                   
                     break
 
 
@@ -162,7 +161,7 @@ def index():
     allDataSupplied['LoggedInThisMonth'] = EmployeeDetails['SystemLoggedInTime'][11]
     allDataSupplied['LoggedInLastMonth'] = EmployeeDetails['SystemLoggedInTime'][10]
 
-    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = skill1, skill2 = skill2, skill3 = skill3, allData = allDataSupplied)
+    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied)
 
 @blueprint.route('/<template>')
 @login_required
@@ -250,15 +249,26 @@ def route_health_individual():
 #employee basically skill groaph
 @blueprint.route('/plots')
 def root():
+    flag=True
     for row in User.query.filter_by(id=current_user.get_id()).all():
-            r1 = row.skills1
-            r2 = row.skills2
-            r3 = row.skills3
-            r4 = row.skills4
-            r5 = row.skills5
+
+            res=json.loads(row.skills)
+            try:
+                dept=row.department
+                jlevel=row.job_level
+            except :
+                flag=false
     #G = GraphG(r1,r2,r3,r4,r5)
-    recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
-    print(recom)
+    print(res,type(res))
+    jlist=[]
+    if flag:
+        for row in User.query.filter_by(job_level=str(int(jlevel)+1) , department=dept).all():
+            temp=json.loads(row.skills)
+            jlist.extend(temp["skills"])
+
+    
+    recom,Graph=getRecommendations(res["skills"],jlist)
+
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
 
 
@@ -361,10 +371,10 @@ def route_work_one():
     if request.method == 'POST':
         username = request.form["username"]
         print(username)
-        print(dfEmployee)
+       
         row=dfEmployee.loc[dfEmployee["username"]==username].to_dict("records")[0]
-        print(row)
-        print(row["dob"])
+     
+      
         dob = row["dob"]
         department = row["Dept"]
         Gender = row["Gender"]
@@ -435,7 +445,7 @@ def route_work_one():
                     test[i] = [codes[i][employee[i]]]
             else:
                 test[i] = [employee[i]]
-        print("here")
+       
         lstring=["Poor","Average","Good","Great","Excelent"]
         if(getJobSatisfaction(test)[0]==0):
             js="Not Satisfied"
@@ -501,7 +511,7 @@ def sync_function():
         diction=diction.to_dict('records')
         if(len(diction)>0):
             diction=diction[0]
-            print(type(diction["username"]),diction["username"])
+
             row.extra = diction["fullname"]
             row.Gender = diction["Gender"]
             row.MaritalStatus = diction["MaritalStatus"]
@@ -517,7 +527,8 @@ def sync_function():
             row.department = diction["Dept"]
             row.salary = diction["salary"]
             row.dob = diction["dob"]
-            row.heightandweight = str(diction["height"]) + " " + str(diction["weight"])
+            row.height =str(diction["height"])
+            row.weight = str(diction["weight"])
             #row.heightandweight = Column(String)
             db.session.commit()
     return redirect("/page-404.html", code=200)
@@ -530,7 +541,7 @@ def route_enterEmployeeCsv():
         # save the single "profile" file
         csvFile = request.files['Csv']
         dfCsv = pd.read_csv(csvFile)
-        print(dfCsv)
+   
         for row in User.query.all():
             username = row.username
             print(username)
@@ -538,7 +549,7 @@ def route_enterEmployeeCsv():
             diction=diction.to_dict('records')
             if(len(diction)>0):
                 diction=diction[0]
-                print(type(diction["username"]),diction["username"])
+       
                 row.extra = diction["fullname"]
                 row.Gender = diction["Gender"]
                 row.MaritalStatus = diction["MaritalStatus"]
