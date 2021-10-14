@@ -284,6 +284,7 @@ def root():
             print(pdf.filename)
             for row in User.query.filter_by(id=current_user.get_id()).all():
                 username = row.username
+                row.SkillPointEarned=str(int(row.SkillPointEarned)+100)
             pathlib.Path("Certificates/"+username).mkdir(parents=True, exist_ok=True)
             pdf.save( "Certificates/"+username+"/"+pdf.filename)
         
