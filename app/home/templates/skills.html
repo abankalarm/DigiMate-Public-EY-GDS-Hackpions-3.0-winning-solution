@@ -7,6 +7,26 @@
         height: 800px;
         width: 100%;
     }
+    .button-skill {
+        border-radius: 12px;
+        font-size: 16px;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        background-color: #f44336;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-color: black;
+        transition-duration: 0.4s;
+        margin-left: 20px;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+    .button-skill:hover {
+        background-color: pink;
+        color: black;
+    }
 </style>
 {% endblock stylesheets %} {% block content %}
 
@@ -35,9 +55,14 @@
                                     <br>
                                     <br> below are our recommendations, for a more transparent understanding you can also look the brain graph being rendered below
 
-                                </p><b>
-                                {% for option in recomm %} {{option}} <br> {% endfor %}
-                            </b>
+                                </p>
+                                <div class="row">
+                                    <div><button class = "button-skill" id="skills1"></button></div>
+                                    <div><button class = "button-skill" id="skills2"></button></div>
+                                    <div><button class = "button-skill" id="skills3"></button></div>
+                                    <div><button class = "button-skill" id="skills4"></button></div>
+                                    <div><button class = "button-skill" id="skills5"></button></div>
+                                </div>
                             </div>
 
                         </div>
@@ -46,9 +71,6 @@
                 <!-- [ Main Content ] end -->
                 
                 <div id="myplot"></div>
-                <script>
-                    
-                </script>
 
             </div>
         </div>
@@ -64,6 +86,41 @@
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <script>
 var allData = JSON.parse('{{allData | tojson}}');
+var recomm = JSON.parse('{{recomm | tojson}}');
+
+var skills1 = document.getElementById('skills1');
+var skills2 = document.getElementById('skills2');
+var skills3 = document.getElementById('skills3');
+var skills4 = document.getElementById('skills4');
+var skills5 = document.getElementById('skills5');
+
+skills1.innerHTML = recomm[0];
+skills2.innerHTML = recomm[1];
+skills3.innerHTML = recomm[2];
+skills4.innerHTML = recomm[3];
+skills5.innerHTML = recomm[4];
+
+skills1.addEventListener("click", function() {
+    window.location.href = window.location.pathname + "/" + skills1.innerHTML;
+});
+
+skills2.addEventListener("click", function() {
+    window.location.href = window.location.pathname + "/" + skills2.innerHTML;
+});
+
+skills3.addEventListener("click", function() {
+    window.location.href = window.location.pathname + "/" + skills3.innerHTML;
+});
+
+skills4.addEventListener("click", function() {
+    window.location.href = window.location.pathname + "/" + skills4.innerHTML;
+});
+
+skills5.addEventListener("click", function() {
+    window.location.href = window.location.pathname + "/" + skills5.innerHTML;
+});
+
+
 $(document).ready(function() {
     setTimeout(function() {
         am4core.ready(function() {
@@ -80,7 +137,7 @@ $(document).ready(function() {
             networkSeries.dataFields.children = "children";
 
             networkSeries.nodes.template.label.text = "{name}"
-            networkSeries.fontSize = 8;
+            networkSeries.fontSize = 12;
             networkSeries.linkWithStrength = 0;
 
             var nodeTemplate = networkSeries.nodes.template;
