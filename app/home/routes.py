@@ -15,6 +15,7 @@ from bokeh.sampledata.iris import flowers
 import pandas as pd
 import csv
 from pandasql import sqldf
+import requests
 from datetime import date
 from app.base.models import User
 import ast
@@ -31,6 +32,15 @@ dfActivity['Month'] = pd.to_datetime(dfActivity['Month'], format = "%d-%m-%Y")
 dfHealth['ActivityDate'] = pd.to_datetime(dfHealth['ActivityDate'], format = "%d-%m-%Y")
 dfEmployee['dob'] = pd.to_datetime(dfEmployee['dob'], format = "%d-%m-%Y")
 
+def getThought():
+
+    url = "https://zenquotes.io/api/random"
+
+
+
+    response = requests.request("GET", url)
+    return response.json()[0]["q"]
+
 @blueprint.route('/index',methods=["GET","POST"])
 @login_required
 def index():
@@ -39,8 +49,10 @@ def index():
         department = row.department
         job_level = row.job_level
         res=json.loads(row.skills)
-        res=res["skills"]
-
+        res=res["skills"]  
+    #TODO use thoughtgit
+    thought=getThought()
+    print(thought)
     events=[]
     temp=[]
     with open('CSVs/Events.csv','r') as data:
