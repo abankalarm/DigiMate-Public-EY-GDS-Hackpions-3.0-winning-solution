@@ -603,7 +603,7 @@ def route_enterEmployeeCsv():
 ## for everyone
 
 @blueprint.route('/api/getcourse')
-def route_rank():
+def getcourse():
     # imageurl title author hyperlink
     query = "excel"
     r = requests.get('https://api.coursera.org/api/courses.v1?q=search&query='+query+'&includes=instructorIds,partnerIds&fields=instructorIds,previewLink,name,photoUrl,previewLink,links,partnerIds')
