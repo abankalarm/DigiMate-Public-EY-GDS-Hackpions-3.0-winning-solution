@@ -55,7 +55,7 @@ def getThought():
     response = requests.request("GET", url)
     return response.json()[0]["q"]
 
-def getCources(allData,query):
+def getCourses(allData,query):
     r = requests.get('https://api.coursera.org/api/courses.v1?q=search&query='+query+'&includes=instructorIds,partnerIds&fields=instructorIds,previewLink,name,photoUrl,previewLink,links,partnerIds')
     j = r.json()
 
@@ -350,8 +350,6 @@ def oneskill(template):
         print(res)
         if template in res:
             res=res[template]
-            print("@@@@@@@@@@@@@@@@@@@@@@@@@",res)
- 
 
     if request.method == 'POST':
         
@@ -396,7 +394,7 @@ def oneskill(template):
       
     allData = {}
     query = template
-    getCources(allData,query)
+    getCourses(allData,query)
     name1=template
     Graph=[]
     buildGraph(name1,Graph)
