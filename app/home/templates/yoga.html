@@ -99,6 +99,26 @@
     from {opacity: .5}
     to {opacity: 2}
     }
+
+    .col {
+        color: black;
+        float: left;
+        width: 33.33%;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+
+    #container {
+        margin: auto;
+    }
+
 </style>
 {% endblock stylesheets %} {% block content %}
 
@@ -140,7 +160,7 @@ These exercises can be performed while sitting right at the desk.
                             <div class="slideshow-container">
                                 <!-- Full images with numbers and message Info -->
                                 <div class="Containers">
-                                    <div class="MessageInfo" id = "two">1 / 5</div>
+                                    <div class="MessageInfo" id = "one">1 / 5</div>
                                     <img src="" style="width:100%;" id = "one-i">
                                     <div class="Info" id = "one-c"></div>
                                 </div>
@@ -189,6 +209,7 @@ These exercises can be performed while sitting right at the desk.
                                     These exercises can be performed in the Yoga room or at home. You just require a Yoga mat and bit of dedication in exchange for a healthy lifestyle.
                                 </h6>
                             </div>
+                            <div id = "container"></div>
                         </div>
                     </div>
                 </div>
@@ -202,40 +223,45 @@ These exercises can be performed while sitting right at the desk.
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-    $.getJSON("/static/assets/data/yoga_data.json", function(data){
+    
+        var data = JSON.parse('{{allData | tojson}}');
         document.getElementById("one-i").src = data.prayanama[0].img_url;
         document.getElementById("one-c").innerHTML = "Tap on image to know more";
         document.getElementById("one-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/" + data.prayanama[0].sanskrit_name;
+            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[0].sanskrit_name;
         });
 
         document.getElementById("two-i").src = data.prayanama[1].img_url;
         document.getElementById("two-c").innerHTML = "Tap on image to know more";
         document.getElementById("two-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/" + data.prayanama[1].sanskrit_name;
+            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[1].sanskrit_name;
         });
 
         document.getElementById("three-i").src = data.prayanama[2].img_url;
         document.getElementById("three-c").innerHTML = "Tap on image to know more";
         document.getElementById("three-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/" + data.prayanama[2].sanskrit_name;
+            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[2].sanskrit_name;
         });
 
         document.getElementById("four-i").src = data.prayanama[3].img_url;
         document.getElementById("four-c").innerHTML = "Tap on image to know more";
-        document.getElementById("three-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/" + data.prayanama[3].sanskrit_name;
+        document.getElementById("four-i").addEventListener('click', function() {
+            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[3].sanskrit_name;
         });
 
         document.getElementById("five-i").src = data.prayanama[4].img_url;
         document.getElementById("five-c").innerHTML = "Tap on image to know more";
         document.getElementById("five-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/" + data.prayanama[4].sanskrit_name;
+            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[4].sanskrit_name;
         });
 
-    }).fail(function(){
-        console.log("An error has occurred.");
-    });
+        var element = "";
+        var total = Object.keys(data.otherexercise).length;
+        console.log(total);
+        for(var ele = 0; ele < total; ele+=3) {
+            element += "<div class='row'><div class = 'col'><img src='" + data.otherexercise[ele].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele].sanskrit_name + "(" + data.otherexercise[ele].english_name + ")" + " </div></div><div class = 'col'><img src='" + data.otherexercise[ele + 1].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele + 1].sanskrit_name + "(" + data.otherexercise[ele + 1].english_name + ")" + " </div></div><div class = 'col'><img src='" + data.otherexercise[ele + 2].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele + 2].sanskrit_name + "(" + data.otherexercise[ele + 2].english_name + ")" + " </div></div></div>";
+        }
+        document.getElementById("container").innerHTML = element;
 
     var slidePosition = 1;
     SlideShow(slidePosition);
@@ -266,7 +292,6 @@ These exercises can be performed while sitting right at the desk.
     circles[slidePosition-1].className += " enable";
     } 
 
-    //i1.innerHTML = "<img src='chicago.jpg' alt='Chicago' style='width:100%;'><div class='carousel-caption'><h3>Chicago</h3><p>Thank you, Chicago!</p></div>";
 </script>
 
 {% endblock javascripts %}

@@ -37,7 +37,6 @@
             <div id="chartdiv-steps"></div>
         </div>
     </div>
-    <iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/7R6kiCYW_xI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
    <!-- <div class="col-sm-12">
         <h5 class="mt-4">Health Recommendations</h5>
         <h7 id = "reco">
@@ -45,17 +44,18 @@
         <hr>
     </div> -->
     <script>(function(){
-        var js,fs,d=document,id="tars-widget-script",b="https://tars-file-upload.s3.amazonaws.com/bulb/";
-        if(!d.getElementById(id)){
-            js=d.createElement("script");
-            js.id=id;
-            js.type="text/javascript";
-            js.src=b+"js/widget.js";
-            fs=d.getElementsByTagName("script")[0];
-            fs.parentNode.insertBefore(js,fs)
-        }
-    })();
-    window.tarsSettings = {"convid":"fh-r1s"};</script>
+        var js,fs,d=document,id="tars-widget-script";
+            if(!d.getElementById(id)){
+                js=d.createElement("script");
+                js.id=id;
+                js.type="text/javascript";
+                js.src="/static/assets/js/bot.js";
+                fs=d.getElementsByTagName("script")[0];
+                fs.parentNode.insertBefore(js,fs)
+            }
+        })();
+        window.tarsSettings = {"convid":"fh-r1s"}
+    </script>
 </div>
 
 

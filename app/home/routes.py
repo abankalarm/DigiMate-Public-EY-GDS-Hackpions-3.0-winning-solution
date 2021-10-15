@@ -42,6 +42,9 @@ dfActivity['Month'] = pd.to_datetime(dfActivity['Month'], format = "%d-%m-%Y")
 dfHealth['ActivityDate'] = pd.to_datetime(dfHealth['ActivityDate'], format = "%d-%m-%Y")
 dfEmployee['dob'] = pd.to_datetime(dfEmployee['dob'], format = "%d-%m-%Y")
 
+with open('app/base/static/assets/data/yoga_data.json') as json_file:
+    yoga_data = json.load(json_file)
+
 def getThought():
 
     url = "https://zenquotes.io/api/random"
@@ -337,8 +340,15 @@ def oneskill(template):
     return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
 
 @blueprint.route('/yoga')
-def bot():
-    return render_template('yoga.html', segment = get_segment(request))
+def yoga():
+    print(yoga_data)
+    return render_template('yoga.html', segment = get_segment(request), allData = yoga_data)
+
+@blueprint.route('/yoga/prayanama/<template>')
+def yoga_one(template):
+    allDataSupplied = list(filter(lambda yo: yo['sanskrit_name'] == template, yoga_data['prayanama']))
+    return render_template('yoga-one.html', segment = get_segment(request), allData = allDataSupplied[0])
+
 
 
 # @blueprint.route('/plot')
