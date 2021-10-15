@@ -17,25 +17,6 @@
         width: 60%;
         height: 600px;
     }
-    #bot {
-        position: fixed;
-        margin: 10px;
-        right: 0;
-        bottom: 0;
-    }
-    #bot-hover {
-        display: none;
-    }
-    #bot:hover + #bot-hover {
-        display: block;
-        padding: 20px;
-        background-color: lightblue;
-        color: black;
-        position: fixed;
-        margin: 60px;
-        right: 0;
-        bottom: 0;
-    }
 </style>
 <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 {% endblock stylesheets %} {% block content %}
@@ -55,8 +36,6 @@
             </div>
             <div id="chartdiv-steps"></div>
         </div>
-        <a id = "bot" href ="https://creator.voiceflow.com/prototype/6166f5001979e100076ce614"><img src = "/static/assets/images/bot.png"></a>
-        <div class="hide" id="bot-hover">I am your DigiMate. Click to talk to me.</div>
     </div>
     <!-- <div class="col-sm-12">
         <h5 class="mt-4">Health Recommendations</h5>

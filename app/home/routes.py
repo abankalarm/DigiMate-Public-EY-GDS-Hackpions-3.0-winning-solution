@@ -28,10 +28,15 @@ import json
 import sqlite3
 import requests
 pysqldf = lambda q: sqldf(q, globals())
+con = sqlite3.connect("db.sqlite3")
+dfActivity = pd.read_sql_query("SELECT * from EmployeeActivity", con)
+dfEmployee = pd.read_sql_query("SELECT * from User where id != 1 and id != 451", con)
+dfHealth = pd.read_sql_query("SELECT * from EmployeeHealth", con)
+con.close()
 
-dfActivity = pd.read_csv("./CSVs/EmployeeActivity.csv")
-dfHealth = pd.read_csv("./CSVs/EmployeeHealth.csv")
-dfEmployee = pd.read_csv("./CSVs/EmployeeDataset.csv")
+#dfActivity = pd.read_csv("./CSVs/EmployeeActivity.csv")
+#dfHealth = pd.read_csv("./CSVs/EmployeeHealth.csv")
+#dfEmployee = pd.read_csv("./CSVs/EmployeeDataset.csv")
 
 dfActivity['Month'] = pd.to_datetime(dfActivity['Month'], format = "%d-%m-%Y")
 dfHealth['ActivityDate'] = pd.to_datetime(dfHealth['ActivityDate'], format = "%d-%m-%Y")
@@ -158,7 +163,7 @@ def index():
             'totalWorkingLastMonth': 0
         }
 
-        NumberEmployees = pysqldf("""Select Dept, count(*) as Count from dfEmployee group by Dept""")
+        NumberEmployees = pysqldf("""Select department, count(*) as Count from dfEmployee group by department""")
 
         Work = pysqldf("""Select avg(SystemLoggedInTime) as Work from dfActivity group by Month""").to_dict()
 
@@ -223,7 +228,7 @@ def route_work_employee():
 
     ansOneEmp = pysqldf("""SELECT Month, Email, Meetings, WorkingOnIssues, Offs FROM dfActivity WHERE username='{}' """.format(username))
 
-    ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username in (Select username from dfEmployee where Dept = '{}') group by Month;""".format(department))
+    ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username in (Select username from dfEmployee where department = '{}') group by Month;""".format(department))
     #ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username like '{}' group by Month""".format(dept + "%"))
 
     allDataSupplied['monthWise'] = ansOneEmp.to_dict()
@@ -255,7 +260,7 @@ def route_health_individual():
     ansCompanyAvg = pysqldf(queryCompanyAvg).to_dict()
     allDataSupplied['companyAvg'] =  ansCompanyAvg
 
-    queryDeptAvg = """select ActivityDate as Date, avg(TotalSteps) as Steps, avg(Calories) as Calories from dfHealth, dfEmployee where dfHealth.username = dfEmployee.username and dfEmployee.Dept = '{}' group by ActivityDate;""".format(department)
+    queryDeptAvg = """select ActivityDate as Date, avg(TotalSteps) as Steps, avg(Calories) as Calories from dfHealth, dfEmployee where dfHealth.username = dfEmployee.username and dfEmployee.department = '{}' group by ActivityDate;""".format(department)
     ansDeptAvg = pysqldf(queryDeptAvg).to_dict()
     allDataSupplied['deptAvg'] =  ansDeptAvg
 
@@ -331,10 +336,9 @@ def oneskill(template):
     #print(recom)
     return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
 
-
-@blueprint.route('/bot')
+@blueprint.route('/yoga')
 def bot():
-    return render_template('bot.html', segment = get_segment(request))
+    return render_template('yoga.html', segment = get_segment(request))
 
 
 # @blueprint.route('/plot')
@@ -418,7 +422,7 @@ def route_work_one():
      
       
         dob = row["dob"]
-        department = row["Dept"]
+        department = row["department"]
         Gender = row["Gender"]
         MaritalStatus = row["MaritalStatus"]
         YearsAtCompany  = row["YearsAtCompany"]
@@ -505,7 +509,7 @@ def route_work_one():
 
         ansOneEmp = pysqldf("""SELECT Month, Email, Meetings, WorkingOnIssues, Offs FROM dfActivity WHERE username='{}' """.format(username))
 
-        ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username in (Select username from dfEmployee where Dept = '{}') group by Month;""".format(department))
+        ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username in (Select username from dfEmployee where department = '{}') group by Month;""".format(department))
         #ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username like '{}' group by Month""".format(dept + "%"))
 
         allDataSupplied['monthWise'] = ansOneEmp.to_dict()
@@ -524,11 +528,11 @@ def route_work_dep():
         'companyAvg': {}
     }
 
-    depts = pysqldf("""Select distinct(Dept) from dfEmployee;""").to_dict()
+    depts = pysqldf("""Select distinct(department) from dfEmployee;""").to_dict()
 
-    for i in depts['Dept']:
-        allDataSupplied['monthWise'][depts['Dept'][i]] = pysqldf("""Select dfActivity.Month as Month, sum(dfActivity.Email) as TotalEmail, sum(dfActivity.Meetings) as TotalMeetings, sum(dfActivity.WorkingOnIssues) as TotalIssues, sum(dfActivity.Offs) as TotalOffs from dfEmployee, dfActivity where dfActivity.username = dfEmployee.username and dfEmployee.Dept = '{}' group by dfActivity.Month""".format(depts['Dept'][i])).to_dict()
-        allDataSupplied['monthWiseAvgPerPerson'][depts['Dept'][i]] = pysqldf("""Select dfActivity.Month as Month, avg(dfActivity.Email) as TotalEmail, avg(dfActivity.Meetings) as TotalMeetings, avg(dfActivity.WorkingOnIssues) as TotalIssues, avg(dfActivity.Offs) as TotalOffs from dfEmployee, dfActivity where dfActivity.username = dfEmployee.username and dfEmployee.Dept = '{}' group by dfActivity.Month""".format(depts['Dept'][i])).to_dict()
+    for i in depts['department']:
+        allDataSupplied['monthWise'][depts['department'][i]] = pysqldf("""Select dfActivity.Month as Month, sum(dfActivity.Email) as TotalEmail, sum(dfActivity.Meetings) as TotalMeetings, sum(dfActivity.WorkingOnIssues) as TotalIssues, sum(dfActivity.Offs) as TotalOffs from dfEmployee, dfActivity where dfActivity.username = dfEmployee.username and dfEmployee.department = '{}' group by dfActivity.Month""".format(depts['department'][i])).to_dict()
+        allDataSupplied['monthWiseAvgPerPerson'][depts['department'][i]] = pysqldf("""Select dfActivity.Month as Month, avg(dfActivity.Email) as TotalEmail, avg(dfActivity.Meetings) as TotalMeetings, avg(dfActivity.WorkingOnIssues) as TotalIssues, avg(dfActivity.Offs) as TotalOffs from dfEmployee, dfActivity where dfActivity.username = dfEmployee.username and dfEmployee.department = '{}' group by dfActivity.Month""".format(depts['department'][i])).to_dict()
 
     #queryPerMonthSumH = """SELECT Month, sum(Email) as TotalEmail, sum(Meetings) as TotalMeetings, sum(WorkingOnIssues) as TotalIssues, sum(Offs) as TotalOffs
     #                    FROM dfActivity as df
@@ -566,7 +570,7 @@ def sync_function():
             row.job_level = diction["job_level"]
             row.rating = diction["rating"]
             row.onsite = diction["onsite"]
-            row.department = diction["Dept"]
+            row.department = diction["department"]
             row.salary = diction["salary"]
             row.dob = diction["dob"]
             row.height =str(diction["height"])
