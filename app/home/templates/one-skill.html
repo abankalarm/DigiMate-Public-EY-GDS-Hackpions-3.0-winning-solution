@@ -28,16 +28,76 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 id = "course-name">
-                                </h5>
+                                <tr>
+                                    <td>
+                                    <h5 id = "course-name">
+                                    {{name1}}
+                                    </h5>
+                                    </td>
+                                    <td>
+                                    {%if res["start"]=="Begin Today"%}
+                                        {{res["start"]}}
+                                    {%elif res["start"]!="Begin Today" and res["end"]=="Take your time"%}
+                                        In Progress
+                                    {%elif res["end"]!="Take your time"%}
+                                        {{res["end"]}}
+                                    {%endif %}
+                                    </td>
+                            </tr>
                             </div>
                             <div class="card-block">
-                                <h6 id = "course-desc">
-                                </h6>
+                            <tr>
+                                {%if res["start"]=="Begin Today"%}   
+                                <td>
+                                    <form method=post enctype=multipart/form-data>
+        
+                                        <button type="submit"  name="start" >Start Today</button>
+                                    </form>
+                                </td>
+                                
+                                {%elif res["start"]!="Begin Today" and res["end"]=="Take your time"%}
+                                
+                                <td>Started on {{res["start"]}}</td>
+                                <td>
+                                    <form method=post enctype=multipart/form-data>
+                                        <input type="file" name="pdf-file" >
+                                        <button type="submit"  name="register" >Submit</button>
+                                    </form>
+                                </td>
+                                {% else %}
+                                <td>
+                                    You have Already Completed this course
+                                </td>
+                                {%endif %}
+                                
+                            </tr>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                {% for e in allData %}
+                    <!-- TODO Add Cource URL to div  -->
+                    <div class="col-md-6 col-xl-4" >
+                        <div class="card daily-sales">
+                            <div class="card-block">
+                            <div class="card-header">
+                                <h5 id = "course-name">
+                                    {{allData[e]["name"]}}
+                                </h5><br>
+                                <p> {{allData[e]["author"]}}</p>
+                            </div>
+                            <div class="card-block">
+                                <img src="{{allData[e]['img']}}" alt="Image" style="width:100%; height:100%">
+                                <a href="{{allData[e]['url']}}" target="_blank" rel="noopener noreferrer">Start</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                
+                {% endfor %}
+            </div>
                 <!-- [ Main Content ] end -->
                 
                 <div id="myplot"></div>
@@ -59,9 +119,67 @@
 var na = document.getElementById('course-name');
 var desc = document.getElementById('desc');
 var allData = JSON.parse('{{allData | tojson}}');
-na.innerHTML = allData.name;
-console.log(allData)
+na.innerHTML = name1;
 
+
+</script>
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script>
+var allData1 = JSON.parse('{{allData1 | tojson}}');
+
+
+$(document).ready(function() {
+    setTimeout(function() {
+        am4core.ready(function() {
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
+
+            var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+            networkSeries.dataFields.linkWith = "linkWith";
+            networkSeries.dataFields.name = "name";
+            networkSeries.dataFields.id = "name";
+            networkSeries.dataFields.value = "value";
+            networkSeries.dataFields.children = "children";
+
+            networkSeries.nodes.template.label.text = "{name}"
+            networkSeries.fontSize = 12;
+            networkSeries.linkWithStrength = 0;
+
+            var nodeTemplate = networkSeries.nodes.template;
+            nodeTemplate.tooltipText = "{name}";
+            nodeTemplate.fillOpacity = 1;
+            nodeTemplate.label.hideOversized = true;
+            nodeTemplate.label.truncate = true;
+
+            var linkTemplate = networkSeries.links.template;
+            linkTemplate.strokeWidth = 1;
+            var linkHoverState = linkTemplate.states.create("hover");
+            linkHoverState.properties.strokeOpacity = 1;
+            linkHoverState.properties.strokeWidth = 2;
+
+            nodeTemplate.events.on("over", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = true;
+                })
+            })
+
+            nodeTemplate.events.on("out", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = false;
+                })
+            })
+
+            networkSeries.data = allData1
+                    });
+                }, 700);
+            });
 </script>
 
 {% endblock javascripts %}

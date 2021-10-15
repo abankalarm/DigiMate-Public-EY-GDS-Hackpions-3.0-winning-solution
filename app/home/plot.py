@@ -4,7 +4,34 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 from collections import Counter
-
+def buildGraph(node,Graph):
+  G = nx.read_gpickle("graph.gpickle")
+  done=[]
+  linkWith=list(G.neighbors(node))[:7]
+  Graph.append({"name":node,"value":15,"linkWith":linkWith })
+  
+  linkWith1=[]
+  notlist=[]
+  for x in linkWith:
+    children=[]
+    if x not in done:
+      ch=list(G.neighbors(x))
+      #print("@@@@@@@@@@@",x,ch)
+      i=0
+      for y in ch:
+        if y in linkWith:
+          linkWith1.append(y)
+        elif y in notlist:
+          continue
+        elif y !=node :
+          i+=1
+          notlist.append(y)
+          children.append({"name":y,"value":5})
+          if i>7:
+            break
+      Graph.append({"name":x,"value":10,"linkWith":linkWith1,"children":children  })
+      done.append(x)
+    
 def clevel(G,nodes,recommended,Graph):
   linkWith=[]
   done=[]
