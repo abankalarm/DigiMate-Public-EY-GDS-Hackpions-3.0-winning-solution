@@ -2,10 +2,173 @@
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
+<link rel="stylesheet" href="https://use.typekit.net/lae8qkv.css">
 <style>
     #myplot {
         height: 800px;
         width: 100%;
+    }
+    
+    .container {
+        z-index: 1;
+        perspective: 3000px;
+    }
+    
+    .container .book {
+        position: relative;
+        display: block;
+        width: 400px;
+        height: 550px;
+        margin: 5% auto;
+        border-radius: 2px 4px 4px 2px;
+        background: linear-gradient(45deg, #DAD5DC 0%, #f2ebf4 100%);
+        font-family: acumin-pro, sans-serif;
+        -webkit-box-shadow: 13px 13px 8px 0px rgba(151, 146, 153, 0.6);
+        -moz-box-shadow: 13px 13px 8px 0px rgba(151, 146, 153, 0.6);
+        box-shadow: 13px 13px 8px 0px rgba(151, 146, 153, 0.6);
+        font-weight: 400;
+        color: #2b2b2b;
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        -webkit-transition: -webkit-transform .5s;
+        -moz-transition: -moz-transform .5s;
+        transition: transform .5s;
+    }
+    
+    .container .book:hover {
+        -webkit-transform: rotate3d(0, 1, 0, 35deg);
+        -moz-transform: rotate3d(0, 1, 0, 35deg);
+        transform: rotate3d(0, 1, 0, 35deg);
+    }
+    
+    .container .book>div,
+    .container .front>div {
+        display: block;
+        position: absolute;
+    }
+    
+    .container .front {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        -webkit-transform-origin: 0% 50%;
+        -moz-transform-origin: 0% 50%;
+        transform-origin: 0% 50%;
+        -webkit-transition: -webkit-transform .5s;
+        -moz-transition: -moz-transform .5s;
+        transition: transform .5s;
+        -webkit-transform: translate3d(0, 0, 20px);
+        -moz-transform: translate3d(0, 0, 20px);
+        transform: translate3d(0, 0, 20px);
+        z-index: 10;
+    }
+    
+    .container .front>div {
+        width: 400px;
+        height: 550px;
+    }
+    
+    .container .left-side {
+        width: 40px;
+        left: -20px;
+        height: 550px;
+        background-color: rgba(232, 229, 234);
+        -webkit-transform: rotate3d(0, 1, 0, -90deg);
+        -moz-transform: rotate3d(0, 1, 0, -90deg);
+        transform: rotate3d(0, 1, 0, -90deg);
+    }
+    
+    .cover svg {
+        position: absolute;
+        top: 50%;
+        left: 45%;
+        margin-top: -100px;
+        margin-left: -110px;
+        width: 300px;
+    }
+    
+    #eye-right {
+        padding-left: 185px;
+    }
+    
+    .cover .num-up {
+        position: absolute;
+        top: 64px;
+        left: 47px;
+        letter-spacing: 50px;
+        transform: rotate(-90deg);
+    }
+    
+    .cover .num-down {
+        position: relative;
+        top: 65px;
+        left: -95px;
+        transform: rotate(-90deg);
+    }
+    
+    .author {
+        font-family: acumin-pro, sans-serif;
+        font-weight: 400;
+        position: absolute;
+        top: 400px;
+        left: 50px;
+        opacity: .8;
+    }
+    
+    .container .front>div {
+        border-radius: 0 3px 3px 0;
+        box-shadow: inset 4px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .container .front:after {
+        content: '';
+        position: absolute;
+        top: 1px;
+        bottom: 1px;
+        left: -1px;
+        width: 1px;
+    }
+    
+    .container .cover:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 10px;
+        bottom: 0;
+        width: 3px;
+        background: rgba(0, 0, 0, 0.1);
+        box-shadow: 1px 0 3px rgba(255, 255, 255, 0.1);
+    }
+    
+    .container h2 {
+        width: 500px;
+        height: 40px;
+        color: #2b2b2b;
+        font-size: 15px;
+        line-height: 40px;
+        padding-right: 10px;
+        text-align: right;
+        -webkit-transform-origin: 0 0;
+        -moz-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: rotate(90deg) translateY(-40px);
+        -moz-transform: rotate(90deg) translateY(-40px);
+        transform: rotate(90deg) translateY(-40px);
+    }
+    
+    .cover {
+        background: linear-gradient(45deg, #DAD5DC 0%, #f2ebf4 100%);
+    }
+    
+    .left-side h2 span:first-child {
+        font-weight: 400;
+        font-size: 13px;
+        padding-right: 20px;
+    }
+    
+    .left-side h2 span:last-child {
+        font-family: acumin-pro, sans-serif;
     }
 </style>
 {% endblock stylesheets %} {% block content %}
@@ -30,77 +193,111 @@
                             <div class="card-header">
                                 <tr>
                                     <td>
-                                    <h5 id = "course-name">
-                                    {{name1}}
-                                    </h5>
+                                        <h5 id="course-name">
+                                            Hi, this is your first step towards <b>{{name1}}</b>
+                                        </h5>
                                     </td>
                                     <td>
-                                    {%if res["start"]=="Begin Today"%}
-                                        {{res["start"]}}
-                                    {%elif res["start"]!="Begin Today" and res["end"]=="Take your time"%}
-                                        In Progress
-                                    {%elif res["end"]!="Take your time"%}
-                                        {{res["end"]}}
-                                    {%endif %}
+                                        {%if res["start"]=="Begin Today"%} {{res["start"]}} {%elif res["start"]!="Begin Today" and res["end"]=="Take your time"%} In Progress {%elif res["end"]!="Take your time"%} {{res["end"]}} {%endif %}
                                     </td>
-                            </tr>
+                                </tr>
                             </div>
                             <div class="card-block">
-                            <tr>
-                                {%if res["start"]=="Begin Today"%}   
-                                <td>
-                                    <form method=post enctype=multipart/form-data>
-        
-                                        <button type="submit"  name="start" >Start Today</button>
-                                    </form>
-                                </td>
-                                
-                                {%elif res["start"]!="Begin Today" and res["end"]=="Take your time"%}
-                                
-                                <td>Started on {{res["start"]}}</td>
-                                <td>
-                                    <form method=post enctype=multipart/form-data>
-                                        <input type="file" name="pdf-file" >
-                                        <button type="submit"  name="register" >Submit</button>
-                                    </form>
-                                </td>
-                                {% else %}
-                                <td>
-                                    You have Already Completed this course
-                                </td>
-                                {%endif %}
-                                
-                            </tr>
+                                <tr>
+                                    {%if res["start"]=="Begin Today"%}
+                                    <td>
+                                        <form method=post enctype=multipart/form-data>
+
+                                            <button class="btn btn-primary" type="submit" name="start">Start Today</button>
+                                        </form>
+                                    </td>
+
+                                    {%elif res["start"]!="Begin Today" and res["end"]=="Take your time"%}
+
+                                    <td>Started on {{res["start"]}}</td>
+                                    <br> After completing any of the below courses from udemy or course era below, please submit the certificate in pdf format here to mark this skill as complete.
+                                    <td><br><br><br>
+                                        <form method=post enctype=multipart/form-data>
+                                            <input class="btn btn-outline-primary" type="file" name="pdf-file">
+                                            <button class="btn btn-primary" type="submit" name="register">Submit</button>
+                                        </form>
+                                    </td>
+                                    {% else %}
+                                    <td>
+                                        You have Already Completed this course
+                                    </td>
+                                    {%endif %}
+
+                                </tr>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                {% for e in allData %}
-                    <!-- TODO Add Cource URL to div  -->
-                    <div class="col-md-6 col-xl-4" >
-                        <div class="card daily-sales">
-                            <div class="card-block">
-                            <div class="card-header">
-                                <h5 id = "course-name">
-                                    {{allData[e]["name"]}}
-                                </h5><br>
-                                <p> {{allData[e]["author"]}}</p>
-                            </div>
-                            <div class="card-block">
-                                <img src="{{allData[e]['img']}}" alt="Image" style="width:100%; height:100%">
-                                <a href="{{allData[e]['url']}}" target="_blank" rel="noopener noreferrer">Start</a>
 
+                    {% for e in allData %}
+
+                    <div class="col-md-6">
+
+                        <div class="container">
+                            <div class="book">
+                                <div class="front">
+                                    <div class="cover">
+                                        <p class="num-up">84</p>
+                                        <img src="{{allData[e]['img']}}" style="top: 50%;
+                                    left: 45%;
+                                    margin-top: 25px;
+                                    margin-left: 50px;
+                                    width: 300px;">
+                                        <p class="num-down"></p>
+                                        <p class=author><b></b><a href="{{allData[e]['url']}}" target="_blank" rel="noopener noreferrer">{{allData[e]["name"]}}</a></b><br> by {{allData[e]["author"]}}</p>
+                                    </div>
+                                </div>
+                                <div class="left-side">
+                                    <h2>
+                                        <span>{{allData[e]["name"]}}</span>
+                                    </h2>
+                                </div>
                             </div>
-                        </div>
+                        </div> <br><br><br>
                     </div>
-                    </div>
-                
-                {% endfor %}
-            </div>
+                    <!-- TODO Add Cource URL to div 
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card daily-sales">
+                                <div class="card-block">
+                                    <div class="card-header">
+                                        <h5 id="course-name">
+                                            {{allData[e]["name"]}}
+                                        </h5><br>
+                                        <p> {{allData[e]["name"]}}</p>
+                                    </div>
+                                    <div class="card-block">
+                                        <img src="{{allData[e]['img']}}" alt="Image" style="width:100%; height:100%">
+                                        <a href="{{allData[e]['url']}}" target="_blank" rel="noopener noreferrer">Start</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    {% endfor %}
+                </div>
                 <!-- [ Main Content ] end -->
-                
-                <div id="myplot"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <tr>
+                            <td>
+                                <h5 id="course-name">
+                                    Where to go from here?</b>
+                                </h5>
+
+                        </tr>
+                    </div>
+                    <div class="card-block">
+
+                        <div id="myplot"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -114,72 +311,69 @@
 <script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <script>
-
-//api request with name
-var na = document.getElementById('course-name');
-var desc = document.getElementById('desc');
-var allData = JSON.parse('{{allData | tojson}}');
-na.innerHTML = name1;
-
-
+    //api request with name
+    var na = document.getElementById('course-name');
+    var desc = document.getElementById('desc');
+    var allData = JSON.parse('{{allData | tojson}}');
+    na.innerHTML = name1;
 </script>
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <script>
-var allData1 = JSON.parse('{{allData1 | tojson}}');
+    var allData1 = JSON.parse('{{allData1 | tojson}}');
 
 
-$(document).ready(function() {
-    setTimeout(function() {
-        am4core.ready(function() {
-            am4core.useTheme(am4themes_animated);
-            // Themes end
+    $(document).ready(function() {
+        setTimeout(function() {
+            am4core.ready(function() {
+                am4core.useTheme(am4themes_animated);
+                // Themes end
 
-            var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
+                var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
 
-            var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
-            networkSeries.dataFields.linkWith = "linkWith";
-            networkSeries.dataFields.name = "name";
-            networkSeries.dataFields.id = "name";
-            networkSeries.dataFields.value = "value";
-            networkSeries.dataFields.children = "children";
+                var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+                networkSeries.dataFields.linkWith = "linkWith";
+                networkSeries.dataFields.name = "name";
+                networkSeries.dataFields.id = "name";
+                networkSeries.dataFields.value = "value";
+                networkSeries.dataFields.children = "children";
 
-            networkSeries.nodes.template.label.text = "{name}"
-            networkSeries.fontSize = 12;
-            networkSeries.linkWithStrength = 0;
+                networkSeries.nodes.template.label.text = "{name}"
+                networkSeries.fontSize = 12;
+                networkSeries.linkWithStrength = 0;
 
-            var nodeTemplate = networkSeries.nodes.template;
-            nodeTemplate.tooltipText = "{name}";
-            nodeTemplate.fillOpacity = 1;
-            nodeTemplate.label.hideOversized = true;
-            nodeTemplate.label.truncate = true;
+                var nodeTemplate = networkSeries.nodes.template;
+                nodeTemplate.tooltipText = "{name}";
+                nodeTemplate.fillOpacity = 1;
+                nodeTemplate.label.hideOversized = true;
+                nodeTemplate.label.truncate = true;
 
-            var linkTemplate = networkSeries.links.template;
-            linkTemplate.strokeWidth = 1;
-            var linkHoverState = linkTemplate.states.create("hover");
-            linkHoverState.properties.strokeOpacity = 1;
-            linkHoverState.properties.strokeWidth = 2;
+                var linkTemplate = networkSeries.links.template;
+                linkTemplate.strokeWidth = 1;
+                var linkHoverState = linkTemplate.states.create("hover");
+                linkHoverState.properties.strokeOpacity = 1;
+                linkHoverState.properties.strokeWidth = 2;
 
-            nodeTemplate.events.on("over", function (event) {
-                var dataItem = event.target.dataItem;
-                dataItem.childLinks.each(function (link) {
-                    link.isHover = true;
+                nodeTemplate.events.on("over", function(event) {
+                    var dataItem = event.target.dataItem;
+                    dataItem.childLinks.each(function(link) {
+                        link.isHover = true;
+                    })
                 })
-            })
 
-            nodeTemplate.events.on("out", function (event) {
-                var dataItem = event.target.dataItem;
-                dataItem.childLinks.each(function (link) {
-                    link.isHover = false;
+                nodeTemplate.events.on("out", function(event) {
+                    var dataItem = event.target.dataItem;
+                    dataItem.childLinks.each(function(link) {
+                        link.isHover = false;
+                    })
                 })
-            })
 
-            networkSeries.data = allData1
-                    });
-                }, 700);
+                networkSeries.data = allData1
             });
+        }, 700);
+    });
 </script>
 
 {% endblock javascripts %}
