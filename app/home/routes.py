@@ -1,3 +1,4 @@
+from app.base.util import verify_pass
 from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.functions import user
 from app.home.plot import *
@@ -19,7 +20,6 @@ from bokeh.sampledata.iris import flowers
 import pandas as pd
 import csv
 from pandasql import sqldf
-import requests
 from datetime import date
 from app.base.models import User
 import ast
@@ -27,11 +27,12 @@ import datetime
 import json
 import sqlite3
 import requests
-import requests
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import httplib2
+import base64
+
 
 pysqldf = lambda q: sqldf(q, globals())
 con = sqlite3.connect("db.sqlite3")
@@ -54,13 +55,59 @@ with open('app/base/static/assets/data/yoga_data.json') as json_file:
 with open('app/base/static/assets/data/mental_data.json') as json_file:
     mental_data = json.load(json_file)
 
+def apiauth(username,password):
+    user = User.query.filter_by(username=username).first()
+    for row in User.query.filter_by(username='test').all():
+        print(type(row))
+        print(row.skills1)
+        #print(row.fullname)
+    # Check the password
+    if user and verify_pass( password, user.password):
+        return True
+    return False
+
 def getThought():
 
     url = "https://zenquotes.io/api/random"
     response = requests.request("GET", url)
     return response.json()[0]["q"]
 
+def getCourses(allData,query):
+    r = requests.get('https://api.coursera.org/api/courses.v1?q=search&query='+query+'&includes=instructorIds,partnerIds&fields=instructorIds,previewLink,name,photoUrl,previewLink,links,partnerIds')
+    j = r.json()
 
+    allData["c1"]={
+        "name": j['elements'][0]['name'],
+        "img" : j['elements'][0]['photoUrl'],
+        "url" : 'https://www.coursera.org/learn/'+j['elements'][0]['slug'],
+        "author" : j['linked']['partners.v1'][0]['name']
+    }
+    allData["c2"]={
+        "name": j['elements'][1]['name'],
+        "img" : j['elements'][1]['photoUrl'],
+        "url" : 'https://www.coursera.org/learn/'+j['elements'][1]['slug'],
+        "author" : j['linked']['partners.v1'][1]['name']
+    }
+
+
+    url = 'https://www.udemy.com/api-2.0/search-courses/recommendation/?course_badge=beginners_choice&page_size=5&skip_price=true&q='+query
+    headers = {'content-type': 'application/json','Referer': 'https://10.10.10.10/courses/search/'}
+
+    r1 = requests.get(url, headers=headers)
+    j1 = r1.json()
+
+    allData["u1"]={
+        "name": j1['courses'][0]['title'],
+        "img" : j1['courses'][0]['image_100x100'],
+        "url" : 'https://www.udemy.com'+j1['courses'][0]['url'],
+        "author" : j1['courses'][0]['visible_instructors'][0]['display_name']
+    }
+    allData["u2"]={
+        "name": j1['courses'][1]['title'],
+        "img" : j1['courses'][1]['image_100x100'],
+        "url" : 'https://www.udemy.com'+j1['courses'][1]['url'],
+        "author" : j1['courses'][1]['visible_instructors'][0]['display_name']
+    }
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] == "pdf"
@@ -284,29 +331,10 @@ def route_health_individual():
 
 
 #employee basically skill groaph
-@blueprint.route('/plots',methods=["GET","POST"])
+@blueprint.route('/plots')
 def root():
     
-    
-    if request.method == 'POST':
-        print("here")
-        if 'pdf-file' not in request.files:
-            #flash('No pdf file')
-            return redirect(request.url)
-        pdf = request.files['pdf-file']
-        if pdf.filename == '':
-            return redirect(request.url)
-        if pdf and allowed_file(pdf.filename):
-            #TODO increase score
-            print(pdf.filename)
-            for row in User.query.filter_by(id=current_user.get_id()).all():
-                username = row.username
-                row.SkillPointEarned=str(int(row.SkillPointEarned)+100)
-            pathlib.Path("Certificates/"+username).mkdir(parents=True, exist_ok=True)
-            pdf.save( "Certificates/"+username+"/"+pdf.filename)
-        
-            print("score+")
-        
+ 
     
     flag=True
     for row in User.query.filter_by(id=current_user.get_id()).all():
@@ -331,22 +359,64 @@ def root():
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
 
 
-@blueprint.route('/plots/<template>')
+@blueprint.route('/plots/<template>',methods=["GET","POST"])
 def oneskill(template):
-    allDataSupplied = {
-        'name': template
-    }
 
-    #for row in User.query.filter_by(id=current_user.get_id()).all():
-    #        r1 = row.skills1
-    #        r2 = row.skills2
-    #        r3 = row.skills3
-    #        r4 = row.skills4
-    #        r5 = row.skills5
-    #G = GraphG(r1,r2,r3,r4,r5)
-    #recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
-    #print(recom)
-    return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
+    for row in User.query.filter_by(id=current_user.get_id()).all():
+        res=json.loads(row.skills)
+        print(res)
+        if template in res:
+            res=res[template]
+
+    if request.method == 'POST':
+        
+        if 'pdf-file' in request.files:
+            
+            pdf = request.files['pdf-file']
+            if pdf.filename == '':
+                return redirect(request.url)
+            if pdf and allowed_file(pdf.filename):
+                #TODO increase score
+               
+                for row in User.query.filter_by(id=current_user.get_id()).all():
+                    username = row.username
+                    row.SkillPointEarned=str(int(row.SkillPointEarned)+100)
+                    res=json.loads(row.skills)
+                    if template not in res["skills"]:
+                        res["skills"].append(template)
+                    if template not in res:
+                        res[template]={}
+                    res[template]["end"]=str(datetime.datetime.today())
+                    row.skills=str(json.dumps(res))
+                    db.session.commit()
+                pathlib.Path("Certificates/"+username).mkdir(parents=True, exist_ok=True)
+                pdf.save( "Certificates/"+username+"/"+pdf.filename)          
+                print("score+")
+        elif "start" in request.form:
+            print("@!#@$#$%I^^%$#%@$$#$#$")
+            for row in User.query.filter_by(id=current_user.get_id()).all(): 
+                    res=json.loads(row.skills)
+                    if template not in res:
+                        res[template]={}
+                    res[template]["start"]=str(datetime.datetime.today())
+                    print(res)
+                    row.skills=str(json.dumps(res))
+                    db.session.commit()
+                    print(row.skills)
+    
+    if "start" not in res:
+        res={"start":"Begin Today","end":"Take your time"}
+    if "end" not in res:
+        res["end"]="Take your time"
+      
+    allData = {}
+    query = template
+    getCourses(allData,query)
+    name1=template
+    Graph=[]
+    buildGraph(name1,Graph)
+    
+    return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=res)
 
 @blueprint.route('/yoga')
 def yoga():
@@ -367,18 +437,6 @@ def mental_one(template):
     return render_template('mental-health-one.html', segment = get_segment(request), allData = allDataSupplied[0])
 
 
-
-# @blueprint.route('/plot')
-# def plot():
-#     for row in User.query.filter_by(id=current_user.get_id()).all():
-#         r1 = row.skills1
-#         r2 = row.skills2
-#         r3 = row.skills3
-#         r4 = row.skills4
-#         r5 = row.skills5
-#     G = GraphG(r1,r2,r3,r4,r5)
-#     p = make_plot(G)
-#     return json.dumps(json_item(p, "myplot"))
 
 @blueprint.route('/company')
 def route_rank():
@@ -435,11 +493,7 @@ def route_work_one():
     if int(current_user.get_id()) != 1:
         return render_template('page-404.html', segment = get_segment(request))
     dropdownList = dfEmployee["username"].tolist()
-    # for row in User.query.all():
-    #     if row.username != 'test':
-    #         dropdownList.append(row.username)
-    #     #department = row.department
-    # dropdownList=sorted(dropdownList)
+
     
     if request.method == 'POST':
         username = request.form["username"]
@@ -488,25 +542,6 @@ def route_work_one():
         'weight': weight,
         'dob':dob
 }
-        # employee = {
-        #         'username': 'T123',
-        #         'Gender': 'Female',
-        #         'MaritalStatus': 'Married',
-        #         'PercentSalaryHike':10,
-        #         'StockOptionLevel':1,
-        #         'YearsAtCompany':20,
-        #         'YearsInCurrentRole':14,
-        #         'Dept': 'Technology',
-        #         'education':'PG',
-        #         'recruitment_type':0,
-        #         'job_level':5,
-        #         'rating':4,
-        #         'onsite':1,
-        #         'salary':10000,
-        #         'height': 154,
-        #         'weight': 67,
-        #         'dob':'1958-12-21'
-        # }
         test = {}
         for i in list_of_attributes:
             if i in codes:
@@ -663,46 +698,56 @@ def route_enterEmployeeCsv():
 ## for everyone
 
 @blueprint.route('/api/getcourse')
-def getcourse():
-    # imageurl title author hyperlink
-    query = "excel"
-    r = requests.get('https://api.coursera.org/api/courses.v1?q=search&query='+query+'&includes=instructorIds,partnerIds&fields=instructorIds,previewLink,name,photoUrl,previewLink,links,partnerIds')
-    j = r.json()
-    allData={}
-    allData["c1"]={
-        "name": j['elements'][0]['name'],
-        "img" : j['elements'][0]['photoUrl'],
-        "url" : 'https://www.coursera.org/learn/'+j['elements'][0]['slug'],
-        "author" : j['linked']['partners.v1'][0]['name']
-    }
-    allData["c2"]={
-        "name": j['elements'][1]['name'],
-        "img" : j['elements'][1]['photoUrl'],
-        "url" : 'https://www.coursera.org/learn/'+j['elements'][1]['slug'],
-        "author" : j['linked']['partners.v1'][1]['name']
-    }
-
-
-    url = 'https://www.udemy.com/api-2.0/search-courses/recommendation/?course_badge=beginners_choice&page_size=5&skip_price=true&q='+query
-    headers = {'content-type': 'application/json','Referer': 'https://10.10.10.10/courses/search/'}
-
-    r1 = requests.get(url, headers=headers)
-    j1 = r1.json()
-
-    uName1 = j1['courses'][0]['title']
-    uImage1 = j1['courses'][0]['image_100x100']
-    uLink1 = 'https://www.udemy.com'+j1['courses'][0]['url']
-    uAuthor1 = j1['courses'][0]['visible_instructors'][0]['display_name']
-
-    uName2 = j1['courses'][0]['title']
-    uImage2 = j1['courses'][0]['image_100x100']
-    uLink2 = 'https://www.udemy.com'+j1['courses'][0]['url']
-    uAuthor2 = j1['courses'][0]['visible_instructors'][0]['display_name']
-
+def getapicourse():
+    if 'x-access-tokens' in request.headers:
+        token = request.headers['x-access-tokens']
+    else:
+        return jsonify({'message': 'no access token'})
     
-    print(uName1 + "\n" + uImage1 + " \n " + uLink1 + " \n " +uAuthor1)
+    
+    try:
+        token_decoded = base64.b64decode(token).decode("utf-8")
+    except:
+        return jsonify({'message': 'token is invalid'})
+    userpass = token_decoded.split(':')
+    if apiauth(userpass[0],userpass[1])==False:
+        return jsonify({'message': 'token is invalid'})
+    if request.args.get('query'):
+        Getdata = {}
+        getCourses(Getdata, request.args.get('query'))
+        return jsonify(Getdata)        
+    
+    return jsonify({'message': 'no query string'})
 
-    return render_template('course.html', segment = get_segment(request), allData=allDataSupplied)
+@blueprint.route('/api/profile/own')
+def apiprofile():
+    if 'x-access-tokens' in request.headers:
+        token = request.headers['x-access-tokens']
+    else:
+        return jsonify({'message': 'no access token'})
+    
+    
+    try:
+        token_decoded = base64.b64decode(token).decode("utf-8")
+    except:
+        return jsonify({'message': 'token is invalid'})
+    userpass = token_decoded.split(':')
+    if apiauth(userpass[0],userpass[1])==False:
+        return jsonify({'message': 'token is invalid'})
+    
+    for row in User.query.filter_by(username=userpass[0]).all():
+        return jsonify({'username':row.username,'department':row.department,'job_level':row.job_level,'fullname':row.extra,'gender':row.Gender,'MaritalStatus ':row.MaritalStatus,'PercentSalaryHike':row.PercentSalaryHike,'StockOptionLevel':row.StockOptionLevel,'YearsAtCompany ':row.YearsAtCompany,'YearsInCurrentRole': row.YearsInCurrentRole,'education ':row.education,'recruitment_type ':row.recruitment_type,'job_level ':row.job_level,'rating ':row.rating,'onsite ':row.onsite})
+    return jsonify({'message': 'user not synced'})
+
+
+
+
+
+
+
+
+
+#     return render_template('course.html', segment = get_segment(request), allData=allDataSupplied)
 
 
 @blueprint.route('/profile/<template>')
@@ -945,3 +990,10 @@ def print_index_table():
             '    After clearing the token, if you <a href="/test">test the ' +
             '    API request</a> again, you should go back to the auth flow.' +
             '</td></tr></table>')
+
+
+
+
+
+
+
