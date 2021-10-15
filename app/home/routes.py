@@ -1,3 +1,4 @@
+from app.base.util import verify_pass
 from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.functions import user
 from app.home.plot import *
@@ -30,6 +31,8 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import httplib2
+import base64
+
 
 pysqldf = lambda q: sqldf(q, globals())
 con = sqlite3.connect("db.sqlite3")
@@ -48,6 +51,17 @@ dfEmployee['dob'] = pd.to_datetime(dfEmployee['dob'], format = "%d-%m-%Y")
 
 with open('app/base/static/assets/data/yoga_data.json') as json_file:
     yoga_data = json.load(json_file)
+
+def apiauth(username,password):
+    user = User.query.filter_by(username=username).first()
+    for row in User.query.filter_by(username='test').all():
+        print(type(row))
+        print(row.skills1)
+        #print(row.fullname)
+    # Check the password
+    if user and verify_pass( password, user.password):
+        return True
+    return False
 
 def getThought():
 
@@ -672,12 +686,54 @@ def route_enterEmployeeCsv():
 
 ## for everyone
 
-# @blueprint.route('/api/getcourse')
-# def getcourse():
-#     # imageurl title author hyperlink
+@blueprint.route('/api/getcourse')
+def getapicourse():
+    if 'x-access-tokens' in request.headers:
+        token = request.headers['x-access-tokens']
+    else:
+        return jsonify({'message': 'no access token'})
     
+    
+    try:
+        token_decoded = base64.b64decode(token).decode("utf-8")
+    except:
+        return jsonify({'message': 'token is invalid'})
+    userpass = token_decoded.split(':')
+    if apiauth(userpass[0],userpass[1])==False:
+        return jsonify({'message': 'token is invalid'})
+    if request.args.get('query'):
+        Getdata = {}
+        getCourses(Getdata, request.args.get('query'))
+        return jsonify(Getdata)        
+    
+    return jsonify({'message': 'no query string'})
 
+@blueprint.route('/api/profile/own')
+def apiprofile():
+    if 'x-access-tokens' in request.headers:
+        token = request.headers['x-access-tokens']
+    else:
+        return jsonify({'message': 'no access token'})
     
+    
+    try:
+        token_decoded = base64.b64decode(token).decode("utf-8")
+    except:
+        return jsonify({'message': 'token is invalid'})
+    userpass = token_decoded.split(':')
+    if apiauth(userpass[0],userpass[1])==False:
+        return jsonify({'message': 'token is invalid'})
+    
+    for row in User.query.filter_by(username=userpass[0]).all():
+        return jsonify({'username':row.username,'department':row.department,'job_level':row.job_level,'fullname':row.extra,'gender':row.Gender,'MaritalStatus ':row.MaritalStatus,'PercentSalaryHike':row.PercentSalaryHike,'StockOptionLevel':row.StockOptionLevel,'YearsAtCompany ':row.YearsAtCompany,'YearsInCurrentRole': row.YearsInCurrentRole,'education ':row.education,'recruitment_type ':row.recruitment_type,'job_level ':row.job_level,'rating ':row.rating,'onsite ':row.onsite})
+    return jsonify({'message': 'user not synced'})
+
+
+
+
+
+
+
 
 
 #     return render_template('course.html', segment = get_segment(request), allData=allDataSupplied)
@@ -923,3 +979,10 @@ def print_index_table():
             '    After clearing the token, if you <a href="/test">test the ' +
             '    API request</a> again, you should go back to the auth flow.' +
             '</td></tr></table>')
+
+
+
+
+
+
+
