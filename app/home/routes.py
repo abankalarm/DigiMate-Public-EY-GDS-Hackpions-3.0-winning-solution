@@ -51,6 +51,9 @@ dfEmployee['dob'] = pd.to_datetime(dfEmployee['dob'], format = "%d-%m-%Y")
 with open('app/base/static/assets/data/yoga_data.json') as json_file:
     yoga_data = json.load(json_file)
 
+with open('app/base/static/assets/data/mental_data.json') as json_file:
+    mental_data = json.load(json_file)
+
 def getThought():
 
     url = "https://zenquotes.io/api/random"
@@ -347,13 +350,21 @@ def oneskill(template):
 
 @blueprint.route('/yoga')
 def yoga():
-    print(yoga_data)
     return render_template('yoga.html', segment = get_segment(request), allData = yoga_data)
 
 @blueprint.route('/yoga/prayanama/<template>')
 def yoga_one(template):
     allDataSupplied = list(filter(lambda yo: yo['sanskrit_name'] == template, yoga_data['prayanama']))
     return render_template('yoga-one.html', segment = get_segment(request), allData = allDataSupplied[0])
+
+@blueprint.route('/mental-health')
+def mental():
+    return render_template('mental-health.html', segment = get_segment(request), allData = mental_data)
+
+@blueprint.route('/mental-health/<template>')
+def mental_one(template):
+    allDataSupplied = list(filter(lambda yo: yo['name'] == template, mental_data['conditions']))
+    return render_template('mental-health-one.html', segment = get_segment(request), allData = allDataSupplied[0])
 
 
 

@@ -1,0 +1,241 @@
+{% extends "layouts/base.html" %} {% block title %} Page Blank {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    .col {
+        color: black;
+        float: left;
+        width: 50%;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+
+    #container {
+        margin: 10px;
+    }
+
+    #desc1, #desc2, #desc3, #desc4, #desc5, #desc6 {
+        white-space: pre-line;
+        line-height: 2em;
+        font-weight: bold;
+    }
+
+    #one, #two, #three, #four, #five, #six {
+        border-radius: 20%;
+        margin: 20px;
+        padding: 10px;
+        background-repeat: no-repeat;
+        background-image: url('https://wallpaperaccess.com/full/6027126.png');
+        border-color: red;
+    }
+
+    #name1, #name2, #name3, #name4, #name5, #name6 {
+        color: red;
+        font-weight: bolder;
+    }
+
+</style>
+{% endblock stylesheets %} {% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 id = "name">
+                                    Mental Health Awareness
+                                </h5>
+                            </div>
+                            <div class="card-block">
+                                <h6>
+                                    Mental health refers to cognitive, behavioral, and emotional well-being. It is all about how people think, feel, and behave. People sometimes use the term “mental health” to mean the absence of a mental disorder. Mental health can affect daily living, relationships, and physical health.
+                                </h6>
+                                <h6>
+                                    <b>Why is mental health important?</b><br>
+                                    Mental health is important because it can help you to
+                                    <ul>
+                                    <li>Cope with the stresses of life</li>
+                                    <li>Be physically healthy</li>
+                                    <li>Have good relationships</li>
+                                    <li>Make meaningful contributions to your community</li>
+                                    <li>Work productively</li>
+                                    <li>Realize your full potential</li>
+                                    <li>Your mental health is also important because it can affect your physical health. For example, mental disorders can raise your risk for physical health problems such as stroke, type 2 diabetes, and heart disease.</li>
+                                    </ul>
+                                    
+                                    <b>What can affect my mental health?</b><br>
+                                    There are many different factors that can affect your mental health, including
+                                    <br>
+                                    <ul>
+                                    <li>Biological factors, such as genes or brain chemistry</li>
+                                    <li>Life experiences, such as trauma or abuse</li>
+                                    <li>Family history of mental health problems</li>
+                                    <li>Your lifestyle, such as diet, physical activity, and substance use</li>
+                                    <li>You can also affect your mental health by taking steps to improve it, such as doing meditation, using relaxation techniques, and practicing gratitude.</li>
+                                    </ul>
+                                    <b>Can my mental health change over time?</b><br>
+                                    Over time, your mental health can change. For example, you may be dealing with a difficult situation, such as trying to manage a chronic illness, taking care of an ill relative, or facing money problems. The situation may wear you out and overwhelm your ability to cope with it. This can worsen your mental health. On the other hand, getting therapy may improve your mental health.
+                                    <br>
+                                    <br>
+                                    <b>What are the signs that I might have a mental health problem?</b><br>
+                                    When it comes to your emotions, it can be hard to know what is normal and what is not. There are warning signs that you may have a mental health problem, including
+                                    <ul>
+                                    <li>A change in your eating or sleeping habits</li>
+                                    <li>Withdrawing from the people and activities you enjoy</li>
+                                    <li>Having low or no energy</li>
+                                    <li>Feeling numb or like nothing matters</li>
+                                    <li>Having unexplained aches and pains</li>
+                                    <li>Feeling helpless or hopeless</li>
+                                    <li>Smoking, drinking, or using drugs more than usual</li>
+                                    <li>Feeling unusually confused, forgetful, angry, upset, worried, or scared</li>
+                                    <li>Having severe mood swings that cause problems in your relationships</li>
+                                    <li>Having thoughts and memories that you can't get out of your head</li>
+                                    <li>Hearing voices or believing things that are not true</li>
+                                    <li>Thinking of harming yourself or others</li>
+                                    <li>Not being able to perform daily tasks like taking care of your kids or getting to work or school</li>
+                                    </ul>
+                                    <b>What should I do if I think I have a mental health problem?</b><br>
+                                    If you think that you may have a mental health problem, get help. Talk therapy and/or medicines can treat mental disorders. If you don't know where to start, contact your primary care provider.
+                                </h6>
+                            </div>
+                            <div id = 'container'>
+                                <div class = 'row'>
+                                    <div class = 'col' id = "one">
+                                        <h5 id = "name1">
+                                            
+                                        </h5>
+                                        <div class="card-block">
+                                            <h6 id = "desc1">
+
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class = 'col' id = "two">
+                                        <h5 id = "name2">
+                                            
+                                        </h5>
+                                        <div class="card-block">
+                                            <h6 id = "desc2">
+                                                
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class = 'row'>
+                                    <div class = 'col' id = "three">
+                                        <h5 id = "name3">
+                                            
+                                        </h5>
+                                        <div class="card-block">
+                                            <h6 id = "desc3">
+                                                
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class = 'col' id = "four">
+                                        <h5 id = "name4">
+                                            
+                                        </h5>
+                                        <div class="card-block">
+                                            <h6 id = "desc4">
+                                                
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class = 'row'>
+                                    <div class = 'col' id = "five">
+                                        <h5 id = "name5">
+                                        </h5>
+                                        <div class="card-block">
+                                            <h6 id = "desc5">
+                                                
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class = "col" id = "six">
+                                        <h5 id = "name6">
+                                        </h5>
+                                        <div class="card-block">
+                                            <h6 id = "desc6">
+                                                
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ Main Content ] end -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    
+        var data = JSON.parse('{{allData | tojson}}');
+
+        document.getElementById("name1").innerHTML = data.conditions[0].name;
+        //document.getElementById("one").style.backgroundImage = "url(" + data.conditions[0].img + ")";
+        document.getElementById("desc1").innerHTML = data.conditions[0].overview;
+        document.getElementById("one").addEventListener('click', function() {
+            window.location.href = window.location.pathname + "/" + data.conditions[0].name;
+        });
+
+        document.getElementById("name2").innerHTML = data.conditions[1].name;
+        //document.getElementById("two").style.background = "pink";
+        document.getElementById("desc2").innerHTML = data.conditions[1].overview;
+        document.getElementById("two").addEventListener('click', function() {
+            window.location.href = window.location.pathname + "/" +  data.conditions[1].name;
+        });
+
+
+        document.getElementById("name3").innerHTML = data.conditions[2].name;
+        //document.getElementById("three").style.background = "pink";
+        document.getElementById("desc3").innerHTML = data.conditions[2].overview;
+        document.getElementById("three").addEventListener('click', function() {
+            window.location.href = window.location.pathname + "/" + data.conditions[2].name;
+        });
+
+        document.getElementById("name4").innerHTML = data.conditions[3].name;
+        //document.getElementById("four").style.background = "pink";
+        document.getElementById("desc4").innerHTML = data.conditions[3].overview;
+        document.getElementById("four").addEventListener('click', function() {
+            window.location.href = window.location.pathname + "/" +  data.conditions[3].name;
+        });
+
+        document.getElementById("name5").innerHTML = data.conditions[4].name;
+        //document.getElementById("five").style.background = "pink";
+        document.getElementById("desc5").innerHTML = data.conditions[4].overview;
+        document.getElementById("five").addEventListener('click', function() {
+            window.location.href = window.location.pathname + "/" + data.conditions[4].name;
+        });
+
+        document.getElementById("name6").innerHTML = data.conditions[5].name;
+        //document.getElementById("six").style.background = "pink";
+        document.getElementById("desc6").innerHTML = data.conditions[5].overview;
+        document.getElementById("six").addEventListener('click', function() {
+            window.location.href = window.location.pathname + "/" + data.conditions[5].name;
+        });
+</script>
+
+{% endblock javascripts %}
