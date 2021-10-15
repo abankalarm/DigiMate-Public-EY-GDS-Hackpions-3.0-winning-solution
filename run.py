@@ -2,7 +2,7 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-
+import os
 from flask_migrate import Migrate
 from os import environ
 from sys import exit
@@ -26,6 +26,7 @@ try:
 except KeyError:
     exit('Error: Invalid <config_mode>. Expected values [Debug, Production] ')
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 app = create_app( app_config ) 
 Migrate(app, db)
 
@@ -35,4 +36,4 @@ if DEBUG:
     app.logger.info('DBMS        = ' + app_config.SQLALCHEMY_DATABASE_URI )
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=80)
