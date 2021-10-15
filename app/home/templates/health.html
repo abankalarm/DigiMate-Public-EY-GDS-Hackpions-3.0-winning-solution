@@ -37,7 +37,8 @@
             <div id="chartdiv-steps"></div>
         </div>
     </div>
-    <!-- <div class="col-sm-12">
+    <iframe id="video" width="560" height="315" src="https://www.youtube.com/embed/7R6kiCYW_xI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+   <!-- <div class="col-sm-12">
         <h5 class="mt-4">Health Recommendations</h5>
         <h7 id = "reco">
         </h7>
@@ -73,6 +74,7 @@
 <script src="https://cdn.amcharts.com/lib/4/plugins/timeline.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/plugins/bullets.js"></script>
 <script>
+
     var allData = JSON.parse('{{allData | tojson}}');
     var bmi = (allData.biometrics.weight[0] * 100 * 100 / (allData.biometrics.height[0] * allData.biometrics.height[0]));
     var verdict = "";
