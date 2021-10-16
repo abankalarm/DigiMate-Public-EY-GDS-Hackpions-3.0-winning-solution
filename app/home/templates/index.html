@@ -599,12 +599,14 @@
                                 </form>
 
                                 </form>
+                                {%if data | length >1 %}
                                 <div id="checklist">
                                     {% for key, value in data.items() %}
                                     <!-- <input id="{{key}}" type="checkbox" name="r" onclick="javascript:location.href='/task/delete/{{key}}';"> -->
                                     <input id="{{key}}" type="checkbox" name="r" onclick="popup('/task/delete/{{key}}')">
                                     <label for="{{key}}">{{ value }}</label> {% endfor %}
                                 </div>
+                                {% endif %}
 
 
                             </div>

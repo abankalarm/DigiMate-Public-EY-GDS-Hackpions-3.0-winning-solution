@@ -19,11 +19,11 @@ from bokeh.resources import CDN
 from bokeh.sampledata.iris import flowers
 import pandas as pd
 import csv
-import datetime
 from pandasql import sqldf
 from datetime import date
 from app.base.models import User
 import ast
+import datetime
 import json
 import sqlite3
 import requests
@@ -253,19 +253,22 @@ def index():
     
     def listtask1():
         row = User.query.filter_by(id=current_user.get_id()).first()
-        try:
-            tasks = row.tasks
-            if tasks:
-                return json.loads(tasks)
+        
+        task = row.tasks
+        if (task=="null" or task==""):
+            tasks = json.dumps({1:'enter your first task'})
+        if task:
+            tasks = json.loads(task)
+        else:
+            tasks = json.dumps({1:'enter your first task'})
+        print("gsdhfdjgkfjg",tasks)
+        return tasks
 
-            tasks = {'message':'empty'}
-            return jsonify(tasks)
-        except:
-            tasks = {'message':'error'}
-            return jsonify(tasks) 
 
     datatasks = listtask1()
-    print(datatasks)
+    if type(datatasks)==type(str()):
+       datatasks=json.loads(datatasks) 
+   
     return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks)
 
 @blueprint.route('/<template>')
@@ -821,7 +824,6 @@ def addtask():
     row.tasks = json.dumps(tasks)
     db.session.commit()
     return redirect('/')
-    return jsonify({"message":"success"})
 
   
 @blueprint.route('/task/delete/<id>')
@@ -974,15 +976,13 @@ def test_api_request():
     if 'credentials' not in session:
         credentials = google.oauth2.credentials.Credentials(**session['credentials'])
     service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
-    
+
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     print('Getting the upcoming 10 events')
     events_result = service.events().list(calendarId='primary', timeMin=now,
                                         maxResults=10, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
-
-   
 
 
     calenderEvents=[]
@@ -1001,9 +1001,8 @@ def test_api_request():
     #   page_token = calendar_list.get('nextPageToken')
     #   if not page_token:
     #     break
-    
-    return render_template('tempCalendar.html', cevents=calenderEvents,date=str(date.today()))
 
+    return render_template('tempCalendar.html', cevents=calenderEvents,date=str(date.today()))
 
 @blueprint.route('/authorize')
 def authorize():
