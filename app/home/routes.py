@@ -334,12 +334,11 @@ def route_health_individual():
 @blueprint.route('/plots')
 def root():
     
- 
-    
     flag=True
     for row in User.query.filter_by(id=current_user.get_id()).all():
 
             res=json.loads(row.skills)
+            print(res)
             try:
                 dept=row.department
                 jlevel=row.job_level
@@ -354,19 +353,27 @@ def root():
             jlist.extend(temp["skills"])
 
     
-    crecom,recom,Graph=getRecommendations(res["skills"],jlist)
+    recom,Graph,crecom,Graph1=getRecommendations(res["skills"],res['dont'],jlist)
 
     return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
 
 
 @blueprint.route('/plots/<template>',methods=["GET","POST"])
 def oneskill(template):
-
+    allData = {}
+    query = template
+    getCourses(allData,query)
+    name1=template
+    Graph=[]
+    buildGraph(name1,Graph)
+    dates={"start":"Begin Today","end":"Take your time"}
     for row in User.query.filter_by(id=current_user.get_id()).all():
         res=json.loads(row.skills)
         print(res)
         if template in res:
-            res=res[template]
+            dates=res[template]
+    
+    
 
     if request.method == 'POST':
         
@@ -376,7 +383,6 @@ def oneskill(template):
             if pdf.filename == '':
                 return redirect(request.url)
             if pdf and allowed_file(pdf.filename):
-                #TODO increase score
                
                 for row in User.query.filter_by(id=current_user.get_id()).all():
                     username = row.username
@@ -384,14 +390,24 @@ def oneskill(template):
                     res=json.loads(row.skills)
                     if template not in res["skills"]:
                         res["skills"].append(template)
+                        if 'dont' not in res:
+                            res['dont']=[]
+                        res["dont"].append(template)
                     if template not in res:
                         res[template]={}
                     res[template]["end"]=str(datetime.datetime.today())
+                    dates=res[template]
                     row.skills=str(json.dumps(res))
                     db.session.commit()
                 pathlib.Path("Certificates/"+username).mkdir(parents=True, exist_ok=True)
                 pdf.save( "Certificates/"+username+"/"+pdf.filename)          
                 print("score+")
+                if "start" not in dates:
+                    dates={"start":"Begin Today","end":"Take your time"}
+                if "end" not in dates:
+                    dates["end"]="Take your time"
+                print("here",dates)
+                return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=dates)
         elif "start" in request.form:
             print("@!#@$#$%I^^%$#%@$$#$#$")
             for row in User.query.filter_by(id=current_user.get_id()).all(): 
@@ -400,23 +416,26 @@ def oneskill(template):
                         res[template]={}
                     res[template]["start"]=str(datetime.datetime.today())
                     print(res)
+                    dates=res[template]
                     row.skills=str(json.dumps(res))
                     db.session.commit()
                     print(row.skills)
+            if "start" not in dates:
+                dates={"start":"Begin Today","end":"Take your time"}
+            if "end" not in dates:
+                dates["end"]="Take your time"
+            print(res)
+            return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=dates)
+    if "start" not in dates:
+        dates={"start":"Begin Today","end":"Take your time"}
+    if "end" not in dates:
+        dates["end"]="Take your time"
+    print(dates)
     
-    if "start" not in res:
-        res={"start":"Begin Today","end":"Take your time"}
-    if "end" not in res:
-        res["end"]="Take your time"
       
-    allData = {}
-    query = template
-    getCourses(allData,query)
-    name1=template
-    Graph=[]
-    buildGraph(name1,Graph)
     
-    return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=res)
+    
+    return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=dates)
 
 @blueprint.route('/yoga')
 def yoga():

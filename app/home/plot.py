@@ -31,7 +31,9 @@ def buildGraph(node,Graph):
             break
       Graph.append({"name":x,"value":10,"linkWith":linkWith1,"children":children  })
       done.append(x)
-    
+
+
+
 def clevel(G,nodes,recommended,Graph):
   linkWith=[]
   done=[]
@@ -66,7 +68,7 @@ def clevel(G,nodes,recommended,Graph):
         Graph.append({"name":x,"value":10,"linkWith":linkWith,"children":children  })
         done.append(x)
     
-def getRecommendations(ilist,flatJlist):
+def getRecommendations(ilist,dont,flatJlist):
 
   G = nx.read_gpickle("graph.gpickle")
   alreadyRecommend=[]
@@ -76,7 +78,7 @@ def getRecommendations(ilist,flatJlist):
 
   #alreadyRecommend.extend(skills)
   #print(alreadyRecommend)
-  Graph=[]
+  
   temp={}
   temp1={}
   #flatJlist = [j for sub in jlist for j in sub]
@@ -94,12 +96,20 @@ def getRecommendations(ilist,flatJlist):
             temp1[e]=counter[e]
           
       
-  recommend=list(dict(sorted(temp.items(), key=lambda item: item[1],reverse=True)).keys())[:5]
-  #TODO return
-  crecommend=list(dict(sorted(temp1.items(), key=lambda item: item[1],reverse=True)).keys())[:5]
+  recommend=list(dict(sorted(temp.items(), key=lambda item: item[1],reverse=True)).keys())
+  for thing in dont:
+    if thing in recommend: recommend.remove(thing)
+  recommend=recommend[:5]
 
-  l=recommend.copy()
+  crecommend=list(dict(sorted(temp1.items(), key=lambda item: item[1],reverse=True)).keys())
+  for thing in dont:
+    if thing in crecommend: crecommend.remove(thing)
+  #l=recommend.copy()
+  Graph1=[]
+  Graph=[]
   clevel(G,alreadyRecommend,recommend,Graph)
+  clevel(G,alreadyRecommend,crecommend,Graph1)
+  
   #print(Graph)
 
-  return crecommend,l,Graph
+  return recommend,Graph,crecommend,Graph1
