@@ -1,5 +1,5 @@
 from app.base.util import verify_pass
-from sqlalchemy.sql.expression import false
+from sqlalchemy.sql.expression import false, null
 from sqlalchemy.sql.functions import user
 from app.home.plot import *
 from app.home.predictions import *
@@ -19,11 +19,11 @@ from bokeh.resources import CDN
 from bokeh.sampledata.iris import flowers
 import pandas as pd
 import csv
+import datetime
 from pandasql import sqldf
 from datetime import date
 from app.base.models import User
 import ast
-import datetime
 import json
 import sqlite3
 import requests
@@ -35,15 +35,15 @@ import base64
 
 
 pysqldf = lambda q: sqldf(q, globals())
-con = sqlite3.connect("db.sqlite3")
-dfActivity = pd.read_sql_query("SELECT * from EmployeeActivity", con)
-dfEmployee = pd.read_sql_query("SELECT * from User where id != 1 and id != 451", con)
-dfHealth = pd.read_sql_query("SELECT * from EmployeeHealth", con)
-con.close()
+# con = sqlite3.connect("db.sqlite3")
+# dfActivity = pd.read_sql_query("SELECT * from EmployeeActivity", con)
+# dfEmployee = pd.read_sql_query("SELECT * from User where id != 1 and id != 451", con)
+# dfHealth = pd.read_sql_query("SELECT * from EmployeeHealth", con)
+# con.close()
 
-#dfActivity = pd.read_csv("./CSVs/EmployeeActivity.csv")
-#dfHealth = pd.read_csv("./CSVs/EmployeeHealth.csv")
-#dfEmployee = pd.read_csv("./CSVs/EmployeeDataset.csv")
+dfActivity = pd.read_csv("./CSVs/EmployeeActivity.csv")
+dfHealth = pd.read_csv("./CSVs/EmployeeHealth.csv")
+dfEmployee = pd.read_csv("./CSVs/EmployeeDataset.csv")
 
 dfActivity['Month'] = pd.to_datetime(dfActivity['Month'], format = "%d-%m-%Y")
 dfHealth['ActivityDate'] = pd.to_datetime(dfHealth['ActivityDate'], format = "%d-%m-%Y")
@@ -250,8 +250,23 @@ def index():
     allDataSupplied['OffsLastMonth'] = EmployeeDetails['Offs'][10]
     allDataSupplied['LoggedInThisMonth'] = EmployeeDetails['SystemLoggedInTime'][11]
     allDataSupplied['LoggedInLastMonth'] = EmployeeDetails['SystemLoggedInTime'][10]
+    
+    def listtask1():
+        row = User.query.filter_by(id=current_user.get_id()).first()
+        try:
+            tasks = row.tasks
+            if tasks:
+                return json.loads(tasks)
 
-    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied)
+            tasks = {'message':'empty'}
+            return jsonify(tasks)
+        except:
+            tasks = {'message':'error'}
+            return jsonify(tasks) 
+
+    datatasks = listtask1()
+    print(datatasks)
+    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks)
 
 @blueprint.route('/<template>')
 @login_required
@@ -773,7 +788,58 @@ def apiprofile():
         return jsonify({'username':row.username,'department':row.department,'job_level':row.job_level,'fullname':row.extra,'gender':row.Gender,'MaritalStatus ':row.MaritalStatus,'PercentSalaryHike':row.PercentSalaryHike,'StockOptionLevel':row.StockOptionLevel,'YearsAtCompany ':row.YearsAtCompany,'YearsInCurrentRole': row.YearsInCurrentRole,'education ':row.education,'recruitment_type ':row.recruitment_type,'job_level ':row.job_level,'rating ':row.rating,'onsite ':row.onsite})
     return jsonify({'message': 'user not synced'})
 
+@blueprint.route('/task/list')
+def listtask():
+    row = User.query.filter_by(id=current_user.get_id()).first()
+    try:
+        tasks = row.tasks
+        if tasks:
+            return json.loads(tasks)
 
+        tasks = {'message':'empty'}
+        return jsonify(tasks)
+    except:
+        tasks = {'message':'error'}
+        return jsonify(tasks) 
+
+@blueprint.route('/task/add', methods=['POST'])
+def addtask():
+    row = User.query.filter_by(id=current_user.get_id()).first()
+    task = row.tasks
+    if (task=="null"):
+        tasks = {1:'enter your first task'}
+    if task:
+        tasks = json.loads(task)
+    else:
+        tasks = {1:'enter your first task'}
+
+    todo = request.form['todoitem']
+    id = random.randint(1,10000)
+    # newtask = {id,todo}
+    # tasks.update(newtask)
+    tasks[id]=todo
+    row.tasks = json.dumps(tasks)
+    db.session.commit()
+    return redirect('/')
+    return jsonify({"message":"success"})
+
+  
+@blueprint.route('/task/delete/<id>')
+def completetask(id):
+    try:
+        row = User.query.filter_by(id=current_user.get_id()).first()
+        task = row.tasks
+        tasks = json.loads(task)
+        try:
+            del tasks[id]
+            row.tasks = json.dumps(tasks)
+            db.session.commit()
+            return jsonify({"message":"deleted"})
+        except:
+            return jsonify({"message":"id doesnt exist"})
+
+    except:
+        return jsonify({"message":"id is invalid"})
 
 
 
@@ -801,7 +867,7 @@ def profile(template):
     #G = GraphG(r1,r2,r3,r4,r5)
     #recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
     #print(recom)
-    return render_template('one-skill.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
+    return render_template('profile.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
 
 
 
@@ -908,15 +974,35 @@ def test_api_request():
     if 'credentials' not in session:
         credentials = google.oauth2.credentials.Credentials(**session['credentials'])
     service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
-    page_token = None
-    while True:
-      calendar_list = service.calendarList().list(pageToken=page_token).execute()
-      for calendar_list_entry in calendar_list['items']:
-        calendars.append({"name": calendar_list_entry['summary'], "id": calendar_list_entry['id']})
-      page_token = calendar_list.get('nextPageToken')
-      if not page_token:
-        break
-    return jsonify("calendarReturn", {"data": calendars})
+    
+    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+    print('Getting the upcoming 10 events')
+    events_result = service.events().list(calendarId='primary', timeMin=now,
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+
+   
+
+
+    calenderEvents=[]
+    for event in events:
+        if 'dateTime' in event['start']:
+            calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
+        elif "date" in event["start"]:
+            calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
+    print(calenderEvents)
+    # page_token = None
+    # while True:
+    #   calendar_list = service.calendarList().list(pageToken=page_token).execute()
+    #   for calendar_list_entry in calendar_list['items']:
+    #     print(calendar_list_entry)
+    #     calendars.append({"name": calendar_list_entry['summary'], "id": calendar_list_entry['id']})
+    #   page_token = calendar_list.get('nextPageToken')
+    #   if not page_token:
+    #     break
+    
+    return render_template('tempCalendar.html', cevents=calenderEvents,date=str(date.today()))
 
 
 @blueprint.route('/authorize')

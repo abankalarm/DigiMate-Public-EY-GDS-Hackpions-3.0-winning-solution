@@ -46,6 +46,7 @@ class User(db.Model, UserMixin):
     height = Column(String)
     weight = Column(String)
     SkillPointEarned=Column(String)
+    tasks = Column(String)
     def __init__(self, **kwargs):
         skills=[]
         templist=['skills1','skills2','skills3','skills4','skills5']
