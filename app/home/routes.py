@@ -19,11 +19,11 @@ from bokeh.resources import CDN
 from bokeh.sampledata.iris import flowers
 import pandas as pd
 import csv
+import datetime
 from pandasql import sqldf
 from datetime import date
 from app.base.models import User
 import ast
-import datetime
 import json
 import sqlite3
 import requests
@@ -894,15 +894,35 @@ def test_api_request():
     if 'credentials' not in session:
         credentials = google.oauth2.credentials.Credentials(**session['credentials'])
     service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
-    page_token = None
-    while True:
-      calendar_list = service.calendarList().list(pageToken=page_token).execute()
-      for calendar_list_entry in calendar_list['items']:
-        calendars.append({"name": calendar_list_entry['summary'], "id": calendar_list_entry['id']})
-      page_token = calendar_list.get('nextPageToken')
-      if not page_token:
-        break
-    return jsonify("calendarReturn", {"data": calendars})
+    
+    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+    print('Getting the upcoming 10 events')
+    events_result = service.events().list(calendarId='primary', timeMin=now,
+                                        maxResults=10, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+
+   
+
+
+    calenderEvents=[]
+    for event in events:
+        if 'dateTime' in event['start']:
+            calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
+        elif "date" in event["start"]:
+            calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
+    print(calenderEvents)
+    # page_token = None
+    # while True:
+    #   calendar_list = service.calendarList().list(pageToken=page_token).execute()
+    #   for calendar_list_entry in calendar_list['items']:
+    #     print(calendar_list_entry)
+    #     calendars.append({"name": calendar_list_entry['summary'], "id": calendar_list_entry['id']})
+    #   page_token = calendar_list.get('nextPageToken')
+    #   if not page_token:
+    #     break
+    
+    return render_template('tempCalendar.html', cevents=calenderEvents,date=str(date.today()))
 
 
 @blueprint.route('/authorize')
