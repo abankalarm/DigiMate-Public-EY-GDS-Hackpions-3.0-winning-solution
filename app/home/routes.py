@@ -249,16 +249,20 @@ def index():
         row = User.query.filter_by(id=current_user.get_id()).first()
         
         task = row.tasks
-        if (task=="null"):
-            tasks = jsonify({1:'enter your first task'})
+        if (task=="null" or task==""):
+            tasks = json.dumps({1:'enter your first task'})
         if task:
             tasks = json.loads(task)
         else:
-            tasks = jsonify({1:'enter your first task'})
+            tasks = json.dumps({1:'enter your first task'})
+        print("gsdhfdjgkfjg",tasks)
         return tasks
 
+
     datatasks = listtask1()
-    print(datatasks)
+    if type(datatasks)==type(str()):
+       datatasks=json.loads(datatasks) 
+   
     return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks)
 
 @blueprint.route('/<template>')

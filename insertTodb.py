@@ -8,8 +8,9 @@ dfEvent=pd.read_csv("./CSVs/Events.csv", converters={'Attending':pd.eval}).to_di
 con = sqlite3.connect("db.sqlite3")
 
 
-
+# cur=con.cursor()
 # cur.execute("CREATE TABLE EmployeeActivity (username,Month,SystemLoggedInTime,Email,Meetings,WorkingOnIssues,SystemInactiveTime,Offs,SkillPointEarned);")
+# con.commit()
 # cur.execute("CREATE TABLE EmployeeHealth (username,ActivityDate,TotalSteps,TotalDistance,TrackerDistance,LoggedActivitiesDistance,VeryActiveDistance,ModeratelyActiveDistance,LightActiveDistance,SedentaryActiveDistance,VeryActiveMinutes,FairlyActiveMinutes,LightlyActiveMinutes,SedentaryMinutes,Calories);")
 # cur.execute("CREATE TABLE Events (Id,Event,Start,Description,Attending);")
 
@@ -65,16 +66,16 @@ con = sqlite3.connect("db.sqlite3")
 # #print(li)
 # sqlite_insert_with_param = """INSERT INTO User 
 #     (
-#     id,username,email,password,dob,department,skills,Gender,MaritalStatus,PercentSalaryHike,StockOptionLevel,extra,YearsAtCompany,YearsInCurrentRole,education,recruitment_type,job_level,rating,onsite,salary,height,weight,SkillPointEarned
+#     id,username,email,password,dob,department,skills,Gender,MaritalStatus,PercentSalaryHike,StockOptionLevel,extra,YearsAtCompany,YearsInCurrentRole,education,recruitment_type,job_level,rating,onsite,salary,height,weight,SkillPointEarned,tasks
 #     ) 
-#                           VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,?,?);"""
+#                           VALUES (?, ?, ?, ?, ?,?,?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?,?,?);"""
 # for l in range(len(li)):
 #     i=l+2
 #     #print(i)
 #     da=li[l]
 #     # for x in da:
 #     #     print(x,type(da[x]))
-#     data_tuple =(i,da['username'],da['email'],hash_pass( da['username'] ),da['dob'],da['Dept'],str(json.dumps({"skills":da['skills']})),da['Gender'],da['MaritalStatus'],str(da['PercentSalaryHike']),str(da['StockOptionLevel']),da['fullname'],str(da['YearsAtCompany']),str(da['YearsInCurrentRole']),da['education'],da['recruitment_type'],str(da['job_level']),str(da['rating']),str(da['onsite']),str(da['salary']),str(da['height']),str(da['weight']),str(da['SkillPointEarned']))
+#     data_tuple =(i,da['username'],da['email'],hash_pass( da['username'] ),da['dob'],da['Dept'],str(json.dumps({"skills":da['skills']})),da['Gender'],da['MaritalStatus'],str(da['PercentSalaryHike']),str(da['StockOptionLevel']),da['fullname'],str(da['YearsAtCompany']),str(da['YearsInCurrentRole']),da['education'],da['recruitment_type'],str(da['job_level']),str(da['rating']),str(da['onsite']),str(da['salary']),str(da['height']),str(da['weight']),str(da['SkillPointEarned']),"")
 #     #print(len(data_tuple))
 #     cursor=con.cursor()
 #     cursor.execute(sqlite_insert_with_param, data_tuple)
