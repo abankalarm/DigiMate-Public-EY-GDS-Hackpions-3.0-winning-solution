@@ -35,15 +35,15 @@ import base64
 
 
 pysqldf = lambda q: sqldf(q, globals())
-# con = sqlite3.connect("db.sqlite3")
-# dfActivity = pd.read_sql_query("SELECT * from EmployeeActivity", con)
-# dfEmployee = pd.read_sql_query("SELECT * from User where id != 1 and id != 451", con)
-# dfHealth = pd.read_sql_query("SELECT * from EmployeeHealth", con)
-# con.close()
+con = sqlite3.connect("db.sqlite3")
+dfActivity = pd.read_sql_query("SELECT * from EmployeeActivity", con)
+dfEmployee = pd.read_sql_query("SELECT * from User where id != 1 and id != 451", con)
+dfHealth = pd.read_sql_query("SELECT * from EmployeeHealth", con)
+con.close()
 
-dfActivity = pd.read_csv("./CSVs/EmployeeActivity.csv")
-dfHealth = pd.read_csv("./CSVs/EmployeeHealth.csv")
-dfEmployee = pd.read_csv("./CSVs/EmployeeDataset.csv")
+#dfActivity = pd.read_csv("./CSVs/EmployeeActivity.csv")
+#dfHealth = pd.read_csv("./CSVs/EmployeeHealth.csv")
+#dfEmployee = pd.read_csv("./CSVs/EmployeeDataset.csv")
 
 dfActivity['Month'] = pd.to_datetime(dfActivity['Month'], format = "%d-%m-%Y")
 dfHealth['ActivityDate'] = pd.to_datetime(dfHealth['ActivityDate'], format = "%d-%m-%Y")
@@ -464,10 +464,68 @@ def oneskill(template):
 
 @blueprint.route('/exercise')
 def exercise():
+    for row in User.query.filter_by(id=current_user.get_id()).all():
+        username = row.username
+        department = row.department
+        Gender = row.Gender
+        StockOptionLevel= row.StockOptionLevel
+        MaritalStatus = row.MaritalStatus
+        PercentSalaryHike = row.PercentSalaryHike
+        YearsAtCompany = row.YearsAtCompany
+        YearsInCurrentRole = row.YearsInCurrentRole
+        Dept = row.department
+        education = row.education
+        recruitment_type = row.recruitment_type
+        job_level = row.job_level
+        rating = row.rating
+        onsite = row.onsite
+        salary = row.salary
+        height = row.height
+        weight = row.weight
+        dob = row.dob
+
+
+    employee = {
+        'username': username,
+        'Gender': Gender,
+        'MaritalStatus': MaritalStatus,
+        'PercentSalaryHike':PercentSalaryHike,
+        'StockOptionLevel':StockOptionLevel,
+        'YearsAtCompany':YearsAtCompany,
+        'YearsInCurrentRole':YearsInCurrentRole,
+        'Dept': department,
+        'education':education,
+        'recruitment_type':recruitment_type,
+        'job_level':job_level,
+        'rating':rating,
+        'onsite':onsite,
+        'salary':salary,
+        'height': height,
+        'weight': weight,
+        'dob':dob
+    }
+    test = {}
+    for i in list_of_attributes:
+        if i in codes:
+            if employee[i] in codes[i]:
+                test[i] = [codes[i][employee[i]]]
+            else:
+                k = len(codes[i])
+                codes[i][employee[i]] = k
+                test[i] = [codes[i][employee[i]]]
+        else:
+            test[i] = [employee[i]]
+
+    print(exercise_data['WLB'])
+    if getWorkLifeBalance(test)[0] >= 3:
+        exercise_data['WLB'] = 1
+    else:
+        exercise_data['WLB'] = 0 
     return render_template('exercise.html', segment = get_segment(request), allData = exercise_data)
 
 @blueprint.route('/covid-faq')
 def covidfaq():
+    print(covid_data)
     return render_template('covid-faq.html', segment = get_segment(request), allData = covid_data)
 
 @blueprint.route('/yoga')

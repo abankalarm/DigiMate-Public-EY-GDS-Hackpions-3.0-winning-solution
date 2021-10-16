@@ -112,6 +112,7 @@
                                     Description
                                 </h6>
                             </div>
+                            <h3 style="margin: auto;">Nearby Vaccination Centres</h3>
                             <div class="card-block" id="whole">
                                 <div class="row">
                                     <div class = "col" id = "c1">
@@ -217,8 +218,9 @@
                                         </div>
                                 </div>
                             </div>
+                            <h3 style="margin: auto;">FAQs</h3>
                             <div class="card-block">
-                                <div id = "ques">
+                                <div id = "ques" style = "color: black">
     
                                 </div>
                             </div>
@@ -237,7 +239,7 @@
 
 <script>
         $(document).ready(function() {
-            if (!navigator.geolocation) {
+            if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
             } else {
                 document.getElementById("whole").style.visibility = "hidden";
@@ -329,15 +331,15 @@
                                             document.getElementById("c3-addr").innerHTML = totalCentres[2].address;
                                             document.getElementById("c4-addr").innerHTML = totalCentres[3].address;
 
-                                            document.getElementById("c1-d1").innerHTML = "Dose-1 = " + totalCentres[0].available_capacity_dose1;
-                                            document.getElementById("c2-d1").innerHTML = "Dose-1 = " + totalCentres[1].available_capacity_dose1;
-                                            document.getElementById("c3-d1").innerHTML = "Dose-1 = " + totalCentres[2].available_capacity_dose1;
-                                            document.getElementById("c4-d1").innerHTML = "Dose-1 = " + totalCentres[3].available_capacity_dose1;
+                                            document.getElementById("c1-d1").innerHTML = "Available Dose 1 - " + totalCentres[0].available_capacity_dose1;
+                                            document.getElementById("c2-d1").innerHTML = "Available Dose 1 - " + totalCentres[1].available_capacity_dose1;
+                                            document.getElementById("c3-d1").innerHTML = "Available Dose 1 - " + totalCentres[2].available_capacity_dose1;
+                                            document.getElementById("c4-d1").innerHTML = "Available Dose 1 - " + totalCentres[3].available_capacity_dose1;
 
-                                            document.getElementById("c1-d2").innerHTML = "Dose-2 = " + totalCentres[0].available_capacity_dose2;
-                                            document.getElementById("c2-d2").innerHTML = "Dose-2 = " + totalCentres[1].available_capacity_dose2;
-                                            document.getElementById("c3-d2").innerHTML = "Dose-2 = " + totalCentres[2].available_capacity_dose2;
-                                            document.getElementById("c4-d2").innerHTML = "Dose-2 = " + totalCentres[3].available_capacity_dose2;
+                                            document.getElementById("c1-d2").innerHTML = "Available Dose 2 - " + totalCentres[0].available_capacity_dose2;
+                                            document.getElementById("c2-d2").innerHTML = "Available Dose 2 - " + totalCentres[1].available_capacity_dose2;
+                                            document.getElementById("c3-d2").innerHTML = "Available Dose 2 - " + totalCentres[2].available_capacity_dose2;
+                                            document.getElementById("c4-d2").innerHTML = "Available Dose 2 - " + totalCentres[3].available_capacity_dose2;
 
                                             document.getElementById("c1-type").innerHTML = totalCentres[0].vaccine;
                                             document.getElementById("c2-type").innerHTML = totalCentres[1].vaccine;
@@ -361,14 +363,14 @@
                                 document.getElementById("c2-addr").innerHTML = totalCentres[1].address;
                                 document.getElementById("c3-addr").innerHTML = totalCentres[2].address;
                                 document.getElementById("c4-addr").innerHTML = totalCentres[3].address;
-                                document.getElementById("c1-d1").innerHTML = "Dose-1 = " + totalCentres[0].available_capacity_dose1;
-                                document.getElementById("c2-d1").innerHTML = "Dose-1 = " + totalCentres[1].available_capacity_dose1;
-                                document.getElementById("c3-d1").innerHTML = "Dose-1 = " + totalCentres[2].available_capacity_dose1;
-                                document.getElementById("c4-d1").innerHTML = "Dose-1 = " + totalCentres[3].available_capacity_dose1;
-                                document.getElementById("c1-d2").innerHTML = "Dose-2 = " + totalCentres[0].available_capacity_dose2;
-                                document.getElementById("c2-d2").innerHTML = "Dose-2 = " + totalCentres[1].available_capacity_dose2;
-                                document.getElementById("c3-d2").innerHTML = "Dose-2 = " + totalCentres[2].available_capacity_dose2;
-                                document.getElementById("c4-d2").innerHTML = "Dose-2 = " + totalCentres[3].available_capacity_dose2;
+                                document.getElementById("c1-d1").innerHTML = "Available Dose 1 - " + totalCentres[0].available_capacity_dose1;
+                                document.getElementById("c2-d1").innerHTML = "Available Dose 1 - " + totalCentres[1].available_capacity_dose1;
+                                document.getElementById("c3-d1").innerHTML = "Available Dose 1 - " + totalCentres[2].available_capacity_dose1;
+                                document.getElementById("c4-d1").innerHTML = "Available Dose 1 - " + totalCentres[3].available_capacity_dose1;
+                                document.getElementById("c1-d2").innerHTML = "Available Dose 2 - " + totalCentres[0].available_capacity_dose2;
+                                document.getElementById("c2-d2").innerHTML = "Available Dose 2 - " + totalCentres[1].available_capacity_dose2;
+                                document.getElementById("c3-d2").innerHTML = "Available Dose 2 - " + totalCentres[2].available_capacity_dose2;
+                                document.getElementById("c4-d2").innerHTML = "Available Dose 2 - " + totalCentres[3].available_capacity_dose2;
                                 document.getElementById("c1-type").innerHTML = totalCentres[0].vaccine;
                                 document.getElementById("c2-type").innerHTML = totalCentres[1].vaccine;
                                 document.getElementById("c3-type").innerHTML = totalCentres[2].vaccine;
