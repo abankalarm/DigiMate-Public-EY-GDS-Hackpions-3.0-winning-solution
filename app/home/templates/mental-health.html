@@ -28,7 +28,7 @@
         font-weight: bold;
     }
 
-    #one, #two, #three, #four, #five, #six {
+    #col1, #col2, #col3, #col4, #col5, #col6 {
         border-radius: 20%;
         margin: 20px;
         padding: 10px;
@@ -113,70 +113,6 @@
                                 </h6>
                             </div>
                             <div id = 'container'>
-                                <div class = 'row'>
-                                    <div class = 'col' id = "one">
-                                        <h5 id = "name1">
-                                            
-                                        </h5>
-                                        <div class="card-block">
-                                            <h6 id = "desc1">
-
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <div class = 'col' id = "two">
-                                        <h5 id = "name2">
-                                            
-                                        </h5>
-                                        <div class="card-block">
-                                            <h6 id = "desc2">
-                                                
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class = 'row'>
-                                    <div class = 'col' id = "three">
-                                        <h5 id = "name3">
-                                            
-                                        </h5>
-                                        <div class="card-block">
-                                            <h6 id = "desc3">
-                                                
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <div class = 'col' id = "four">
-                                        <h5 id = "name4">
-                                            
-                                        </h5>
-                                        <div class="card-block">
-                                            <h6 id = "desc4">
-                                                
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class = 'row'>
-                                    <div class = 'col' id = "five">
-                                        <h5 id = "name5">
-                                        </h5>
-                                        <div class="card-block">
-                                            <h6 id = "desc5">
-                                                
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <div class = "col" id = "six">
-                                        <h5 id = "name6">
-                                        </h5>
-                                        <div class="card-block">
-                                            <h6 id = "desc6">
-                                                
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -194,7 +130,7 @@
     
         var data = JSON.parse('{{allData | tojson}}');
 
-        document.getElementById("name1").innerHTML = data.conditions[0].name;
+        /*document.getElementById("name1").innerHTML = data.conditions[0].name;
         //document.getElementById("one").style.backgroundImage = "url(" + data.conditions[0].img + ")";
         document.getElementById("desc1").innerHTML = data.conditions[0].overview;
         document.getElementById("one").addEventListener('click', function() {
@@ -235,7 +171,20 @@
         document.getElementById("desc6").innerHTML = data.conditions[5].overview;
         document.getElementById("six").addEventListener('click', function() {
             window.location.href = window.location.pathname + "/" + data.conditions[5].name;
-        });
+        });*/
+
+        var ele = "";
+        for(var i = 0; i < Object.keys(data.conditions).length; i += 2) {
+            ele += "<div class = 'row'><div class = 'col' id ='col" + (i + 1) + "' onclick = 'myFunc(" + i + ")'><h5 id ='name" + (i + 1) + "'>" + data.conditions[i].name + "</h5><div class='card-block'><h6 id ='desc" + (i + 1) + "'>" + data.conditions[i].overview + "</h6></div></div><div class = 'col' onclick = 'myFunc(" + (i + 1) + ")' id ='col" + (i + 2) + "'><h5 id ='name" + (i + 2) + "'>" + data.conditions[i + 1].name + "</h5><div class='card-block' ><h6 id ='desc" + (i + 2) + "'>" + data.conditions[i + 1].overview + "</h6></div></div></div>"
+        }
+
+        document.getElementById("container").innerHTML = ele;
+
+        function myFunc(n) {
+            window.location.href = window.location.pathname + "/" + data.conditions[n].name;
+        }
+ 
+
 </script>
 
 {% endblock javascripts %}

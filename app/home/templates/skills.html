@@ -54,8 +54,17 @@
                                 <p>This section allows our intelligent systems to use the skills set that you posses and recommend you the next one that you should take up to enhance your current skillset and be an overall better employ
                                     <br>
                                     <br> below are our recommendations, for a more transparent understanding you can also look the brain graph being rendered below
-
                                 </p>
+                                <div class="row">
+                                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="pills-sk1-tab" data-toggle="pill" href="#pills-sk1" role="tab" aria-controls="pills-sk1" aria-selected="true">Enhance Skills</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="pills-sk2-tab" data-toggle="pill" href="#pills-sk2" role="tab" aria-controls="pills-sk2" aria-selected="false">Skills for Professional Benefits</a>
+                                        </li>
+                                    </ul>
+                                </div>
                                 <div class="row">
                                     <div><button class = "button-skill" id="skills1"></button></div>
                                     <div><button class = "button-skill" id="skills2"></button></div>
@@ -87,18 +96,13 @@
 <script>
 var allData = JSON.parse('{{allData | tojson}}');
 var recomm = JSON.parse('{{recomm | tojson}}');
+var crecomm = JSON.parse('{{crecomm | tojson}}');
 
 var skills1 = document.getElementById('skills1');
 var skills2 = document.getElementById('skills2');
 var skills3 = document.getElementById('skills3');
 var skills4 = document.getElementById('skills4');
 var skills5 = document.getElementById('skills5');
-
-skills1.innerHTML = recomm[0];
-skills2.innerHTML = recomm[1];
-skills3.innerHTML = recomm[2];
-skills4.innerHTML = recomm[3];
-skills5.innerHTML = recomm[4];
 
 skills1.addEventListener("click", function() {
     window.location.href = window.location.pathname + "/" + skills1.innerHTML;
@@ -121,7 +125,13 @@ skills5.addEventListener("click", function() {
 });
 
 
+
 $(document).ready(function() {
+    skills1.innerHTML = recomm[0];
+    skills2.innerHTML = recomm[1];
+    skills3.innerHTML = recomm[2];
+    skills4.innerHTML = recomm[3];
+    skills5.innerHTML = recomm[4];
     setTimeout(function() {
         am4core.ready(function() {
             am4core.useTheme(am4themes_animated);
@@ -170,6 +180,124 @@ $(document).ready(function() {
                     });
                 }, 700);
             });
+
+    var another = false;
+    if(!another) {
+    document.getElementById("pills-sk2-tab").addEventListener('click', function() {
+        skills1.innerHTML = crecomm[0];
+        skills2.innerHTML = crecomm[1];
+        skills3.innerHTML = crecomm[2];
+        skills4.innerHTML = crecomm[3];
+        skills5.innerHTML = crecomm[4];
+        setTimeout(function() {
+        am4core.ready(function() {
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
+
+            var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+            networkSeries.dataFields.linkWith = "linkWith";
+            networkSeries.dataFields.name = "name";
+            networkSeries.dataFields.id = "name";
+            networkSeries.dataFields.value = "value";
+            networkSeries.dataFields.children = "children";
+
+            networkSeries.nodes.template.label.text = "{name}"
+            networkSeries.fontSize = 12;
+            networkSeries.linkWithStrength = 0;
+
+            var nodeTemplate = networkSeries.nodes.template;
+            nodeTemplate.tooltipText = "{name}";
+            nodeTemplate.fillOpacity = 1;
+            nodeTemplate.label.hideOversized = true;
+            nodeTemplate.label.truncate = true;
+
+            var linkTemplate = networkSeries.links.template;
+            linkTemplate.strokeWidth = 1;
+            var linkHoverState = linkTemplate.states.create("hover");
+            linkHoverState.properties.strokeOpacity = 1;
+            linkHoverState.properties.strokeWidth = 2;
+
+            nodeTemplate.events.on("over", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = true;
+                })
+            })
+
+            nodeTemplate.events.on("out", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = false;
+                })
+            })
+
+            networkSeries.data = crecomm
+                    });
+                }, 700);
+            another = true;
+        });
+    }
+
+    var anotherOne = false;
+    if(!anotherOne) {
+    document.getElementById("pills-sk1-tab").addEventListener('click', function() {
+        skills1.innerHTML = recomm[0];
+        skills2.innerHTML = recomm[1];
+        skills3.innerHTML = recomm[2];
+        skills4.innerHTML = recomm[3];
+        skills5.innerHTML = recomm[4];
+        setTimeout(function() {
+        am4core.ready(function() {
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
+
+            var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+            networkSeries.dataFields.linkWith = "linkWith";
+            networkSeries.dataFields.name = "name";
+            networkSeries.dataFields.id = "name";
+            networkSeries.dataFields.value = "value";
+            networkSeries.dataFields.children = "children";
+
+            networkSeries.nodes.template.label.text = "{name}"
+            networkSeries.fontSize = 12;
+            networkSeries.linkWithStrength = 0;
+
+            var nodeTemplate = networkSeries.nodes.template;
+            nodeTemplate.tooltipText = "{name}";
+            nodeTemplate.fillOpacity = 1;
+            nodeTemplate.label.hideOversized = true;
+            nodeTemplate.label.truncate = true;
+
+            var linkTemplate = networkSeries.links.template;
+            linkTemplate.strokeWidth = 1;
+            var linkHoverState = linkTemplate.states.create("hover");
+            linkHoverState.properties.strokeOpacity = 1;
+            linkHoverState.properties.strokeWidth = 2;
+
+            nodeTemplate.events.on("over", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = true;
+                })
+            })
+
+            nodeTemplate.events.on("out", function (event) {
+                var dataItem = event.target.dataItem;
+                dataItem.childLinks.each(function (link) {
+                    link.isHover = false;
+                })
+            })
+
+            networkSeries.data = allData
+                    });
+                }, 700);
+            anotherOne = true;
+        });
+    }
 </script>
 
 {% endblock javascripts %}

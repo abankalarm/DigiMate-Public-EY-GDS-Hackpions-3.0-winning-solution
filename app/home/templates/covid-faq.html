@@ -1,0 +1,101 @@
+{% extends "layouts/base.html" %} {% block title %} Page Blank {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+    .col {
+        color: black;
+        float: left;
+        width: 50%;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+
+    #container {
+        margin: 10px;
+    }
+
+    #desc1, #desc2, #desc3, #desc4, #desc5, #desc6 {
+        white-space: pre-line;
+        line-height: 2em;
+        font-weight: bold;
+    }
+
+    #one, #two, #three, #four, #five, #six {
+        border-radius: 20%;
+        margin: 20px;
+        padding: 10px;
+        background-repeat: no-repeat;
+        background-image: url('https://wallpaperaccess.com/full/6027126.png');
+        border-color: red;
+    }
+
+    #name1, #name2, #name3, #name4, #name5, #name6 {
+        color: red;
+        font-weight: bolder;
+    }
+
+    #block {
+        display: none;
+    }
+
+</style>
+{% endblock stylesheets %} {% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 id = "name">
+                                    COVID-19 FAQ
+                                </h5>
+                            </div>
+                            <div class="card-block">
+                                <h6>
+                                    Mental health refers to cognitive, behavioral, and emotional well-being. It is all about how people think, feel, and behave. People sometimes use the term “mental health” to mean the absence of a mental disorder. Mental health can affect daily living, relationships, and physical health.
+                                </h6>
+                            </div>
+                            <div id = 'container'>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ Main Content ] end -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    
+        var data = JSON.parse('{{allData | tojson}}');
+        for (var i = 0; i < Object.keys(data.faq).length; i++) {
+            ele += "<div class = 'row' onclick = 'myFunc(" + i + ")'><h5>" + data.faq[i].q + "</h5><div class='card-block' id = 'block-" + i + "'><h6>" + data.faq.a +  "</h6></div></div>";
+        }
+
+        function myFunc(n) {
+            document.getElementById("block-" + n).style.display = "block";
+        }
+
+        document.getElementById("container").innerHTML = ele;
+</script>
+
+{% endblock javascripts %}

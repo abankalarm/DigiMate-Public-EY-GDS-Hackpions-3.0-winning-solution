@@ -157,9 +157,9 @@ The goal of pranayama is to connect your body and mind. It also supplies your bo
 These exercises can be performed while sitting right at the desk.
                                 </h6>
                             </div>
-                            <div class="slideshow-container">
+                            <div class="slideshow-container" id="ss1">
                                 <!-- Full images with numbers and message Info -->
-                                <div class="Containers">
+                                <!--<div class="Containers">
                                     <div class="MessageInfo" id = "one">1 / 5</div>
                                     <img src="" style="width:100%;" id = "one-i">
                                     <div class="Info" id = "one-c"></div>
@@ -185,19 +185,19 @@ These exercises can be performed while sitting right at the desk.
                                     <div class="Info" id = "five-c"></div>
                                 </div>
                               
-                                <!-- Back and forward buttons -->
+                                
                                 <a class="Back" onclick="plusSlides(-1)">&#10094;</a>
-                                <a class="forward" onclick="plusSlides(1)">&#10095;</a>
+                                <a class="forward" onclick="plusSlides(1)">&#10095;</a>-->
                               </div>
                               <br>
                               
                               <!-- The circles/dots -->
-                              <div style="text-align:center">
-                                <span class="dots" onclick="currentSlide(1)"></span>
+                              <div id = "dot-c" style="text-align:center">
+                                <!--<span class="dots" onclick="currentSlide(1)"></span>
                                 <span class="dots" onclick="currentSlide(2)"></span>
                                 <span class="dots" onclick="currentSlide(3)"></span>
                                 <span class="dots" onclick="currentSlide(4)"></span>
-                                <span class="dots" onclick="currentSlide(5)"></span>
+                                <span class="dots" onclick="currentSlide(5)"></span>-->
                               </div> 
                             <div class="card-header">
                                 <h5 id = "name">
@@ -225,7 +225,7 @@ These exercises can be performed while sitting right at the desk.
 <script>
     
         var data = JSON.parse('{{allData | tojson}}');
-        document.getElementById("one-i").src = data.prayanama[0].img_url;
+        /*document.getElementById("one-i").src = data.prayanama[0].img_url;
         document.getElementById("one-c").innerHTML = "Tap on image to know more";
         document.getElementById("one-i").addEventListener('click', function() {
             window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[0].sanskrit_name;
@@ -253,11 +253,31 @@ These exercises can be performed while sitting right at the desk.
         document.getElementById("five-c").innerHTML = "Tap on image to know more";
         document.getElementById("five-i").addEventListener('click', function() {
             window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[4].sanskrit_name;
-        });
+        });*/
+
+
+        var e = "";
+        var p = []
+        var tot = Object.keys(data.prayanama).length;
+        for(var i = 0; i < tot; i++) {
+            p[i] = window.location.pathname + "/prayanama/" + data.prayanama[i].sanskrit_name;
+            e += "<div class='Containers'><div class='MessageInfo'>" + (i + 1) + "/" + tot + "</div><img src='"+ data.prayanama[i].img_url +"' style='width:100%;' onclick = 'myFunction(" + i + ")'><div class='Info'>Tap on Image to know more</div></div>"
+        }
+
+        function myFunction(n) {
+            window.location.href = p[n];
+        }
+
+        e += "<a class='Back' onclick='plusSlides(-1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a>"
+        var k = "";
+        for(var i = 0; i < tot; i++) {
+            k += "<span class='dots' onclick='currentSlide(" + (i + 1) + ")'></span>";
+        }
+        document.getElementById("ss1").innerHTML = e;
+        document.getElementById("dot-c").innerHTML = k;
 
         var element = "";
         var total = Object.keys(data.otherexercise).length;
-        console.log(total);
         for(var ele = 0; ele < total; ele+=3) {
             element += "<div class='row'><div class = 'col'><img src='" + data.otherexercise[ele].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele].sanskrit_name + "(" + data.otherexercise[ele].english_name + ")" + " </div></div><div class = 'col'><img src='" + data.otherexercise[ele + 1].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele + 1].sanskrit_name + "(" + data.otherexercise[ele + 1].english_name + ")" + " </div></div><div class = 'col'><img src='" + data.otherexercise[ele + 2].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele + 2].sanskrit_name + "(" + data.otherexercise[ele + 2].english_name + ")" + " </div></div></div>";
         }

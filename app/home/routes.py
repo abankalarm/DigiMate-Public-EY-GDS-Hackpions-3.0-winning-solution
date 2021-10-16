@@ -356,7 +356,7 @@ def root():
     
     crecom,recom,Graph=getRecommendations(res["skills"],jlist)
 
-    return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, resources=CDN.render())
+    return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, crecomm = crecom, resources=CDN.render())
 
 
 @blueprint.route('/plots/<template>',methods=["GET","POST"])
