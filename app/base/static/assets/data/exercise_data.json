@@ -1,46 +1,110 @@
 {
     "desk": [
         {
-            "name": "",
+            "name": "Tricep Dips",
+            "part": "Triceps and Chest",
             "video": ""
         },
         {
-            "name": "",
+            "name": "Desk Pushup",
+            "part": "Triceps and Chest",
             "video": ""
         },
         {
-            "name": "",
+            "name": "Calf Raises",
+            "part": "Calves",
             "video": ""
         },
         {
-            "name": "",
+            "name": "Desk Planks",
+            "part": "Shoulders",
             "video": ""
         },
         {
-            "name": "",
+            "name": "Desk Donkey Kicks",
+            "part": "Hamstrings",
             "video": ""
         }
     ],
-    "outdoor": [
+    "standing": [
         {
-            "name": "",
+            "name": "Lunges",
+            "part": "Hamstrings",
             "video": ""
         },
         {
-            "name": "",
+            "name": "Single-Lef Deadlifts",
+            "part": "Hamstrings",
             "video": ""
         },
         {
-            "name": "",
+            "name": "Wall Sit",
+            "part": "Hamstrings",
             "video": ""
         },
         {
-            "name": "",
+            "name": "Step-Ups",
+            "part": "Hamstrings",
             "video": ""
         },
         {
-            "name": "",
+            "name": "Side Lunges",
+            "part": "Hamstrings",
             "video": ""
         }
-    ]
+    ],
+    "sitting": [
+        {
+            "name": "Seated Bicycles",
+            "part": "Abdominal Muscles",
+            "video": ""
+        },
+        {
+            "name": "Seated Knee-To-Chin",
+            "part": "Abdominal Muscles",
+            "video": ""
+        },
+        {
+            "name": "Seated Leg Extensions",
+            "part": "Quads",
+            "video": ""
+        },
+        {
+            "name": "Seated Windshield Wipers",
+            "part": "Abdominal Muscles",
+            "video": ""
+        },
+        {
+            "name": "Seated Flutter Kicks",
+            "part": "Abdominal Muscles",
+            "video": ""
+        }
+    ],
+    "withweights": [
+        {
+            "name": "Seated Shoulder Press",
+            "part": "Shoulders",
+            "video": ""
+        },
+        {
+            "name": "Bent Over Rows",
+            "part": "Upper Back and Lats",
+            "video": ""
+        },
+        {
+            "name": "Front Raises",
+            "part": "Shoulders",
+            "video": ""
+        },
+        {
+            "name": "Russian Twists",
+            "video": "Shoulders"
+        },
+        {
+            "name": "Romanian Deadlifts",
+            "video": "Hamstrings"
+        }
+    ], 
+    "Five": "Perform each exercise one after the other, without rest between exercises. Do one set of each.",
+    "Ten": "Perform each exercise one after another without resting in between. After doing all six exercises, rest for 1 minute before repeating the routine a second time."
 }

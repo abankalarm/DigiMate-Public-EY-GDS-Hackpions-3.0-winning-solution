@@ -386,14 +386,14 @@
             });
         }
     
-        /*var allData = JSON.parse('{{allData | tojson}}');
+        var allData = JSON.parse('{{allData | tojson}}');
 
         var ele = "";
         for(var i = 0; i < Object.keys(allData.faq).length; i++) {
             ele += "<div class='faq_container'><div class='faq'><div class = 'faq_question'><div class = 'card-header'><b>" + allData.faq[i].q + "</b><br></div></div><div class='faq_answer_container'><div class='faq_answer'><div class = 'card-block'>" + allData.faq[i].a + "</div><br><br></div></div></div></div>";
-        }*/
+        }
 
-        //document.getElementById("ques").innerHTML = ele;
+        document.getElementById("ques").innerHTML = ele;
 
         $('.faq_question').click(function() {
             if ($(this).parent().is('.open')){

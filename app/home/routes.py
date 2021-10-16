@@ -58,7 +58,7 @@ with open('app/base/static/assets/data/mental_data.json') as json_file:
 with open('app/base/static/assets/data/exercise_data.json') as json_file:
     exercise_data = json.load(json_file)
 
-with open('app/base/static/assets/data/covid_data.json') as json_file:
+with open('app/base/static/assets/data/covid-data.json') as json_file:
     covid_data = json.load(json_file)
 
 def apiauth(username,password):
