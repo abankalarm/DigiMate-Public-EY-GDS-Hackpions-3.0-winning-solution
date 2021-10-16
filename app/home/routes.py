@@ -810,7 +810,6 @@ def addtask():
     row.tasks = json.dumps(tasks)
     db.session.commit()
     return redirect('/')
-    return jsonify({"message":"success"})
 
   
 @blueprint.route('/task/delete/<id>')
