@@ -95,6 +95,7 @@
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <script>
 var allData = JSON.parse('{{allData | tojson}}');
+var allDataOne = JSON.parse('{{allDataOne | tojson}}');
 var recomm = JSON.parse('{{recomm | tojson}}');
 var crecomm = JSON.parse('{{crecomm | tojson}}');
 
@@ -233,7 +234,7 @@ $(document).ready(function() {
                 })
             })
 
-            networkSeries.data = crecomm
+            networkSeries.data = allDataOne;
                     });
                 }, 700);
             another = true;

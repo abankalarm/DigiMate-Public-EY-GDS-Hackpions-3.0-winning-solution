@@ -352,10 +352,11 @@ def root():
             temp=json.loads(row.skills)
             jlist.extend(temp["skills"])
 
-    
+    if('dont' not in res):
+        res['dont'] = []
     recom,Graph,crecom,Graph1=getRecommendations(res["skills"],res['dont'],jlist)
 
-    return render_template('skills.html', segment = get_segment(request),allData=Graph ,recomm = recom, crecomm = crecom, resources=CDN.render())
+    return render_template('skills.html', segment = get_segment(request),allData=Graph ,allDataOne = Graph1, recomm = recom, crecomm = crecom, resources=CDN.render())
 
 
 @blueprint.route('/plots/<template>',methods=["GET","POST"])
