@@ -42,9 +42,30 @@
         font-weight: bolder;
     }
 
+    .faq_question {
+        margin: 0px;
+        padding: 0px 0px 5px 0px;
+        display: inline-block;
+        cursor: pointer;
+        font-weight: bold;
+        color: red;
+    }
+    
+    .faq_answer_container {
+        height: 0px;
+        overflow: hidden;
+        padding: 0px;
+        background-image:url('https://wallpaperaccess.com/full/6027126.png');;
+    }
+
+    .card-block {
+        padding-left: 50px !important;
+        padding-right: 50px !important;
+    }
+
 </style>
 {% endblock stylesheets %} {% block content %}
-
+<script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <!-- [ breadcrumb ] start -->
@@ -61,56 +82,105 @@
                                 </h5>
                             </div>
                             <div class="card-block">
-                                <h6>
+                                <h6 class>
                                     Mental health refers to cognitive, behavioral, and emotional well-being. It is all about how people think, feel, and behave. People sometimes use the term “mental health” to mean the absence of a mental disorder. Mental health can affect daily living, relationships, and physical health.
                                 </h6>
                                 <h6>
-                                    <b>Why is mental health important?</b><br>
-                                    Mental health is important because it can help you to
-                                    <ul>
-                                    <li>Cope with the stresses of life</li>
-                                    <li>Be physically healthy</li>
-                                    <li>Have good relationships</li>
-                                    <li>Make meaningful contributions to your community</li>
-                                    <li>Work productively</li>
-                                    <li>Realize your full potential</li>
-                                    <li>Your mental health is also important because it can affect your physical health. For example, mental disorders can raise your risk for physical health problems such as stroke, type 2 diabetes, and heart disease.</li>
-                                    </ul>
-                                    
-                                    <b>What can affect my mental health?</b><br>
-                                    There are many different factors that can affect your mental health, including
-                                    <br>
-                                    <ul>
-                                    <li>Biological factors, such as genes or brain chemistry</li>
-                                    <li>Life experiences, such as trauma or abuse</li>
-                                    <li>Family history of mental health problems</li>
-                                    <li>Your lifestyle, such as diet, physical activity, and substance use</li>
-                                    <li>You can also affect your mental health by taking steps to improve it, such as doing meditation, using relaxation techniques, and practicing gratitude.</li>
-                                    </ul>
-                                    <b>Can my mental health change over time?</b><br>
-                                    Over time, your mental health can change. For example, you may be dealing with a difficult situation, such as trying to manage a chronic illness, taking care of an ill relative, or facing money problems. The situation may wear you out and overwhelm your ability to cope with it. This can worsen your mental health. On the other hand, getting therapy may improve your mental health.
-                                    <br>
-                                    <br>
-                                    <b>What are the signs that I might have a mental health problem?</b><br>
-                                    When it comes to your emotions, it can be hard to know what is normal and what is not. There are warning signs that you may have a mental health problem, including
-                                    <ul>
-                                    <li>A change in your eating or sleeping habits</li>
-                                    <li>Withdrawing from the people and activities you enjoy</li>
-                                    <li>Having low or no energy</li>
-                                    <li>Feeling numb or like nothing matters</li>
-                                    <li>Having unexplained aches and pains</li>
-                                    <li>Feeling helpless or hopeless</li>
-                                    <li>Smoking, drinking, or using drugs more than usual</li>
-                                    <li>Feeling unusually confused, forgetful, angry, upset, worried, or scared</li>
-                                    <li>Having severe mood swings that cause problems in your relationships</li>
-                                    <li>Having thoughts and memories that you can't get out of your head</li>
-                                    <li>Hearing voices or believing things that are not true</li>
-                                    <li>Thinking of harming yourself or others</li>
-                                    <li>Not being able to perform daily tasks like taking care of your kids or getting to work or school</li>
-                                    </ul>
-                                    <b>What should I do if I think I have a mental health problem?</b><br>
-                                    If you think that you may have a mental health problem, get help. Talk therapy and/or medicines can treat mental disorders. If you don't know where to start, contact your primary care provider.
-                                </h6>
+                                    <div class="faq_container">
+                                    <div class="faq">
+                                    <div class = "faq_question"><div class = "card-header"><b>Why is mental health important?</b><br></div></div>
+                                    <div class="faq_answer_container">
+                                        <div class="faq_answer">
+                                            <div class = "card-block">
+                                            Mental health is important because it can help you to
+                                            <ul>
+                                                <li>Cope with the stresses of life</li>
+                                                <li>Be physically healthy</li>
+                                                <li>Have good relationships</li>
+                                                <li>Make meaningful contributions to your community</li>
+                                                <li>Work productively</li>
+                                                <li>Realize your full potential</li>
+                                                <li>Your mental health is also important because it can affect your physical health. For example, mental disorders can raise your risk for physical health problems such as stroke, type 2 diabetes, and heart disease.</li>
+                                            </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    </div>
+
+                                    <div class="faq_container">
+                                    <div class="faq">
+                                    <div class = "faq_question"><div class = "card-header"><b>What can affect my mental health?</b><br></div></div>
+                                    <div class="faq_answer_container">
+                                        <div class="faq_answer">
+                                            <div class="card-block">
+                                            There are many different factors that can affect your mental health, including
+                                            <br>
+                                            <ul>
+                                                <li>Biological factors, such as genes or brain chemistry</li>
+                                                <li>Life experiences, such as trauma or abuse</li>
+                                                <li>Family history of mental health problems</li>
+                                                <li>Your lifestyle, such as diet, physical activity, and substance use</li>
+                                                <li>You can also affect your mental health by taking steps to improve it, such as doing meditation, using relaxation techniques, and practicing gratitude.</li>
+                                            </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    </div>
+
+                                    <div class="faq_container">
+                                        <div class="faq">
+                                        <div class = "faq_question"><div class = "card-header"><b>Can my mental health change over time?</b><br></div></div>
+                                        <div class="faq_answer_container">
+                                            <div class="faq_answer">
+                                                <div class = "card-block">Over time, your mental health can change. For example, you may be dealing with a difficult situation, such as trying to manage a chronic illness, taking care of an ill relative, or facing money problems. The situation may wear you out and overwhelm your ability to cope with it. This can worsen your mental health. On the other hand, getting therapy may improve your mental health.
+                                                </div>
+                                            <br>
+                                            <br>
+                                            </div>
+                                    </div>
+                                    </div>
+                                    </div>
+
+                                    <div class="faq_container">
+                                    <div class="faq">
+                                    <div class = "faq_question"><div class = "card-header"><b>What are the signs that I might have a mental health problem?</b><br></div></div>
+                                    <div class="faq_answer_container">
+                                        <div class="faq_answer">
+                                            <div class = "card-block">
+                                            When it comes to your emotions, it can be hard to know what is normal and what is not. There are warning signs that you may have a mental health problem, including
+                                            <ul>
+                                                <li>A change in your eating or sleeping habits</li>
+                                                <li>Withdrawing from the people and activities you enjoy</li>
+                                                <li>Having low or no energy</li>
+                                                <li>Feeling numb or like nothing matters</li>
+                                                <li>Having unexplained aches and pains</li>
+                                                <li>Feeling helpless or hopeless</li>
+                                                <li>Smoking, drinking, or using drugs more than usual</li>
+                                                <li>Feeling unusually confused, forgetful, angry, upset, worried, or scared</li>
+                                                <li>Having severe mood swings that cause problems in your relationships</li>
+                                                <li>Having thoughts and memories that you can't get out of your head</li>
+                                                <li>Hearing voices or believing things that are not true</li>
+                                                <li>Thinking of harming yourself or others</li>
+                                                <li>Not being able to perform daily tasks like taking care of your kids or getting to work or school</li>
+                                            </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    </div>
+
+                                    <div class="faq_container">
+                                    <div class="faq">
+                                    <div class = "faq_question"><div class = "card-header"><b>What should I do if I think I have a mental health problem?</b><br></div></div>
+                                    <div class="faq_answer_container">
+                                        <div class="faq_answer">
+                                            <div class = "card-block">If you think that you may have a mental health problem, get help. Talk therapy and/or medicines can treat mental disorders. If you don't know where to start, contact your primary care provider.</div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    </div>
                             </div>
                             <div id = 'container'>
                             </div>
@@ -126,6 +196,7 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+
 <script>
     
         var data = JSON.parse('{{allData | tojson}}');
@@ -172,10 +243,21 @@
         document.getElementById("six").addEventListener('click', function() {
             window.location.href = window.location.pathname + "/" + data.conditions[5].name;
         });*/
+        $('.faq_question').click(function() {
+            if ($(this).parent().is('.open')){
+                $(this).closest('.faq').find('.faq_answer_container').animate({'height':'0'},500);
+                $(this).closest('.faq').removeClass('open');
+
+                }else{
+                    var newHeight =$(this).closest('.faq').find('.faq_answer').height() +'px';
+                    $(this).closest('.faq').find('.faq_answer_container').animate({'height':newHeight},500);
+                    $(this).closest('.faq').addClass('open');
+                }
+        });
 
         var ele = "";
         for(var i = 0; i < Object.keys(data.conditions).length; i += 2) {
-            ele += "<div class = 'row'><div class = 'col' id ='col" + (i + 1) + "' onclick = 'myFunc(" + i + ")'><h5 id ='name" + (i + 1) + "'>" + data.conditions[i].name + "</h5><div class='card-block'><h6 id ='desc" + (i + 1) + "'>" + data.conditions[i].overview + "</h6></div></div><div class = 'col' onclick = 'myFunc(" + (i + 1) + ")' id ='col" + (i + 2) + "'><h5 id ='name" + (i + 2) + "'>" + data.conditions[i + 1].name + "</h5><div class='card-block' ><h6 id ='desc" + (i + 2) + "'>" + data.conditions[i + 1].overview + "</h6></div></div></div>"
+            ele += "<div class = 'row'><div class = 'col' id ='col" + (i + 1) + "' onclick = 'myFunc(" + i + ")'><h5 id ='name" + (i + 1) + "'>" + data.conditions[i].name + "</h5><div class='card-block'><h6 id ='desc" + (i + 1) + "'>" + data.conditions[i].overview_short + "</h6></div></div><div class = 'col' onclick = 'myFunc(" + (i + 1) + ")' id ='col" + (i + 2) + "'><h5 id ='name" + (i + 2) + "'>" + data.conditions[i + 1].name + "</h5><div class='card-block' ><h6 id ='desc" + (i + 2) + "'>" + data.conditions[i + 1].overview_short + "</h6></div></div></div>"
         }
 
         document.getElementById("container").innerHTML = ele;
@@ -183,7 +265,6 @@
         function myFunc(n) {
             window.location.href = window.location.pathname + "/" + data.conditions[n].name;
         }
- 
 
 </script>
 

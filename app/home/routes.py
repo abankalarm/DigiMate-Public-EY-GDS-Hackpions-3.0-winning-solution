@@ -55,6 +55,12 @@ with open('app/base/static/assets/data/yoga_data.json') as json_file:
 with open('app/base/static/assets/data/mental_data.json') as json_file:
     mental_data = json.load(json_file)
 
+with open('app/base/static/assets/data/exercise_data.json') as json_file:
+    exercise_data = json.load(json_file)
+
+with open('app/base/static/assets/data/covid_data.json') as json_file:
+    covid_data = json.load(json_file)
+
 def apiauth(username,password):
     user = User.query.filter_by(username=username).first()
     for row in User.query.filter_by(username='test').all():
@@ -437,6 +443,14 @@ def oneskill(template):
     
     
     return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=dates)
+
+@blueprint.route('/exercise')
+def exercise():
+    return render_template('exercise.html', segment = get_segment(request), allData = exercise_data)
+
+@blueprint.route('/covid-faq')
+def covidfaq():
+    return render_template('covid-faq.html', segment = get_segment(request), allData = covid_data)
 
 @blueprint.route('/yoga')
 def yoga():

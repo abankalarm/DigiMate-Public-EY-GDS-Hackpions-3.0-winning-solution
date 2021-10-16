@@ -28,7 +28,7 @@
         font-weight: bold;
     }
 
-    #one, #two, #three, #four, #five, #six {
+    #col1, #col2, #col3, #col4, #col5, #col6 {
         border-radius: 20%;
         margin: 20px;
         padding: 10px;
@@ -42,13 +42,56 @@
         font-weight: bolder;
     }
 
-    #block {
-        display: none;
+    .faq_question {
+        margin: 0px;
+        padding: 0px 0px 5px 0px;
+        display: inline-block;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    
+    .faq_answer_container {
+        height: 0px;
+        overflow: hidden;
+        padding: 0px;
+    }
+
+    .card-block {
+        padding-left: 50px !important;
+        padding-right: 50px !important;
+    }
+
+    #c1, #c2, #c3, #c4 {
+        outline-style: solid;
+        outline-color: blue;
+        margin: 10px;
+        background-color: lightblue;
+    }
+
+    #c1-type, #c2-type, #c3-type, #c4-type {
+        margin: 10px;
+    }
+
+    #c1-name, #c2-name, #c3-name, #c4-name {
+        background: lightblue;
+        
+    }
+
+    #c1-d1, #c2-d1, #c3-d1, #c4-d1 {
+        background-color: yellow;
+        color:black;
+        padding: 4px;
+    }
+
+    #c1-d2, #c2-d2, #c3-d2, #c4-d2 {
+        background-color: green;
+        color: white;
+        padding: 4px;
     }
 
 </style>
 {% endblock stylesheets %} {% block content %}
-
+<script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="pcoded-content">
     <div class="pcoded-inner-content">
         <!-- [ breadcrumb ] start -->
@@ -61,16 +104,123 @@
                         <div class="card">
                             <div class="card-header">
                                 <h5 id = "name">
-                                    COVID-19 FAQ
+                                    COVID-19 Page
                                 </h5>
                             </div>
                             <div class="card-block">
-                                <h6>
-                                    Mental health refers to cognitive, behavioral, and emotional well-being. It is all about how people think, feel, and behave. People sometimes use the term “mental health” to mean the absence of a mental disorder. Mental health can affect daily living, relationships, and physical health.
+                                <h6 id = "desc">
+                                    Description
                                 </h6>
                             </div>
-                            <div id = 'container'>
-                                
+                            <div class="card-block" id="whole">
+                                <div class="row">
+                                    <div class = "col" id = "c1">
+                                        <div class="card-header"  id= "c1-name">
+                                            
+                                        </div>
+                                        <div class = "card-block" id = "c1-addr">
+
+                                        </div>
+                                        <div class = "card-block" id = "c1-available">
+                                            <div id = "c1-type">
+                                                    
+                                            </div>
+                                            <div class = "row">
+                                                <div class = "col" id = "c1-d1">
+
+                                                </div>
+                                                <div class = "col" id = "c1-d2">
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <!--<div class = "card-block" id = "c1-allow">
+                                            
+                                        </div>-->
+                                    </div>
+                                    <div class = "col" id = "c2">
+                                        <div class="card-header" id= "c2-name">
+                                            
+                                        </div>
+                                        <div class = "card-block" id = "c2-addr">
+
+                                        </div>
+                                        <div class = "card-block" id = "c2-available">
+                                            <div id = "c2-type">
+                                                    
+                                            </div>
+                                            <div class = "row">
+                                                <div class = "col" id = "c2-d1">
+
+                                                </div>
+                                                <div class = "col" id = "c2-d2">
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <!--<div class = "card-block" id = "c2-allow">
+                                            
+                                        </div>-->
+                                    </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class = "col" id = "c3">
+                                            <div class="card-header" id = "c3-name">
+                                                
+                                            </div>
+                                            <div class = "card-block"id = "c3-addr">
+    
+                                            </div>
+                                            <div class = "card-block"id = "c3-available">
+                                                <div id = "c3-type">
+                                                    
+                                                </div>
+                                                <div class = "row">
+                                                    <div class = "col" id = "c3-d1">
+
+                                                    </div>
+                                                    <div class = "col" id = "c3-d2">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--<div class = "card-block"id = "c3-allow">
+                                                
+                                            </div>-->
+                                        </div>
+                                        <div class = "col" id = "c4">
+                                            <div class="card-header" id = "c4-name">
+                                                
+                                            </div>
+                                            <div class = "card-block" id = "c4-addr">
+    
+                                            </div>
+                                            <div class = "card-block" id = "c4-available">
+                                                <div id = "c4-type">
+                                                    
+                                                </div>
+                                                <div class = "row">
+                                                    <div class = "col" id = "c4-d1">
+
+                                                    </div>
+                                                    <div class = "col" id = "c4-d2">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--<div class = "card-block" id = "c4-allow">
+                                                
+                                            </div>-->
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div id = "ques">
+    
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -84,18 +234,179 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+
 <script>
+        $(document).ready(function() {
+            if (!navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                document.getElementById("whole").style.visibility = "hidden";
+                var k = document.getElementById("desc").innerHTML;
+                console.log(k);
+                document.getElementById("desc").innerHTML = k + "<br> Location not allowed for vaccination centres availability.";
+            }
+        });
+
+        function showPosition(position) {
+            $.ajax({
+                url: "https://cdn-api.co-vin.in/api/v2/appointment/centers/public/findByLatLong?lat=" + position.coords.latitude + "&long=" + position.coords.longitude,
+                type: 'GET',
+                dataType: 'json', // added data type
+                success: function(res) {
+                    console.log(res);
+                    var lookup = {};
+                    var items = res.centers;
+                    var result = [];
+
+                    for (var item, i = 0; item = items[i++];) {
+                        var name = item.pincode;
+
+                        if (!(name in lookup)) {
+                            lookup[name] = 1;
+                            result.push(name);
+                        }
+
+                        if(result.length > 2) {
+                            break;
+                        }
+                    }
+
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth() + 1;
+                    var yyyy = today.getFullYear();
+                    var d = dd + '-' + mm + '-' + yyyy;
+                    console.log(d)
+
+                    var totalCentres = [];
+                    
+                    $.ajax({
+                        url: "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+ result[0] + "&date="+d,
+                        type: 'GET',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            //console.log(res);
+                            for(var i = 0; i < Object.keys(res.sessions).length; i++) {
+                                if(res.sessions[i].allow_all_age && (res.sessions[i].available_capacity_dose1 != 0 || res.sessions[i].available_capacity_dose2 != 0)) {
+                                    totalCentres.push(res.sessions[i]);
+                                }
+                            }
+                            if(Object.keys(totalCentres).length < 4) {
+                                $.ajax({
+                                    url: "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+ result[1] + "&date="+d,
+                                    type: 'GET',
+                                    dataType: 'json', // added data type
+                                    success: function(res) {
+                                        //console.log(res);
+                                        for(var i = 0; i < Object.keys(res.sessions).length; i++) {
+                                            if(res.sessions[i].allow_all_age && (res.sessions[i].available_capacity_dose1 != 0 || res.sessions[i].available_capacity_dose2 != 0)) {
+                                                totalCentres.push(res.sessions[i]);
+                                            }
+                                        }
+                                        if(Object.keys(totalCentres).length < 4) {
+                                            $.ajax({
+                                                url: "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode="+ result[2] + "&date="+d,
+                                                type: 'GET',
+                                                dataType: 'json', // added data type
+                                                success: function(res) {
+                                                    //console.log(res); 
+                                                    for(var i = 0; i < Object.keys(res.sessions).length; i++) {
+                                                        if(res.sessions[i].allow_all_age && (res.sessions[i].available_capacity_dose1 != 0 || res.sessions[i].available_capacity_dose2 != 0)) {
+                                                            totalCentres.push(res.sessions[i]);
+                                                        }
+                                                    }  
+                                                }
+                                            });
+                                        } else {
+                                            console.log(totalCentres);
+                                            document.getElementById("c1-name").innerHTML = totalCentres[0].name;
+                                            document.getElementById("c2-name").innerHTML = totalCentres[1].name;
+                                            document.getElementById("c3-name").innerHTML = totalCentres[2].name;
+                                            document.getElementById("c4-name").innerHTML = totalCentres[3].name;
+
+                                            document.getElementById("c1-addr").innerHTML = totalCentres[0].address;
+                                            document.getElementById("c2-addr").innerHTML = totalCentres[1].address;
+                                            document.getElementById("c3-addr").innerHTML = totalCentres[2].address;
+                                            document.getElementById("c4-addr").innerHTML = totalCentres[3].address;
+
+                                            document.getElementById("c1-d1").innerHTML = "Dose-1 = " + totalCentres[0].available_capacity_dose1;
+                                            document.getElementById("c2-d1").innerHTML = "Dose-1 = " + totalCentres[1].available_capacity_dose1;
+                                            document.getElementById("c3-d1").innerHTML = "Dose-1 = " + totalCentres[2].available_capacity_dose1;
+                                            document.getElementById("c4-d1").innerHTML = "Dose-1 = " + totalCentres[3].available_capacity_dose1;
+
+                                            document.getElementById("c1-d2").innerHTML = "Dose-2 = " + totalCentres[0].available_capacity_dose2;
+                                            document.getElementById("c2-d2").innerHTML = "Dose-2 = " + totalCentres[1].available_capacity_dose2;
+                                            document.getElementById("c3-d2").innerHTML = "Dose-2 = " + totalCentres[2].available_capacity_dose2;
+                                            document.getElementById("c4-d2").innerHTML = "Dose-2 = " + totalCentres[3].available_capacity_dose2;
+
+                                            document.getElementById("c1-type").innerHTML = totalCentres[0].vaccine;
+                                            document.getElementById("c2-type").innerHTML = totalCentres[1].vaccine;
+                                            document.getElementById("c3-type").innerHTML = totalCentres[2].vaccine;
+                                            document.getElementById("c4-type").innerHTML = totalCentres[3].vaccine;
+
+                                            /*document.getElementById("c1-allow").innerHTML = "Allows all age";
+                                            document.getElementById("c2-allow").innerHTML = "Allows all age";
+                                            document.getElementById("c3-allow").innerHTML = "Allows all age";
+                                            document.getElementById("c4-allow").innerHTML = "Allows all age";*/
+                                        }
+                                    }
+                                });
+                            }  else {
+                                console.log(totalCentres);
+                                document.getElementById("c1-name").innerHTML = totalCentres[0].name;
+                                document.getElementById("c2-name").innerHTML = totalCentres[1].name;
+                                document.getElementById("c3-name").innerHTML = totalCentres[2].name;
+                                document.getElementById("c4-name").innerHTML = totalCentres[3].name;
+                                document.getElementById("c1-addr").innerHTML = totalCentres[0].address;
+                                document.getElementById("c2-addr").innerHTML = totalCentres[1].address;
+                                document.getElementById("c3-addr").innerHTML = totalCentres[2].address;
+                                document.getElementById("c4-addr").innerHTML = totalCentres[3].address;
+                                document.getElementById("c1-d1").innerHTML = "Dose-1 = " + totalCentres[0].available_capacity_dose1;
+                                document.getElementById("c2-d1").innerHTML = "Dose-1 = " + totalCentres[1].available_capacity_dose1;
+                                document.getElementById("c3-d1").innerHTML = "Dose-1 = " + totalCentres[2].available_capacity_dose1;
+                                document.getElementById("c4-d1").innerHTML = "Dose-1 = " + totalCentres[3].available_capacity_dose1;
+                                document.getElementById("c1-d2").innerHTML = "Dose-2 = " + totalCentres[0].available_capacity_dose2;
+                                document.getElementById("c2-d2").innerHTML = "Dose-2 = " + totalCentres[1].available_capacity_dose2;
+                                document.getElementById("c3-d2").innerHTML = "Dose-2 = " + totalCentres[2].available_capacity_dose2;
+                                document.getElementById("c4-d2").innerHTML = "Dose-2 = " + totalCentres[3].available_capacity_dose2;
+                                document.getElementById("c1-type").innerHTML = totalCentres[0].vaccine;
+                                document.getElementById("c2-type").innerHTML = totalCentres[1].vaccine;
+                                document.getElementById("c3-type").innerHTML = totalCentres[2].vaccine;
+                                document.getElementById("c4-type").innerHTML = totalCentres[3].vaccine;
+                                /*document.getElementById("c1-allow").innerHTML = "Allows all age";
+                                document.getElementById("c2-allow").innerHTML = "Allows all age";
+                                document.getElementById("c3-allow").innerHTML = "Allows all age";
+                                document.getElementById("c4-allow").innerHTML = "Allows all age";*/
+                            }  
+
+                        }
+                    });
+                    
+                }
+            });
+        }
     
-        var data = JSON.parse('{{allData | tojson}}');
-        for (var i = 0; i < Object.keys(data.faq).length; i++) {
-            ele += "<div class = 'row' onclick = 'myFunc(" + i + ")'><h5>" + data.faq[i].q + "</h5><div class='card-block' id = 'block-" + i + "'><h6>" + data.faq.a +  "</h6></div></div>";
-        }
+        /*var allData = JSON.parse('{{allData | tojson}}');
 
-        function myFunc(n) {
-            document.getElementById("block-" + n).style.display = "block";
-        }
+        var ele = "";
+        for(var i = 0; i < Object.keys(allData.faq).length; i++) {
+            ele += "<div class='faq_container'><div class='faq'><div class = 'faq_question'><div class = 'card-header'><b>" + allData.faq[i].q + "</b><br></div></div><div class='faq_answer_container'><div class='faq_answer'><div class = 'card-block'>" + allData.faq[i].a + "</div><br><br></div></div></div></div>";
+        }*/
 
-        document.getElementById("container").innerHTML = ele;
+        //document.getElementById("ques").innerHTML = ele;
+
+        $('.faq_question').click(function() {
+            if ($(this).parent().is('.open')){
+                $(this).closest('.faq').find('.faq_answer_container').animate({'height':'0'},500);
+                $(this).closest('.faq').removeClass('open');
+
+                }else{
+                    var newHeight =$(this).closest('.faq').find('.faq_answer').height() +'px';
+                    $(this).closest('.faq').find('.faq_answer_container').animate({'height':newHeight},500);
+                    $(this).closest('.faq').addClass('open');
+                }
+        });
+
 </script>
 
 {% endblock javascripts %}

@@ -111,6 +111,11 @@
                                     
                                 </h5>
                             </div>
+                            <div class="card-block" style = "background-color: white;">
+                                <h6 id = "desc">
+
+                                </h6>
+                            </div>
                             <div class="card-block">
                                 <div class = 'row'>
                                     <div class = 'col' id = "one">
@@ -162,6 +167,7 @@
     
         var data = JSON.parse('{{allData | tojson}}');
         document.getElementById("name").innerHTML = data.name;
+        document.getElementById("desc").innerHTML = data.overview;
         document.getElementById("name1").innerHTML = "Causes";
         document.getElementById("desc1").innerHTML = data.causes;
         document.getElementById("name2").innerHTML = "Symptoms";
