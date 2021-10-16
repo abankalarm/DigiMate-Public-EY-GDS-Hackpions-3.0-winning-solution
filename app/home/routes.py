@@ -255,6 +255,7 @@ def index():
             tasks = json.loads(task)
         else:
             tasks = jsonify({1:'enter your first task'})
+        return tasks
 
     datatasks = listtask1()
     print(datatasks)
