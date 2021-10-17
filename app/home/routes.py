@@ -300,24 +300,62 @@ def route_work_employee():
     for row in User.query.filter_by(id=current_user.get_id()).all():
         username = row.username
         department = row.department
+        
     
     allDataSupplied = {
         'monthWise': {},
         'deptAvg': {}
     }
-
+    row = User.query.filter_by(username=username ).first()
+    employee = {
+        "username" : username,
+        "email" : row.email,
+        "dob" : row.dob,
+        "department" : row.department, 
+        "skills": json.loads(row.skills),
+        "Gender" :row.Gender ,
+        "MaritalStatus" : row.MaritalStatus,
+        "PercentSalaryHike" : row.PercentSalaryHike,
+        "StockOptionLevel"    : row.StockOptionLevel,
+        "extra" : row.extra,
+        "YearsAtCompany"  :int(row.YearsAtCompany), 
+        "YearsInCurrentRole" : row.YearsInCurrentRole,
+        "education" : row.education,
+        "recruitment_type" : row.recruitment_type,
+        "job_level" : row.job_level,
+        'rating' : row.rating,
+        "onsite" : row.onsite,
+        "salary" : row.salary,
+        "height" : row.height,
+        "weight" : row.weight,
+        "SkillPointEarned":int(row.SkillPointEarned)
+    }
+    test = {}
+    for i in list_of_attributes:
+        if i in codes:
+            if employee[i] in codes[i]:
+                test[i] = [codes[i][employee[i]]]
+            else:
+                k = len(codes[i])
+                codes[i][employee[i]] = k
+                test[i] = [codes[i][employee[i]]]
+        else:
+            test[i] = [employee[i]]
+    ji=getJobInvolvement(test)
+    wlb=getWorkLifeBalance(test)
     #username = "HR1004"
     #dept = username[0]
 
-    ansOneEmp = pysqldf("""SELECT Month, Email, Meetings, WorkingOnIssues, Offs FROM dfActivity WHERE username='{}' """.format(username))
+    ansOneEmp = pysqldf("""SELECT Month, Email, Meetings, WorkingOnIssues, Offs ,SkillPointEarned FROM dfActivity WHERE username='{}' """.format(username))
 
-    ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username in (Select username from dfEmployee where department = '{}') group by Month;""".format(department))
+    ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs,avg(SkillPointEarned) as SkillPointEarned FROM dfActivity WHERE username in (Select username from dfEmployee where department = '{}') group by Month;""".format(department))
     #ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username like '{}' group by Month""".format(dept + "%"))
 
     allDataSupplied['monthWise'] = ansOneEmp.to_dict()
     allDataSupplied['deptAvg'] = ansDeptAvg.to_dict()
 
-    return render_template('work_one.html', segment= get_segment(request), allData=allDataSupplied)
+
+    return render_template('work_one.html', segment= get_segment(request),ji=ji,wlb=wlb, allData=allDataSupplied)
 
 # employee health
 @blueprint.route('/health')
@@ -607,8 +645,6 @@ def route_work_one():
     
     if request.method == 'POST':
         username = request.form["username"]
-    
-       
         row=dfEmployee.loc[dfEmployee["username"]==username].to_dict("records")[0]
      
       
@@ -641,7 +677,7 @@ def route_work_one():
         'StockOptionLevel':StockOptionLevel,
         'YearsAtCompany':YearsAtCompany,
         'YearsInCurrentRole':YearsInCurrentRole,
-        'Dept': department,
+        'department': department,
         'education':education,
         'recruitment_type':recruitment_type,
         'job_level':job_level,
@@ -679,9 +715,9 @@ def route_work_one():
         #username = "HR1004"
         #dept = username[0]
 
-        ansOneEmp = pysqldf("""SELECT Month, Email, Meetings, WorkingOnIssues, Offs FROM dfActivity WHERE username='{}' """.format(username))
+        ansOneEmp = pysqldf("""SELECT Month, Email, Meetings, WorkingOnIssues, Offs,SkillPointEarned FROM dfActivity WHERE username='{}' """.format(username))
 
-        ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username in (Select username from dfEmployee where department = '{}') group by Month;""".format(department))
+        ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs,avg(SkillPointEarned) as SkillPointEarned FROM dfActivity WHERE username in (Select username from dfEmployee where department = '{}') group by Month;""".format(department))
         #ansDeptAvg = pysqldf("""SELECT Month, avg(Email) as Email, avg(Meetings) as Meetings, avg(WorkingOnIssues) as WorkingOnIssues, avg(Offs) as Offs FROM dfActivity WHERE username like '{}' group by Month""".format(dept + "%"))
 
         allDataSupplied['monthWise'] = ansOneEmp.to_dict()
@@ -917,8 +953,6 @@ def profile(template):
     
     print(template)
     row = User.query.filter_by(username=template ).first()
-    print(type(row.skills),row.skills)
-    #row.skills=json.loads(row.skills)
     allDataSupplied = {
         "username" : template,
         "email" : row.email,
@@ -942,14 +976,12 @@ def profile(template):
         "weight" : row.weight,
         "SkillPointEarned":int(row.SkillPointEarned)
     }
-    done=["Empty"]
-    doing=["Empty"]
+    done=[]
+    doing=[]
     if "dont" in allDataSupplied["skills"]: 
         done= allDataSupplied["skills"]["dont"]
     for x in allDataSupplied["skills"]:
         if x not in done and x!="skills":
-            if "Empty" in doing:
-                doing=[]
             doing.append(x)
 
     return render_template('profile.html', segment = get_segment(request), resources=CDN.render(), allData =allDataSupplied, done=done,doing=doing)

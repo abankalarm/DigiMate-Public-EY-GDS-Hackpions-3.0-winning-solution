@@ -121,7 +121,8 @@
                             </div>
 
                             <hr class="line"> <span class="mt-2 clearfix">{{Description}} Hi this is {{allData["extra"]}}, welcome to my profile. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
-                            <button type="button" class="btn btn-primary" title="btn btn-primary" data-toggle="tooltip"><a href="mailto:{{allData['email']}}">Contact me</a></button>
+                            <br><br><br><br><br>
+                            <button type="button" class="btn btn-primary" title="btn btn-primary" data-toggle="tooltip"><a href="mailto:{{allData['email']}}" style="color: white;">Contact me</a></button>
                         </div>
 
                     </div>
@@ -139,13 +140,16 @@
                                 console.log("{{allData['SkillPointEarned'] >500}}")
                                 if("{{allData['SkillPointEarned'] >100500}}")
                                     x=4
+                                else
+                                    x=0
                                 if("{{allData['YearsAtCompany'] >4}}")
                                     y=4
-                                      
+                                else
+                                    y=0  
                                 let awards = [1, 2, 4, 0,0 ];
                                 awards[4]=x
                                 awards[3]=y
-                                
+                                console.log(awards)
                                 console.log(parseInt(awards[0]));
                                 if (parseInt(awards[0]) > 0) {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/fitness.png" width="80" > {{fitnesstropy}} rewarded for fitness</div>');
@@ -162,7 +166,7 @@
                                 } else {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/notrophy.png" width="80" >rewarded for No Off in the month</div>')
                                 }
-                                if (parseInt(awards[3]) > 0) {
+                                if (parseInt(awards[3]) == 0) {
                                     document.write('<br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/starfor6m.png" width="80" > {{m6trophy}} rewarded for being veteran</div>');
                                 } else {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/notrophy.png" width="80" >pending, rewarded for being veteran</div>')
@@ -182,25 +186,21 @@
                         <div class="card">
                             <div class="card-header">
                                 <h5>Skills : </h5>
+                                <br><br>
                                 <h6>
                                 {% for x in allData["skills"]["skills"] %}
-                                {{ x }} 
+                                {{ x + ','}} 
                                 {% endfor %}
                             </h6>
                             </div>
-                            <div class="card-block px-0 py-3">
-                            <h6>
-                                In progress
-                                {% for x in doing %}
-                                {{ x }} 
-                                {% endfor %}
-                            </h6>
-                            <h6>
-                                Done
-                                {% for x in done %}
-                                {{ x }} 
-                                {% endfor %}
-                            </h6>
+                            <div class="row mt-3 mb-3" style="text-align: center;">
+                                <div class="col-md-6">
+                                    <h5>Courses in Progress</h5> <span class="num">{{doing | length}}</span>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h5>Courses Completed</h5> <span class="num">{{done | length}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>

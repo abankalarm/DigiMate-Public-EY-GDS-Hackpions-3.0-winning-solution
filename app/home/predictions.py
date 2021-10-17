@@ -3,7 +3,7 @@ import pickle
 from datetime import date
 codes = {'Gender': {'Female': 0, 'Male': 1},
              'MaritalStatus': {'Divorced': 0, 'Married': 1, 'Single': 2},
-             'Dept': {'HR': 0,
+             'department': {'HR': 0,
               'Marketing': 1,
               'Purchasing': 2,
               'Sales': 3,
@@ -15,7 +15,7 @@ codes = {'Gender': {'Female': 0, 'Male': 1},
               'Walk-in': 3}}
 
 list_of_attributes = ['Gender', 'MaritalStatus', 'PercentSalaryHike', 'StockOptionLevel',
-               'YearsAtCompany', 'YearsInCurrentRole', 'Dept', 'education',
+               'YearsAtCompany', 'YearsInCurrentRole', 'department', 'education',
                'recruitment_type', 'job_level', 'rating', 'onsite', 'salary', 'dob']
 
 def calculate_age(dob):
