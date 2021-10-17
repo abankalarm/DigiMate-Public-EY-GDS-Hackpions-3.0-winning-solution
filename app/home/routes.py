@@ -534,7 +534,7 @@ def exercise():
         'StockOptionLevel':StockOptionLevel,
         'YearsAtCompany':YearsAtCompany,
         'YearsInCurrentRole':YearsInCurrentRole,
-        'Dept': department,
+        'department': department,
         'education':education,
         'recruitment_type':recruitment_type,
         'job_level':job_level,
