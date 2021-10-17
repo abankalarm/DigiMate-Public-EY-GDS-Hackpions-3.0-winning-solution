@@ -271,8 +271,32 @@ def index():
     datatasks = listtask1()
     if type(datatasks)==type(str()):
        datatasks=json.loads(datatasks) 
-   
-    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks)
+
+    try:
+        calendars = []
+        credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        if 'credentials' not in session:
+            credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+
+        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+        print('Getting the upcoming 10 events')
+        events_result = service.events().list(calendarId='primary', timeMin=now,
+                                            maxResults=10, singleEvents=True,
+                                            orderBy='startTime').execute()
+        events = events_result.get('items', [])
+
+
+        calenderEvents=[]
+        for event in events:
+            if 'dateTime' in event['start']:
+                calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
+            elif "date" in event["start"]:
+                calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
+    except:
+        calenderEvents=[]
+
+    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks, cevents=calenderEvents,date=str(date.today()))
 
 @blueprint.route('/<template>')
 @login_required
@@ -786,7 +810,7 @@ def sync_function():
             row.job_level = diction["job_level"]
             row.rating = diction["rating"]
             row.onsite = diction["onsite"]
-            row.department = diction["department"]
+            row.department = diction["Department"]
             row.salary = diction["salary"]
             row.dob = diction["dob"]
             row.height =str(diction["height"])

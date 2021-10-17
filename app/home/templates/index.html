@@ -4,7 +4,35 @@
 {% block stylesheets %}
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="{{ url_for('static', filename='fullcalendar.min.css') }}" rel='stylesheet' />
+<link href="{{ url_for('static', filename='fullcalendar.print.css') }}" rel='stylesheet' media='print' />
+
 <style>
+    #script-warning {
+        display: none;
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        padding: 0 10px;
+        line-height: 40px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+        color: red;
+    }
+    
+    #loading {
+        display: none;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    
+    #calendar {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 10px;
+    }
+    
     .buttonup,
     .buttonup::after {
         width: 120%;
@@ -524,9 +552,49 @@
                     <!--[ Recent Users ] start-->
                     <div class="col-xl-8 col-md-6">
                         <div class="card Recent-Users">
+                            <script src="/static/lib/moment.min.js"></script>
+                            <script src="/static/lib/jquery.min.js"></script>
+                            <script src="/static/fullcalendar.min.js"></script>
+                            <script>
+                                var date = "{{date}}"
+                                var cevents = JSON.parse('{{cevents | tojson}}');
+                                console.log(cevents)
+                                $(document).ready(function() {
+
+                                    $('#calendar').fullCalendar({
+                                        header: {
+                                            left: 'prev,next today',
+                                            center: 'title',
+                                            right: 'month,agendaWeek,agendaDay'
+                                        },
+                                        defaultDate: date,
+                                        editable: true,
+                                        eventLimit: true, // allow "more" link when too many events
+                                        events: cevents,
+                                        loading: function(bool) {
+                                            $('#loading').toggle(bool);
+                                        }
+                                    });
+
+                                });
+                            </script>
+                            <div class="card-header"> Your calender</div>
+                            <div id='script-warning'>
+                                Error getting data from <code>/data</code> endpoint.
+                            </div>
+
+                            <div id='loading'>loading...</div>
+
+                            <div id='calendar'></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-8 col-md-6">
+                        <div class="card Recent-Users">
                             <div class="card-header">
+
                                 <h5>Upcoming events</h5>
                             </div>
+
                             <script>
                                 var id = 0;
                                 var html = '<img class="rounded-circle" style="width:40px;" src="/static/assets/images/user/avatar-'
