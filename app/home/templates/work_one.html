@@ -7,6 +7,7 @@
     #chartdiv-meetings,
     #chartdiv-email,
     #chartdiv-issues,
+    #chartdiv-skillPoints,
     #chartdiv-department {
         width: 100%;
         height: 500px;
@@ -25,6 +26,14 @@
         <div class="col-sm-12">
             <h5 class="mt-4">Analysis</h5>
             This dashboard allows you to look at your activity and production levels.
+            <br>
+            {% if ji>=3 and wlb>=3 %}
+                    You are doing great! Keep it up.
+            {% elif ji>=3 %}
+                    You are quite Involved in your job but you need a bit more balance to avoid being burded out
+            {% else %}
+                You need to be more involved in your job
+            {% endif %}
             <hr>
             <b><h6 id="reco1"></b></h6><br>
             <b><h6 id="reco2"></b></h6><br>
@@ -43,6 +52,8 @@
                         
                         <li><a class="nav-link text-left" id="v-pills-offs-tab" data-toggle="pill" href="#v-pills-offs" role="tab" aria-controls="v-pills-offs" aria-selected="false">Offs Last Year</a></li>
 
+                        <li><a class="nav-link text-left" id="v-pills-skillPoints-tab" data-toggle="pill" href="#v-pills-skillPoints" role="tab" aria-controls="v-pills-skillPoints" aria-selected="false">Skill Points</a></li>
+                        
                     </ul>
                 </div>
                 <div class="col-md-9 col-sm-12">
@@ -141,6 +152,26 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="tab-pane fade" id="v-pills-skillPoints" role="tabpanel" aria-labelledby="v-pills-skillPoints-tab">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Skill Points earned in comparision with Department Average</h5>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div id="chartdiv-skillPoints"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                     </div>
                 </div>
@@ -723,7 +754,122 @@
                 drawnOffs = true;
             }
         });
+        var skillPoints = document.getElementById('v-pills-skillPoints-tab');
+        var drawnskillPoints = false;
+        skillPoints.addEventListener('click', function() {
+            if (!drawnskillPoints) {
+                setTimeout(function() {
+                    am4core.ready(function() {
+                        am4core.useTheme(am4themes_animated);
+                    // Themes end
 
+                    // Create chart instance
+                    var chart = am4core.create("chartdiv-skillPoints", am4charts.XYChart);
+
+                    //
+
+                    // Increase contrast by taking evey second color
+                    chart.colors.step = 2;
+
+                    // Add data
+                    chart.data = generateChartData();
+
+                    // Create axes
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.renderer.minGridDistance = 50;
+
+                    // Create series
+                    function createAxisAndSeries(field, name, opposite, bullet) {
+                        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                        if(chart.yAxes.indexOf(valueAxis) != 0){
+                            valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
+                        }
+                        
+                        var series = chart.series.push(new am4charts.LineSeries());
+                        series.dataFields.valueY = field;
+                        series.dataFields.dateX = "Month";
+                        series.strokeWidth = 2;
+                        series.yAxis = valueAxis;
+                        series.name = name;
+                        series.tooltipText = "{name}: [bold]{valueY}[/]";
+                        series.tensionX = 0.8;
+                        series.showOnInit = true;
+                        
+                        var interfaceColors = new am4core.InterfaceColorSet();
+                        
+                        switch(bullet) {
+                            case "triangle":
+                            var bullet = series.bullets.push(new am4charts.Bullet());
+                            bullet.width = 12;
+                            bullet.height = 12;
+                            bullet.horizontalCenter = "middle";
+                            bullet.verticalCenter = "middle";
+                            
+                            var triangle = bullet.createChild(am4core.Triangle);
+                            triangle.stroke = interfaceColors.getFor("background");
+                            triangle.strokeWidth = 2;
+                            triangle.direction = "top";
+                            triangle.width = 12;
+                            triangle.height = 12;
+                            break;
+                            case "rectangle":
+                            var bullet = series.bullets.push(new am4charts.Bullet());
+                            bullet.width = 10;
+                            bullet.height = 10;
+                            bullet.horizontalCenter = "middle";
+                            bullet.verticalCenter = "middle";
+                            
+                            var rectangle = bullet.createChild(am4core.Rectangle);
+                            rectangle.stroke = interfaceColors.getFor("background");
+                            rectangle.strokeWidth = 2;
+                            rectangle.width = 10;
+                            rectangle.height = 10;
+                            break;
+                            default:
+                            var bullet = series.bullets.push(new am4charts.CircleBullet());
+                            bullet.circle.stroke = interfaceColors.getFor("background");
+                            bullet.circle.strokeWidth = 2;
+                            break;
+                        }
+                        
+                        valueAxis.renderer.line.strokeOpacity = 1;
+                        valueAxis.renderer.line.strokeWidth = 2;
+                        valueAxis.renderer.line.stroke = series.stroke;
+                        valueAxis.renderer.labels.template.fill = series.stroke;
+                        valueAxis.renderer.opposite = opposite;
+                    }
+
+                    createAxisAndSeries("skillPointP", "Employee Skill Points", false, "triangle");
+                    createAxisAndSeries("skillPointC", "Department Average", true, "triangle");
+
+                    // Add legend
+                    //chart.legend = new am4charts.Legend();
+
+                    // Add cursor
+                    chart.cursor = new am4charts.XYCursor();
+
+                        // generate some random data, quite different range
+                        function generateChartData() {
+                            var chartData = [];
+                            for(var i = 0; i < 12; i++) {
+                                
+                                dates = allData.deptAvg.Month[i];
+                                skillPointP = allData.monthWise.SkillPointEarned[i];
+                                skillPointC = allData.deptAvg.SkillPointEarned[i];
+                                
+                                chartData.push({
+                                    Month: dates, 
+                                    skillPointP: Math.round(skillPointP),
+                                    skillPointC: Math.round(skillPointC)
+                                })
+                            }
+                            return chartData;
+                        }
+                    });
+                }, 700);
+                drawnskillPoints = true;
+            }
+        });
         /*var loggedIn = document.getElementById('v-pills-loggedin-tab');
         var drawnLoggedIn = false;
         loggedIn.addEventListener('click', function() {
