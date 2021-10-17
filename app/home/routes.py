@@ -689,7 +689,7 @@ def sync_function():
             row.dob = diction["dob"]
             row.height =str(diction["height"])
             row.weight = str(diction["weight"])
-            #row.heightandweight = Column(String)
+            #row.heightandweight = 
             db.session.commit()
     return redirect("/page-404.html", code=200)
 
@@ -724,7 +724,7 @@ def route_enterEmployeeCsv():
                 row.onsite = diction["onsite"]
                 row.salary = diction["salary"]
                 row.heightandweight = str(diction["height"]) + " " + str(diction["weight"])
-                #row.heightandweight = Column(String)
+                #row.heightandweight = 
                 db.session.commit()
 
         
@@ -856,20 +856,45 @@ def completetask(id):
 def profile(template):
     username = template
 
+    
+    print(template)
+    row = User.query.filter_by(username=template ).first()
+    print(type(row.skills),row.skills)
+    #row.skills=json.loads(row.skills)
     allDataSupplied = {
-        'name': template
+        "username" : template,
+        "email" : row.email,
+        "dob" : row.dob,
+        "department" : row.department, 
+        "skills": json.loads(row.skills),
+        "Gender" :row.Gender ,
+        "MaritalStatus" : row.MaritalStatus,
+        "PercentSalaryHike" : row.PercentSalaryHike,
+        "StockOptionLevel"    : row.StockOptionLevel,
+        "extra" : row.extra,
+        "YearsAtCompany"  :int(row.YearsAtCompany), 
+        "YearsInCurrentRole" : row.YearsInCurrentRole,
+        "education" : row.education,
+        "recruitment_type" : row.recruitment_type,
+        "job_level" : row.job_level,
+        'rating' : row.rating,
+        "onsite" : row.onsite,
+        "salary" : row.salary,
+        "height" : row.height,
+        "weight" : row.weight,
+        "SkillPointEarned":int(row.SkillPointEarned)
     }
-    print(allDataSupplied)
-    #for row in User.query.filter_by(id=current_user.get_id()).all():
-    #        r1 = row.skills1
-    #        r2 = row.skills2
-    #        r3 = row.skills3
-    #        r4 = row.skills4
-    #        r5 = row.skills5
-    #G = GraphG(r1,r2,r3,r4,r5)
-    #recom,Graph=getRecommendations(r1,r2,r3,r4,r5)
-    #print(recom)
-    return render_template('profile.html', segment = get_segment(request), resources=CDN.render(), allData = allDataSupplied)
+    done=["Empty"]
+    doing=["Empty"]
+    if "dont" in allDataSupplied["skills"]: 
+        done= allDataSupplied["skills"]["dont"]
+    for x in allDataSupplied["skills"]:
+        if x not in done and x!="skills":
+            if "Empty" in doing:
+                doing=[]
+            doing.append(x)
+
+    return render_template('profile.html', segment = get_segment(request), resources=CDN.render(), allData =allDataSupplied, done=done,doing=doing)
 
 
 
