@@ -1,0 +1,50 @@
+{
+    "Head": {
+        "causes": "Pain here usually occurs due to: \\n1. Alcohol use.\\n2. Changes in eating or sleeping patterns.\\n3. Depression.\\n4. Emotional stress related to family and friends, work or school.\\n5. Excessive medication use.\\n6. Eye, neck or back strain caused by poor posture.\\n7. Noise.",
+        "relief": "Ease pressure on scalp, dim the lights, try not to chew. Drink lots of liquids for hydration and try massage.",
+        "exercise": "Try deep breathing, progressive muscle relaxation and meditation",
+        "doctor": "Get medical care right away for:\\nA headache that follows a head injury. \\nA headache along with dizziness, speech problems, confusion, or other neurological symptomy. \\nA severe headache that comes on suddenly. \\nA headache that gets worse even after you take pain medications"
+    },
+    "Arm": {
+        "causes": "Arm Pain may occur mostly due to strength training, sprains, strains, trauma or working with arms up such as when painting.",
+        "relief": "Take a rest and apply ice pack on the pain area.",
+        "exercise": "Try shoulder stretching, tricep stretching and neck stretching",
+        "doctor": "Contact a doctor if arm pain is related to your heart. This is a medical emergency. If you have sudden arm pain, particularly down your left arm, and you also have back pain, nausea, shortness of breath, chest pain, or pressure in your chest, these are possible signs of a heart attack."
+    },
+    "Leg": {
+        "causes": "Pain here usually occurs due to: \\n1. Alcohol use.\\n2. Changes in eating or sleeping patterns.\\n3. Depression.\\n4. Emotional stress related to family and friends, work or school.\\n5. Excessive medication use.\\n6. Eye, neck or back strain caused by poor posture.\\n7. Noise.",
+        "relief": "Ease pressure on scalp, dim the lights, try not to chew. Drink lots of liquids for hydration and try massage.",
+        "exercise": "Try deep breathing, progressive muscle relaxation and meditation",
+        "doctor": "Get medical care right away for:\\nA headache that follows a head injury. \\nA headache along with dizziness, speech problems, confusion, or other neurological symptomy. \\nA severe headache that comes on suddenly. \\nA headache that gets worse even after you take pain medications"
+    }, 
+    "Chest": {
+        "causes": "Pain here usually occurs due to: \\n1. Alcohol use.\\n2. Changes in eating or sleeping patterns.\\n3. Depression.\\n4. Emotional stress related to family and friends, work or school.\\n5. Excessive medication use.\\n6. Eye, neck or back strain caused by poor posture.\\n7. Noise.",
+        "relief": "Ease pressure on scalp, dim the lights, try not to chew. Drink lots of liquids for hydration and try massage.",
+        "exercise": "Try deep breathing, progressive muscle relaxation and meditation",
+        "doctor": "Get medical care right away for:\\nA headache that follows a head injury. \\nA headache along with dizziness, speech problems, confusion, or other neurological symptomy. \\nA severe headache that comes on suddenly. \\nA headache that gets worse even after you take pain medications"
+    }, 
+    "Stomach": {
+        "causes": "Pain here usually occurs due to: \\n1. Alcohol use.\\n2. Changes in eating or sleeping patterns.\\n3. Depression.\\n4. Emotional stress related to family and friends, work or school.\\n5. Excessive medication use.\\n6. Eye, neck or back strain caused by poor posture.\\n7. Noise.",
+        "relief": "Ease pressure on scalp, dim the lights, try not to chew. Drink lots of liquids for hydration and try massage.",
+        "exercise": "Try deep breathing, progressive muscle relaxation and meditation",
+        "doctor": "Get medical care right away for:\\nA headache that follows a head injury. \\nA headache along with dizziness, speech problems, confusion, or other neurological symptomy. \\nA severe headache that comes on suddenly. \\nA headache that gets worse even after you take pain medications"
+    },
+    "Shoudler": {
+        "causes": "Pain here usually occurs due to: \\n1. Alcohol use.\\n2. Changes in eating or sleeping patterns.\\n3. Depression.\\n4. Emotional stress related to family and friends, work or school.\\n5. Excessive medication use.\\n6. Eye, neck or back strain caused by poor posture.\\n7. Noise.",
+        "relief": "Ease pressure on scalp, dim the lights, try not to chew. Drink lots of liquids for hydration and try massage.",
+        "exercise": "Try deep breathing, progressive muscle relaxation and meditation",
+        "doctor": "Get medical care right away for:\\nA headache that follows a head injury. \\nA headache along with dizziness, speech problems, confusion, or other neurological symptomy. \\nA severe headache that comes on suddenly. \\nA headache that gets worse even after you take pain medications"
+    }, 
+    "Hand": {
+        "causes": "Pain here usually occurs due to: \\n1. Alcohol use.\\n2. Changes in eating or sleeping patterns.\\n3. Depression.\\n4. Emotional stress related to family and friends, work or school.\\n5. Excessive medication use.\\n6. Eye, neck or back strain caused by poor posture.\\n7. Noise.",
+        "relief": "Ease pressure on scalp, dim the lights, try not to chew. Drink lots of liquids for hydration and try massage.",
+        "exercise": "Try deep breathing, progressive muscle relaxation and meditation",
+        "doctor": "Get medical care right away for:\\nA headache that follows a head injury. \\nA headache along with dizziness, speech problems, confusion, or other neurological symptomy. \\nA severe headache that comes on suddenly. \\nA headache that gets worse even after you take pain medications"
+    }, 
+    "Foot": {
+        "causes": "Pain here usually occurs due to: \\n1. Alcohol use.\\n2. Changes in eating or sleeping patterns.\\n3. Depression.\\n4. Emotional stress related to family and friends, work or school.\\n5. Excessive medication use.\\n6. Eye, neck or back strain caused by poor posture.\\n7. Noise.",
+        "relief": "Ease pressure on scalp, dim the lights, try not to chew. Drink lots of liquids for hydration and try massage.",
+        "exercise": "Try deep breathing, progressive muscle relaxation and meditation",
+        "doctor": "Get medical care right away for:\\nA headache that follows a head injury. \\nA headache along with dizziness, speech problems, confusion, or other neurological symptomy. \\nA severe headache that comes on suddenly. \\nA headache that gets worse even after you take pain medications"
+    }
+}

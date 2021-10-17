@@ -54,3 +54,17 @@
 </body>
 
 </html>
+
+<script>(function(){
+    var js,fs,d=document,id="tars-widget-script";
+        if(!d.getElementById(id)){
+            js=d.createElement("script");
+            js.id=id;
+            js.type="text/javascript";
+            js.src="/static/assets/js/bot.js";
+            fs=d.getElementsByTagName("script")[0];
+            fs.parentNode.insertBefore(js,fs)
+        }
+    })();
+    window.tarsSettings = {"convid":"fh-r1s"}
+</script>

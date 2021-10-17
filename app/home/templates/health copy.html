@@ -17,7 +17,6 @@
         width: 60%;
         height: 600px;
     }
-
 </style>
 <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 {% endblock stylesheets %} {% block content %}
@@ -44,6 +43,19 @@
         </h7>
         <hr>
     </div> -->
+    <script>(function(){
+        var js,fs,d=document,id="tars-widget-script";
+            if(!d.getElementById(id)){
+                js=d.createElement("script");
+                js.id=id;
+                js.type="text/javascript";
+                js.src="/static/assets/js/bot.js";
+                fs=d.getElementsByTagName("script")[0];
+                fs.parentNode.insertBefore(js,fs)
+            }
+        })();
+        window.tarsSettings = {"convid":"fh-r1s"}
+    </script>
 </div>
 
 
@@ -64,7 +76,6 @@
 <script>
 
     var allData = JSON.parse('{{allData | tojson}}');
-
     var bmi = (allData.biometrics.weight[0] * 100 * 100 / (allData.biometrics.height[0] * allData.biometrics.height[0]));
     var verdict = "";
     if (bmi < 18.5) {
@@ -501,6 +512,23 @@
         //label.text = "{score}";
         label.fill = am4core.color(matchingGrade.color);
 
+        /**
+         * Label 2
+         */
+
+        /*var label2 = chart.radarContainer.createChild(am4core.Label);
+        label2.isMeasured = false;
+        label2.fontSize = "2em";
+        label2.horizontalCenter = "middle";
+        label2.verticalCenter = "bottom";
+        label2.text = matchingGrade.title.toUpperCase();
+        label2.fill = am4core.color(matchingGrade.color);*/
+
+
+        /**
+         * Hand
+         */
+
         var hand = chart.hands.push(new am4charts.ClockHand());
         hand.axis = axis2;
         hand.innerRadius = am4core.percent(55);
@@ -509,6 +537,21 @@
         hand.value = data.score;
         hand.fill = am4core.color("#444");
         hand.stroke = am4core.color("#000");
+
+        /*hand.events.on("positionchanged", function(){
+        label.text = axis2.positionToValue(hand.currentPosition).toFixed(1);
+        var value2 = axis.positionToValue(hand.currentPosition);
+        var matchingGrade = lookUpGrade(axis.positionToValue(hand.currentPosition), data.gradingData);
+        label2.text = matchingGrade.title.toUpperCase();
+        label2.fill = am4core.color(matchingGrade.color);
+        label2.stroke = am4core.color(matchingGrade.color);  
+        label.fill = am4core.color(matchingGrade.color);
+        })*/
+
+        /*setInterval(function() {
+            var value = chartMin + Math.random() * (chartMax - chartMin);
+            hand.showValue(value, 1000, am4core.ease.cubicOut);
+        }, 2000);*/
 
     }); // end am4core.ready()
 </script>

@@ -61,6 +61,9 @@ with open('app/base/static/assets/data/exercise_data.json') as json_file:
 with open('app/base/static/assets/data/covid-data.json') as json_file:
     covid_data = json.load(json_file)
 
+with open('app/base/static/assets/data/physical_pain.json') as json_file:
+    physical_data = json.load(json_file)
+
 def apiauth(username,password):
     user = User.query.filter_by(username=username).first()
     for row in User.query.filter_by(username='test').all():
@@ -527,6 +530,11 @@ def exercise():
 def covidfaq():
     print(covid_data)
     return render_template('covid-faq.html', segment = get_segment(request), allData = covid_data)
+
+@blueprint.route('/physical-pain')
+def physical():
+    print(physical_data)
+    return render_template('physical-pain.html', segment = get_segment(request), allData = physical_data)
 
 @blueprint.route('/yoga')
 def yoga():
