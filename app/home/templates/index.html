@@ -4,8 +4,11 @@
 {% block stylesheets %}
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<!--<link href="/static/lib/cupertino/jqery-ui.min.css" rel = "stylesheet">-->
+<!--<link href="/static/lib/cupertino/jquery-ui.min.css" rel = "stylesheet">-->
 <link href="{{ url_for('static', filename='fullcalendar.min.css') }}" rel='stylesheet' />
 <link href="{{ url_for('static', filename='fullcalendar.print.css') }}" rel='stylesheet' media='print' />
+
 
 <style>
     #script-warning {
@@ -393,8 +396,13 @@
 
 <!-- Trigger/Open The Modal -->
 
+<script src="/static/lib/moment.min.js"></script>
+<script src="/static/lib/jquery.min.js"></script>
+<script src="/static/fullcalendar.min.js"></script>
+
 
 <script>
+    var J = jQuery.noConflict();
     function syncitall() {
         const Http = new XMLHttpRequest();
         const url = '/Sync';
@@ -552,16 +560,13 @@
                     <!--[ Recent Users ] start-->
                     <div class="col-xl-8 col-md-6">
                         <div class="card Recent-Users">
-                            <script src="/static/lib/moment.min.js"></script>
-                            <script src="/static/lib/jquery.min.js"></script>
-                            <script src="/static/fullcalendar.min.js"></script>
                             <script>
                                 var date = "{{date}}"
                                 var cevents = JSON.parse('{{cevents | tojson}}');
                                 console.log(cevents)
-                                $(document).ready(function() {
+                                J(document).ready(function() {
 
-                                    $('#calendar').fullCalendar({
+                                    J('#calendar').fullCalendar({
                                         header: {
                                             left: 'prev,next today',
                                             center: 'title',
@@ -572,7 +577,7 @@
                                         eventLimit: true, // allow "more" link when too many events
                                         events: cevents,
                                         loading: function(bool) {
-                                            $('#loading').toggle(bool);
+                                            J('#loading').toggle(bool);
                                         }
                                     });
 

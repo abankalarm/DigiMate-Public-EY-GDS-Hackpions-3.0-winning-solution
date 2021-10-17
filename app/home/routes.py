@@ -538,7 +538,7 @@ def exercise():
         PercentSalaryHike = row.PercentSalaryHike
         YearsAtCompany = row.YearsAtCompany
         YearsInCurrentRole = row.YearsInCurrentRole
-        Dept = row.department
+        deptartment = row.department
         education = row.education
         recruitment_type = row.recruitment_type
         job_level = row.job_level
