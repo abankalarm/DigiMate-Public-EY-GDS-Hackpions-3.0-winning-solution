@@ -5,6 +5,7 @@ from app.home.plot import *
 from app.home.predictions import *
 from app.home import blueprint
 import os
+import time
 import pathlib
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
@@ -31,7 +32,18 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import httplib2
+import pytz
 import base64
+def get_aggregate(fit_service, startTimeMillis, endTimeMillis, dataSourceId):
+    return fit_service.users().dataset().aggregate(userId="me", body={
+        "aggregateBy": [{
+            "dataTypeName": "com.google.step_count.delta",
+            "dataSourceId": dataSourceId
+        }],
+        "bucketByTime": {"durationMillis":86400000},
+        "startTimeMillis": startTimeMillis,
+        "endTimeMillis": endTimeMillis
+    }).execute()
 
 
 pysqldf = lambda q: sqldf(q, globals())
@@ -136,6 +148,27 @@ def index():
     print(thought)
     events=[]
     temp=[]
+    try:
+        credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        if 'credentials' not in session:
+            credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+
+        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+        print('Getting the upcoming 10 events')
+        events_result = service.events().list(calendarId='primary', timeMin=now,
+                                            maxResults=10, singleEvents=True,
+                                            orderBy='startTime').execute()
+        events1 = events_result.get('items', [])
+        
+        calenderEvents=[]
+        for event in events1:
+            if 'dateTime' in event['start']:
+                calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
+            elif "date" in event["start"]:
+                calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
+    except:
+        calenderEvents=[]
     with open('CSVs/Events.csv','r') as data:
         for line in csv.DictReader(data):
             line["Attending"]=ast.literal_eval(line["Attending"])
@@ -156,42 +189,6 @@ def index():
         if(datetime.datetime.strptime(event ["Start"], "%Y-%m-%d") <datetime.datetime.today() ):
             events.remove(event)
 
-    if request.method == 'POST':
-        registerEvent = request.form["registerEvent"]
-        if(registerEvent): 
-            registerEvent=str(registerEvent)
-            for event in events:
-             
-                if(event["Id"]==registerEvent and username not in event["Attending"] ) :
-                  
-                    # temp=[]
-                    # with open('CSVs/Events.csv','r') as data:
-                    #     for line in csv.DictReader(data):
-                    #         temp.append(line)
-                    for i in range(len(temp)):
-                        if temp[i]==event:
-                            temp[i]["Attending"].append(username)
-                            break
-                    keys = temp[0].keys()
-                    with open('CSVs/Events.csv', 'w', newline='')  as output_file:
-                        dict_writer = csv.DictWriter(output_file, keys)
-                        dict_writer.writeheader()
-                        dict_writer.writerows(temp)
-                    # with open('CSVs/Events.csv', "wb") as outfile:
-                    #     writer = csv.writer(outfile)
-                    #     writer.writerow(temp.keys())
-                    #     writer.writerows(zip(*temp.values()))
-                    
-                    events=temp.copy()
-
-                    inEvent=[]
-                    for event in temp:
-                        if username in event['Attending']:
-                            inEvent.append(event)
-                            events.remove(event)
-                    events=sorted(events, key=lambda x: datetime.datetime.strptime(x["Start"], "%Y-%m-%d"))
-                   
-                    break
 
 
             
@@ -272,29 +269,59 @@ def index():
     if type(datatasks)==type(str()):
        datatasks=json.loads(datatasks) 
 
-    try:
-        calendars = []
-        credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-        if 'credentials' not in session:
-            credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-        service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+    if request.method == 'POST':
+        registerEvent = request.form["registerEvent"]
+        if(registerEvent): 
+            registerEvent=str(registerEvent)
+            for event in events:
+                if(event["Id"]==registerEvent and username not in event["Attending"] ) :
+                  
+                    print(event)
+                    sfix="T10:00:00.000Z"
+                    efix="T17:00:00.000Z"
+                    ts=service.events().insert(calendarId='primary', body={"summary":event["Event"],"description":event["Description"],'start': {'dateTime': event["Start"]+sfix,},'end': {'dateTime': event["Start"]+efix,}}).execute()
+                    print ('Event created: %s' % (ts.get('htmlLink')))
+                    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+                    print('Getting the upcoming 10 events')
+                    events_result = service.events().list(calendarId='primary', timeMin=now,
+                                                        maxResults=10, singleEvents=True,
+                                                        orderBy='startTime').execute()
+                    events1 = events_result.get('items', [])
+                    calenderEvents=[]
+                    for event1 in events1:
+                        if 'dateTime' in event1['start']:
+                            calenderEvents.append({"title":event1["summary"],"start":event1["start"]["dateTime"],"end":event1["end"]["dateTime"]})
+                        elif "date" in event1["start"]:
+                            calenderEvents.append({"title":event1["summary"],"start":event1["start"]["date"],"end":event1["end"]["date"]})
+                    
+                    
+                    for i in range(len(temp)):
+                        if temp[i]==event:
+                            temp[i]["Attending"].append(username)
+                            break
+                    keys = temp[0].keys()
+                    with open('CSVs/Events.csv', 'w', newline='')  as output_file:
+                        dict_writer = csv.DictWriter(output_file, keys)
+                        dict_writer.writeheader()
+                        dict_writer.writerows(temp)
+                    # with open('CSVs/Events.csv', "wb") as outfile:
+                    #     writer = csv.writer(outfile)
+                    #     writer.writerow(temp.keys())
+                    #     writer.writerows(zip(*temp.values()))
+                    
+                    events=temp.copy()
 
-        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
-        events_result = service.events().list(calendarId='primary', timeMin=now,
-                                            maxResults=10, singleEvents=True,
-                                            orderBy='startTime').execute()
-        events = events_result.get('items', [])
+                    inEvent=[]
+                    for event in temp:
+                        if username in event['Attending']:
+                            inEvent.append(event)
+                            events.remove(event)
+                    events=sorted(events, key=lambda x: datetime.datetime.strptime(x["Start"], "%Y-%m-%d"))
+                   
+                    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks, cevents=calenderEvents,date=str(date.today()))
+    
 
 
-        calenderEvents=[]
-        for event in events:
-            if 'dateTime' in event['start']:
-                calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
-            elif "date" in event["start"]:
-                calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
-    except:
-        calenderEvents=[]
 
     return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks, cevents=calenderEvents,date=str(date.today()))
 
@@ -1157,39 +1184,28 @@ def test_api_request():
     # session['credentials'] = credentials_to_dict(credentials)
 
     # return jsonify(**files)
-
-    calendars = []
+    
+    
     credentials = google.oauth2.credentials.Credentials(**session['credentials'])
     if 'credentials' not in session:
         credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-    service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+    service = googleapiclient.discovery.build('fitness', 'v1', credentials=credentials)
+    
+    
+    end_time_millis = int(round(time.time() * 1000))
+    start_time_millis =  end_time_millis - 1000000000
+    calory_data = get_aggregate(service, start_time_millis, end_time_millis, "derived:com.google.weight:com.google.android.gms:merge_weight")
+    #return calory_data
+    for daily_calory_data in calory_data['bucket']:
+        # use local date as the key
+       
+        data_point = daily_calory_data['dataset'][0]['point']
+        if data_point:
+            calories = data_point[0]['value'][0]['fpVal']
+            data_source_id = data_point[0]['originDataSourceId']
+            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
 
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
-
-
-    calenderEvents=[]
-    for event in events:
-        if 'dateTime' in event['start']:
-            calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
-        elif "date" in event["start"]:
-            calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
-    print(calenderEvents)
-    # page_token = None
-    # while True:
-    #   calendar_list = service.calendarList().list(pageToken=page_token).execute()
-    #   for calendar_list_entry in calendar_list['items']:
-    #     print(calendar_list_entry)
-    #     calendars.append({"name": calendar_list_entry['summary'], "id": calendar_list_entry['id']})
-    #   page_token = calendar_list.get('nextPageToken')
-    #   if not page_token:
-    #     break
-
-    return render_template('tempCalendar.html', cevents=calenderEvents,date=str(date.today()))
+    return daily_calories
 
 @blueprint.route('/authorize')
 def authorize():
