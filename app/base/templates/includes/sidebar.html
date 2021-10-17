@@ -26,22 +26,13 @@
 
                     <a href="/work" class="nav-link "><span class="pcoded-micon"><i class="feather icon-box"></i></span><span class="pcoded-mtext">Work</span></a>
                 </li>
-                
+
                 <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
 
                     <a href="/health" class="nav-link "><span class="pcoded-micon"><i class="feather icon-box"></i></span><span class="pcoded-mtext">Health</span></a>
-
-
-                    <!-- <ul class="pcoded-submenu">
-                        <li class=""><a href="/ui-button.html" class="">Button</a></li>
-                        <li class=""><a href="/ui-badges.html" class="">Badges</a></li>
-                        <li class=""><a href="/ui-breadcrumb-pagination.html" class="">Breadcrumb & paggination</a></li>
-                    </ul> -->
-                    <!-- </li>
-                <li class="nav-item pcoded-menu-caption">
-                    <label>UI Element</label>
+                    
                 </li>
-                <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
+                <!--<li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-box"></i></span><span class="pcoded-mtext">Components</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="/ui-button.html" class="">Button</a></li>
@@ -52,7 +43,29 @@
                         <li class=""><a href="/ui-typography.html" class="">Typography</a></li>
                         <li class=""><a href="/ui-icons.html" class="">Feather<span class="pcoded-badge label label-danger">NEW</span></a></li>
                     </ul>
+                </li>-->
+
+                <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds" class="nav-item pcoded-hasmenu">
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="feather icon-box"></i></span><span class="pcoded-mtext">Well Being</span></a>
+                    <ul class="pcoded-submenu">
+                        <li class=""><a href="/mental-health" class="">Mental Health</a></li>
+                        <li class=""><a href="/physical-pain" class="">Physical Health</a></li>
+                        <li class=""><a href="/yoga" class="">Yoga</a></li>
+                        <li class=""><a href="/covid-faq" class="">COVID-19 FAQ</a></li>
+                        <li class=""><a href="/exercise" class="">Plan a Workout<span class="pcoded-badge label label-danger">NEW</span></a></li>
+                    </ul>
                 </li>
+
+                <!-- <ul class="pcoded-submenu">
+                        <li class=""><a href="/ui-button.html" class="">Button</a></li>
+                        <li class=""><a href="/ui-badges.html" class="">Badges</a></li>
+                        <li class=""><a href="/ui-breadcrumb-pagination.html" class="">Breadcrumb & paggination</a></li>
+                    </ul> -->
+                <!-- </li>
+                <li class="nav-item pcoded-menu-caption">
+                    <label>UI Element</label>
+                </li>
+
                 <li class="nav-item pcoded-menu-caption">
                     <label>Forms & table</label>
                 </li>
@@ -70,17 +83,21 @@
                 <li data-username="Maps Google" class="nav-item {% if 'maps-google' in segment %} active {% endif %}">
                     <a href="/maps-google.html" class="nav-link "><span class="pcoded-micon"><i class="feather icon-map"></i></span><span class="pcoded-mtext">Maps</span></a></li>
                 -->
-                    <li class="nav-item pcoded-menu-caption">
-                        <label>Pages</label>
-                    </li>
-                    <li data-username="Authentication Sign up Sign in reset password Change password Personal information profile settings map form subscribe" class="nav-item pcoded-hasmenu">
-                        <a href="/auth-reset-pass.html" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">Reset password</span></a>
-                    </li>
-                    <li data-username="Disabled Menu" class="nav-item">
-                        <a href="{{ url_for('base_blueprint.logout') }}" class="nav-link">
-                            <span class="pcoded-micon"><i class="feather icon-power"></i></span><span class="pcoded-mtext">Logout</span>
-                        </a>
-                    </li>
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Pages</label>
+                </li>
+                <li class="nav-item pcoded-hasmenu">
+                    <a href="/profile-section" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">Profile section</span></a>
+                </li>
+
+                <li data-username="Authentication Sign up Sign in reset password Change password Personal information profile settings map form subscribe" class="nav-item pcoded-hasmenu">
+                    <a href="/auth-reset-pass.html" class="nav-link "><span class="pcoded-micon"><i class="feather icon-lock"></i></span><span class="pcoded-mtext">Reset password</span></a>
+                </li>
+                <li data-username="Disabled Menu" class="nav-item">
+                    <a href="{{ url_for('base_blueprint.logout') }}" class="nav-link">
+                        <span class="pcoded-micon"><i class="feather icon-power"></i></span><span class="pcoded-mtext">Logout</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

@@ -5,6 +5,7 @@ from app.home.plot import *
 from app.home.predictions import *
 from app.home import blueprint
 import os
+import time
 import pathlib
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
@@ -31,8 +32,18 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import httplib2
+import pytz
 import base64
-import time
+def get_aggregate(fit_service, startTimeMillis, endTimeMillis, dataSourceId):
+    return fit_service.users().dataset().aggregate(userId="me", body={
+        "aggregateBy": [{
+            "dataTypeName": "com.google.step_count.delta",
+            "dataSourceId": dataSourceId
+        }],
+        "bucketByTime": {"durationMillis":86400000},
+        "startTimeMillis": startTimeMillis,
+        "endTimeMillis": endTimeMillis
+    }).execute()
 
 
 pysqldf = lambda q: sqldf(q, globals())
@@ -64,6 +75,9 @@ with open('app/base/static/assets/data/covid-data.json') as json_file:
 
 with open('app/base/static/assets/data/physical_pain.json') as json_file:
     physical_data = json.load(json_file)
+
+with open('app/base/static/assets/data/nutrition_data.json') as json_file:
+    nutrition_data = json.load(json_file)
 
 def apiauth(username,password):
     user = User.query.filter_by(username=username).first()
@@ -137,6 +151,27 @@ def index():
     print(thought)
     events=[]
     temp=[]
+    try:
+        credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        if 'credentials' not in session:
+            credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+
+        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+        print('Getting the upcoming 10 events')
+        events_result = service.events().list(calendarId='primary', timeMin=now,
+                                            maxResults=10, singleEvents=True,
+                                            orderBy='startTime').execute()
+        events1 = events_result.get('items', [])
+        
+        calenderEvents=[]
+        for event in events1:
+            if 'dateTime' in event['start']:
+                calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
+            elif "date" in event["start"]:
+                calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
+    except:
+        calenderEvents=[]
     with open('CSVs/Events.csv','r') as data:
         for line in csv.DictReader(data):
             line["Attending"]=ast.literal_eval(line["Attending"])
@@ -157,42 +192,6 @@ def index():
         if(datetime.datetime.strptime(event ["Start"], "%Y-%m-%d") <datetime.datetime.today() ):
             events.remove(event)
 
-    if request.method == 'POST':
-        registerEvent = request.form["registerEvent"]
-        if(registerEvent): 
-            registerEvent=str(registerEvent)
-            for event in events:
-             
-                if(event["Id"]==registerEvent and username not in event["Attending"] ) :
-                  
-                    # temp=[]
-                    # with open('CSVs/Events.csv','r') as data:
-                    #     for line in csv.DictReader(data):
-                    #         temp.append(line)
-                    for i in range(len(temp)):
-                        if temp[i]==event:
-                            temp[i]["Attending"].append(username)
-                            break
-                    keys = temp[0].keys()
-                    with open('CSVs/Events.csv', 'w', newline='')  as output_file:
-                        dict_writer = csv.DictWriter(output_file, keys)
-                        dict_writer.writeheader()
-                        dict_writer.writerows(temp)
-                    # with open('CSVs/Events.csv', "wb") as outfile:
-                    #     writer = csv.writer(outfile)
-                    #     writer.writerow(temp.keys())
-                    #     writer.writerows(zip(*temp.values()))
-                    
-                    events=temp.copy()
-
-                    inEvent=[]
-                    for event in temp:
-                        if username in event['Attending']:
-                            inEvent.append(event)
-                            events.remove(event)
-                    events=sorted(events, key=lambda x: datetime.datetime.strptime(x["Start"], "%Y-%m-%d"))
-                   
-                    break
 
 
             
@@ -273,29 +272,59 @@ def index():
     if type(datatasks)==type(str()):
        datatasks=json.loads(datatasks) 
 
-    try:
-        calendars = []
-        credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-        if 'credentials' not in session:
-            credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-        service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+    if request.method == 'POST':
+        registerEvent = request.form["registerEvent"]
+        if(registerEvent): 
+            registerEvent=str(registerEvent)
+            for event in events:
+                if(event["Id"]==registerEvent and username not in event["Attending"] ) :
+                  
+                    print(event)
+                    sfix="T10:00:00.000Z"
+                    efix="T17:00:00.000Z"
+                    ts=service.events().insert(calendarId='primary', body={"summary":event["Event"],"description":event["Description"],'start': {'dateTime': event["Start"]+sfix,},'end': {'dateTime': event["Start"]+efix,}}).execute()
+                    print ('Event created: %s' % (ts.get('htmlLink')))
+                    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+                    print('Getting the upcoming 10 events')
+                    events_result = service.events().list(calendarId='primary', timeMin=now,
+                                                        maxResults=10, singleEvents=True,
+                                                        orderBy='startTime').execute()
+                    events1 = events_result.get('items', [])
+                    calenderEvents=[]
+                    for event1 in events1:
+                        if 'dateTime' in event1['start']:
+                            calenderEvents.append({"title":event1["summary"],"start":event1["start"]["dateTime"],"end":event1["end"]["dateTime"]})
+                        elif "date" in event1["start"]:
+                            calenderEvents.append({"title":event1["summary"],"start":event1["start"]["date"],"end":event1["end"]["date"]})
+                    
+                    
+                    for i in range(len(temp)):
+                        if temp[i]==event:
+                            temp[i]["Attending"].append(username)
+                            break
+                    keys = temp[0].keys()
+                    with open('CSVs/Events.csv', 'w', newline='')  as output_file:
+                        dict_writer = csv.DictWriter(output_file, keys)
+                        dict_writer.writeheader()
+                        dict_writer.writerows(temp)
+                    # with open('CSVs/Events.csv', "wb") as outfile:
+                    #     writer = csv.writer(outfile)
+                    #     writer.writerow(temp.keys())
+                    #     writer.writerows(zip(*temp.values()))
+                    
+                    events=temp.copy()
 
-        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
-        events_result = service.events().list(calendarId='primary', timeMin=now,
-                                            maxResults=10, singleEvents=True,
-                                            orderBy='startTime').execute()
-        events = events_result.get('items', [])
+                    inEvent=[]
+                    for event in temp:
+                        if username in event['Attending']:
+                            inEvent.append(event)
+                            events.remove(event)
+                    events=sorted(events, key=lambda x: datetime.datetime.strptime(x["Start"], "%Y-%m-%d"))
+                   
+                    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks, cevents=calenderEvents,date=str(date.today()))
+    
 
 
-        calenderEvents=[]
-        for event in events:
-            if 'dateTime' in event['start']:
-                calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
-            elif "date" in event["start"]:
-                calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
-    except:
-        calenderEvents=[]
 
     return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks, cevents=calenderEvents,date=str(date.today()))
 
@@ -385,38 +414,90 @@ def route_work_employee():
 
     return render_template('work_one.html', segment= get_segment(request),ji=ji,wlb=wlb, allData=allDataSupplied)
 
-
-def get_aggregate(fit_service, startTimeMillis, endTimeMillis, dataSourceId):
-    return fit_service.users().dataset().aggregate(userId="me", body={
-        "aggregateBy": [{
-            "dataTypeName": "com.google.step_count.delta",
-            "dataSourceId": dataSourceId
-        }],
-        "bucketByTime": {"durationMillis": 86400000},
-        "startTimeMillis": startTimeMillis,
-        "endTimeMillis": endTimeMillis
-    }).execute()
-
-
-
-def current_milli_time():
-    return int(round(time.time() * 1000))
-
 # employee health
 @blueprint.route('/health')
 def route_health_individual():
+
+    allDataSupplied = {
+        'employee': {},
+        'companyAvg': {},
+        'deptAvg': {},
+        'biometrics': {},
+        'height_fit': 0,
+        'weight_fit': 0,
+        'steps_fit': 0,
+        'calorie_fit': 0,
+        'nutrition_data': nutrition_data
+    }
+
+
+    credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+    if 'credentials' not in session:
+        credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+    service = googleapiclient.discovery.build('fitness', 'v1', credentials=credentials)
+    
+    
+    end_time_millis = int(round(time.time() * 1000))
+    start_time_millis =  end_time_millis - 7 * 86400000
+    steps = "derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas"
+    calorie = "derived:com.google.calories.expended:com.google.android.gms:merge_calories_expended"
+    height = "derived:com.google.height:com.google.android.gms:merge_height"
+    #heart = "derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm"
+    #sleep = "derived:com.google.sleep.segment:com.google.android.gms:sleep_from_activity<-raw:com.google.activity.segment:com.heytap.wearable.health:stream_sleep"
+    weight = "derived:com.google.weight:com.google.android.gms:merge_weight"
+
+    calory_data = get_aggregate(service, start_time_millis, end_time_millis, calorie)
+    for daily_calory_data in calory_data['bucket']:
+       # use local date as the key
+        data_point = daily_calory_data['dataset'][0]['point']
+        if data_point:
+            calories = data_point[0]['value'][0]['fpVal']
+            data_source_id = data_point[0]['originDataSourceId']
+            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+
+    allDataSupplied['calorie_fit'] = daily_calories['calories']
+
+    calory_data = get_aggregate(service, start_time_millis, end_time_millis, steps)
+    
+    for daily_calory_data in calory_data['bucket']:
+       # use local date as the key
+        data_point = daily_calory_data['dataset'][0]['point']
+        if data_point:
+            calories = data_point[0]['value'][0]['intVal']
+            data_source_id = data_point[0]['originDataSourceId']
+            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+    
+        
+    allDataSupplied['steps_fit'] = daily_calories['calories']
+
+    calory_data = get_aggregate(service, start_time_millis, end_time_millis, height)
+    for daily_calory_data in calory_data['bucket']:
+       # use local date as the key
+        data_point = daily_calory_data['dataset'][0]['point']
+        if data_point:
+            calories = data_point[0]['value'][0]['fpVal']
+            data_source_id = data_point[0]['originDataSourceId']
+            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+    
+        
+    allDataSupplied['height_fit'] = daily_calories['calories']
+    calory_data = get_aggregate(service, start_time_millis, end_time_millis, weight)
+    for daily_calory_data in calory_data['bucket']:
+       # use local date as the key
+        data_point = daily_calory_data['dataset'][0]['point']
+        if data_point:
+            calories = data_point[0]['value'][0]['fpVal']
+            data_source_id = data_point[0]['originDataSourceId']
+            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+
+    allDataSupplied['weight_fit'] = daily_calories['calories']
+
     for row in User.query.filter_by(id=current_user.get_id()).all():
         username = row.username
         department = row.department
 
     #username = "HR1004"
-    
-    allDataSupplied = {
-        'employee': {},
-        'companyAvg': {},
-        'deptAvg': {},
-        'biometrics': {}
-    }
+
 
     q = """Select username, ActivityDate as Date, TotalSteps as Steps, Calories, VeryActiveMinutes as VActive, FairlyActiveMinutes as Active, LightlyActiveMinutes as LActive, SedentaryMinutes as IActive from dfHealth where username = '{}'""".format(username)
     ansEmployee = pysqldf(q).to_dict()
@@ -810,7 +891,6 @@ def sync_function():
     dfCsv = pd.read_csv(csvFile)
     for row in User.query.all():
         username = row.username
-        print(username)
         diction = dfCsv.loc[dfCsv['username'] == username]
         diction=diction.to_dict('records')
         if(len(diction)>0):
@@ -828,7 +908,7 @@ def sync_function():
             row.job_level = diction["job_level"]
             row.rating = diction["rating"]
             row.onsite = diction["onsite"]
-            row.department = diction["Department"]
+            row.department = diction["department"]
             row.salary = diction["salary"]
             row.dob = diction["dob"]
             row.height =str(diction["height"])
@@ -1036,6 +1116,47 @@ def profile(template):
 
     return render_template('profile.html', segment = get_segment(request), resources=CDN.render(), allData =allDataSupplied, done=done,doing=doing)
 
+@blueprint.route('/profile-section')
+def profilesection():
+
+    dropdownList = []
+    for row in User.query.all():
+        if (row.username != "admin"):
+            dropdownList.append(row.username)
+    
+    row = User.query.filter_by(id=current_user.get_id()).first()
+    allDataSupplied = {
+        "username" : row.username,
+        "email" : row.email,
+        "dob" : row.dob,
+        "department" : row.department, 
+        "skills": json.loads(row.skills),
+        "Gender" :row.Gender ,
+        "MaritalStatus" : row.MaritalStatus,
+        "PercentSalaryHike" : row.PercentSalaryHike,
+        "StockOptionLevel"    : row.StockOptionLevel,
+        "extra" : row.extra,
+        "YearsAtCompany"  :int(row.YearsAtCompany), 
+        "YearsInCurrentRole" : row.YearsInCurrentRole,
+        "education" : row.education,
+        "recruitment_type" : row.recruitment_type,
+        "job_level" : row.job_level,
+        'rating' : row.rating,
+        "onsite" : row.onsite,
+        "salary" : row.salary,
+        "height" : row.height,
+        "weight" : row.weight,
+        "SkillPointEarned":int(row.SkillPointEarned)
+    }
+    done=[]
+    doing=[]
+    if "dont" in allDataSupplied["skills"]: 
+        done= allDataSupplied["skills"]["dont"]
+    for x in allDataSupplied["skills"]:
+        if x not in done and x!="skills":
+            doing.append(x)
+
+    return render_template('profilesection.html', segment = get_segment(request), resources=CDN.render(), allData =allDataSupplied, done=done,doing=doing, dropdownList=dropdownList)
 
 
 
@@ -1135,39 +1256,28 @@ def test_api_request():
     # session['credentials'] = credentials_to_dict(credentials)
 
     # return jsonify(**files)
-
-    calendars = []
+    
+    
     credentials = google.oauth2.credentials.Credentials(**session['credentials'])
     if 'credentials' not in session:
         credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-    service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+    service = googleapiclient.discovery.build('fitness', 'v1', credentials=credentials)
+    
+    
+    end_time_millis = int(round(time.time() * 1000))
+    start_time_millis =  end_time_millis - 1000000000
+    calory_data = get_aggregate(service, start_time_millis, end_time_millis, "derived:com.google.calories.expended:com.google.android.gms:from_activities")
+    #return calory_data
+    for daily_calory_data in calory_data['bucket']:
+        # use local date as the key
+       
+        data_point = daily_calory_data['dataset'][0]['point']
+        if data_point:
+            calories = data_point[0]['value'][0]['fpVal']
+            data_source_id = data_point[0]['originDataSourceId']
+            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
 
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
-
-
-    calenderEvents=[]
-    for event in events:
-        if 'dateTime' in event['start']:
-            calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
-        elif "date" in event["start"]:
-            calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
-    print(calenderEvents)
-    # page_token = None
-    # while True:
-    #   calendar_list = service.calendarList().list(pageToken=page_token).execute()
-    #   for calendar_list_entry in calendar_list['items']:
-    #     print(calendar_list_entry)
-    #     calendars.append({"name": calendar_list_entry['summary'], "id": calendar_list_entry['id']})
-    #   page_token = calendar_list.get('nextPageToken')
-    #   if not page_token:
-    #     break
-
-    return render_template('tempCalendar.html', cevents=calenderEvents,date=str(date.today()))
+    return daily_calories
 
 @blueprint.route('/authorize')
 def authorize():
@@ -1215,7 +1325,7 @@ def oauth2callback():
     credentials = flow.credentials
     session['credentials'] = credentials_to_dict(credentials)
 
-    return redirect(url_for('.test_api_request'))
+    return redirect('/profile-section')
 
 
 @blueprint.route('/revoke')
@@ -1233,17 +1343,16 @@ def revoke():
 
     status_code = getattr(revoke, 'status_code')
     if status_code == 200:
-        return('Credentials successfully revoked.' + print_index_table())
+        return('Credentials successfully revoked.')
     else:
-        return('An error occurred.' + print_index_table())
+        return('An error occurred.')
 
 
 @blueprint.route('/clear')
 def clear_credentials():
     if 'credentials' in session:
         del session['credentials']
-    return ('Credentials have been cleared.<br><br>' +
-            print_index_table())
+    return ('Credentials have been cleared.<br><br>')
 
 
 def credentials_to_dict(credentials):

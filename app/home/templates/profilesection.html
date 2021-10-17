@@ -96,7 +96,45 @@
     }
 </style>
 {% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<script>
+    var J = jQuery.noConflict();
 
+    function syncitall() {
+        const Http = new XMLHttpRequest();
+        const url = '/Sync';
+        Http.open("GET", url);
+        Http.send();
+        Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
+        }
+    }
+
+    function Authorize() {
+        location.href = "/authorize";
+    }
+
+    function Revoke() {
+        const Http = new XMLHttpRequest();
+        const url = '/revoke';
+        Http.open("GET", url);
+        Http.send();
+        Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
+        }
+        alert(Http.responseText);
+    }
+
+    function clear() {
+        const Http = new XMLHttpRequest();
+        const url = '/clear';
+        Http.open("GET", url);
+        Http.send();
+        Http.onreadystatechange = (e) => {
+            console.log(Http.responseText)
+        }
+        alert(Http.responseText);
+    }
+</script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 <div class="pcoded-content">
@@ -106,6 +144,61 @@
         <div class="main-body">
             <div class="page-wrapper">
                 <!-- [ Main Content ] start -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Search for public profiles of your co-workers</h5>
+                                <div>
+                                    <script type="text/javascript">
+                                        function changeText2() {
+                                            var userInput = document.getElementById('userInput').value;
+                                            location.href = "/profile/" + userInput
+                                        }
+                                    </script>
+                                    <div class="input-group">
+                                        <select class='form-control' name="username" id="userInput" class="btn btn-primary shadow-2 mb-4">
+                                            {% for option in dropdownList %}
+                                            <option value="{{option}}"  >{{option}}</option>
+                                            {% endfor %}
+                                            </select>
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary" name="register" onclick="javascript:changeText2()">Search</button>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-6">
+                                        <h5>Courses in Progress</h5> <span class="num">{{doing | length}}</span>
+                                    </div>
+    
+                                    <div class="col-md-6">
+                                        <h5>Courses Completed</h5> <span class="num">{{done | length}}</span>
+                                    </div> -->
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Manage your data</h5>
+                            </div>
+                            <div class="row mt-3 mb-3" style="text-align: left; margin-left: 20px;">
+                                <div class="col-md-6">
+                                    <h5>Sync your data</h5> <span class="num"><button id="myBtn" onclick="javascript:syncitall();alert('Data synced successfully')" class="btn btn-outline-primary" title="This allows you to update your profile with any latest changes in company database" data-toggle="tooltip">SYNC YOUR DATA</button></span>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Connect to Google</h5> <span class="num"><button id="myBtn" onclick="javascript:Authorize();" class="btn btn-outline-success" title="connect your google account" data-toggle="tooltip">Authorize</button><button id="myBtn" onclick="javascript:Revoke();" class="btn btn-outline-danger" title="You will need to authorize again later" data-toggle="tooltip">Revoke credentials</button><button id="myBtn" onclick="javascript:clear()" class="btn btn-outline-warning" title="keep the app authorized, but removes the key from session forcing it to request one again" data-toggle="tooltip">Remove session key</button></span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="container d-flex justify-content-lg-start col-12">
                     <div class="card p-3 py-4">
                         <div class="text-center"> <img src="/static/assets/images/user/avatar-3.jpg" width="100" class="rounded-circle">

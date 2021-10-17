@@ -1,0 +1,26 @@
+{
+    "Underweight": {
+        "food": "More fats and carbs for gaining weight",
+        "water": "5 glasses a day",
+        "activity": "20 minutes; Weight gaining exercise",
+        "sleep": "8 hours a day"
+    }, 
+    "Overweight": {
+        "food": "More fruits and Vegetables. Less fat and carbs",
+        "water": "8 glasses a day",
+        "activity": "30 minute exercise for losing weight",
+        "sleep": "8 hours a day"
+    }, 
+    "Normal": {
+        "food": "Normal Diet",
+        "water": "7 glasses a day",
+        "activity": "20 minute walk for keeping normal",
+        "sleep": "8 hours a day"
+    }, 
+    "Obese": {
+        "food": "Fruits, vegetables, salad, protein-rich, less-fat, oil-free diet",
+        "water": "10 glasses a day",
+        "activity": "40 minute gym session",
+        "sleep": "8 hours a day"
+    }
+}
