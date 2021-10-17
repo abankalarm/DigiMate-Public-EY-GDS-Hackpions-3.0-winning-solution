@@ -593,69 +593,6 @@
                             <div id='calendar'></div>
                         </div>
                     </div>
-                    <div class="col-xl-8 col-md-6">
-                        <div class="card Recent-Users">
-                            <div class="card-header">
-
-                                <h5>Upcoming events</h5>
-                            </div>
-
-                            <script>
-                                var id = 0;
-                                var html = '<img class="rounded-circle" style="width:40px;" src="/static/assets/images/user/avatar-'
-                                var html2 = '.jpg">';
-
-                                function render(i) {
-                                    document.write(html + String(i) + html2);
-                                }
-                            </script>
-
-                            {% for event in events %}
-                            <div id='{{event["Event"]}}'>
-                                <div class="card-block px-0 py-3">
-
-                                    <div class="table-responsive">
-                                        <table class="table table-hover">
-                                            <tbody>
-
-                                                <tr class="unread">
-                                                    <script>
-                                                    </script>
-                                                    <td>
-                                                        <script>
-                                                            render(id % 4 + 1);
-                                                            id++;
-                                                        </script>
-                                                    </td>
-                                                    <td>
-
-                                                        <h6 class="mb-1">{{event["Event"]}}</h6>
-                                                        <p class="m-0">{{event["Description"]}}</p>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>{{event["Start"]}}</h6>
-                                                    </td>
-
-                                                    <td>
-                                                        <form method="post" action="/index"> <input type="hidden" id="registerEvent" name="registerEvent" value="{{event['Id']}}">
-                                                            <input type="submit" name="submit" value="Accept" class="label theme-bg text-white f-12"><a href='javascript:document.getElementById("{{event["Event"]}}").hidden=true' class="label theme-bg2 text-white f-12">Reject</a>
-                                                        </form>
-                                                        <!-- </form><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
-                                                <td>
-                                                    
-                                                </td> -->
-                                                </tr>
-
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>{% endfor %}
-                        </div>
-                    </div>
-                    <!--[ Recent Users ] end-->
-                    <!-- [ statistics year chart ] start -->
                     <div class="col-xl-4 col-md-6">
                         <div class="card">
                             <div class="card-block">
@@ -733,6 +670,70 @@
                         </div>
 
                     </div>
+                    <div class="col-xl-8 col-md-6">
+                        <div class="card Recent-Users">
+                            <div class="card-header">
+
+                                <h5>Upcoming events</h5>
+                            </div>
+
+                            <script>
+                                var id = 0;
+                                var html = '<img class="rounded-circle" style="width:40px;" src="/static/assets/images/user/avatar-'
+                                var html2 = '.jpg">';
+
+                                function render(i) {
+                                    document.write(html + String(i) + html2);
+                                }
+                            </script>
+
+                            {% for event in events %}
+                            <div id='{{event["Event"]}}'>
+                                <div class="card-block px-0 py-3">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <tbody>
+
+                                                <tr class="unread">
+                                                    <script>
+                                                    </script>
+                                                    <td>
+                                                        <script>
+                                                            render(id % 4 + 1);
+                                                            id++;
+                                                        </script>
+                                                    </td>
+                                                    <td>
+
+                                                        <h6 class="mb-1">{{event["Event"]}}</h6>
+                                                        <p class="m-0">{{event["Description"]}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>{{event["Start"]}}</h6>
+                                                    </td>
+
+                                                    <td>
+                                                        <form method="post" action="/index"> <input type="hidden" id="registerEvent" name="registerEvent" value="{{event['Id']}}">
+                                                            <input type="submit" name="submit" value="Accept" class="label theme-bg text-white f-12"><a href='javascript:document.getElementById("{{event["Event"]}}").hidden=true' class="label theme-bg2 text-white f-12">Reject</a>
+                                                        </form>
+                                                        <!-- </form><a href="#!" class="label theme-bg text-white f-12">Approve</a></td>
+                                                <td>
+                                                    
+                                                </td> -->
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>{% endfor %}
+                        </div>
+                    </div>
+                    <!--[ Recent Users ] end-->
+                    <!-- [ statistics year chart ] start -->
+                    
                     <!-- [ statistics year chart ] end -->
                     <!--[social-media section] start-->
 

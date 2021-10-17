@@ -136,6 +136,27 @@ def index():
     print(thought)
     events=[]
     temp=[]
+    try:
+        credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        if 'credentials' not in session:
+            credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+
+        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+        print('Getting the upcoming 10 events')
+        events_result = service.events().list(calendarId='primary', timeMin=now,
+                                            maxResults=10, singleEvents=True,
+                                            orderBy='startTime').execute()
+        events1 = events_result.get('items', [])
+        
+        calenderEvents=[]
+        for event in events1:
+            if 'dateTime' in event['start']:
+                calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
+            elif "date" in event["start"]:
+                calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
+    except:
+        calenderEvents=[]
     with open('CSVs/Events.csv','r') as data:
         for line in csv.DictReader(data):
             line["Attending"]=ast.literal_eval(line["Attending"])
@@ -156,42 +177,6 @@ def index():
         if(datetime.datetime.strptime(event ["Start"], "%Y-%m-%d") <datetime.datetime.today() ):
             events.remove(event)
 
-    if request.method == 'POST':
-        registerEvent = request.form["registerEvent"]
-        if(registerEvent): 
-            registerEvent=str(registerEvent)
-            for event in events:
-             
-                if(event["Id"]==registerEvent and username not in event["Attending"] ) :
-                  
-                    # temp=[]
-                    # with open('CSVs/Events.csv','r') as data:
-                    #     for line in csv.DictReader(data):
-                    #         temp.append(line)
-                    for i in range(len(temp)):
-                        if temp[i]==event:
-                            temp[i]["Attending"].append(username)
-                            break
-                    keys = temp[0].keys()
-                    with open('CSVs/Events.csv', 'w', newline='')  as output_file:
-                        dict_writer = csv.DictWriter(output_file, keys)
-                        dict_writer.writeheader()
-                        dict_writer.writerows(temp)
-                    # with open('CSVs/Events.csv', "wb") as outfile:
-                    #     writer = csv.writer(outfile)
-                    #     writer.writerow(temp.keys())
-                    #     writer.writerows(zip(*temp.values()))
-                    
-                    events=temp.copy()
-
-                    inEvent=[]
-                    for event in temp:
-                        if username in event['Attending']:
-                            inEvent.append(event)
-                            events.remove(event)
-                    events=sorted(events, key=lambda x: datetime.datetime.strptime(x["Start"], "%Y-%m-%d"))
-                   
-                    break
 
 
             
@@ -272,29 +257,59 @@ def index():
     if type(datatasks)==type(str()):
        datatasks=json.loads(datatasks) 
 
-    try:
-        calendars = []
-        credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-        if 'credentials' not in session:
-            credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-        service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+    if request.method == 'POST':
+        registerEvent = request.form["registerEvent"]
+        if(registerEvent): 
+            registerEvent=str(registerEvent)
+            for event in events:
+                if(event["Id"]==registerEvent and username not in event["Attending"] ) :
+                  
+                    print(event)
+                    sfix="T10:00:00.000Z"
+                    efix="T17:00:00.000Z"
+                    ts=service.events().insert(calendarId='primary', body={"summary":event["Event"],"description":event["Description"],'start': {'dateTime': event["Start"]+sfix,},'end': {'dateTime': event["Start"]+efix,}}).execute()
+                    print ('Event created: %s' % (ts.get('htmlLink')))
+                    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+                    print('Getting the upcoming 10 events')
+                    events_result = service.events().list(calendarId='primary', timeMin=now,
+                                                        maxResults=10, singleEvents=True,
+                                                        orderBy='startTime').execute()
+                    events1 = events_result.get('items', [])
+                    calenderEvents=[]
+                    for event1 in events1:
+                        if 'dateTime' in event1['start']:
+                            calenderEvents.append({"title":event1["summary"],"start":event1["start"]["dateTime"],"end":event1["end"]["dateTime"]})
+                        elif "date" in event1["start"]:
+                            calenderEvents.append({"title":event1["summary"],"start":event1["start"]["date"],"end":event1["end"]["date"]})
+                    
+                    
+                    for i in range(len(temp)):
+                        if temp[i]==event:
+                            temp[i]["Attending"].append(username)
+                            break
+                    keys = temp[0].keys()
+                    with open('CSVs/Events.csv', 'w', newline='')  as output_file:
+                        dict_writer = csv.DictWriter(output_file, keys)
+                        dict_writer.writeheader()
+                        dict_writer.writerows(temp)
+                    # with open('CSVs/Events.csv', "wb") as outfile:
+                    #     writer = csv.writer(outfile)
+                    #     writer.writerow(temp.keys())
+                    #     writer.writerows(zip(*temp.values()))
+                    
+                    events=temp.copy()
 
-        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
-        events_result = service.events().list(calendarId='primary', timeMin=now,
-                                            maxResults=10, singleEvents=True,
-                                            orderBy='startTime').execute()
-        events = events_result.get('items', [])
+                    inEvent=[]
+                    for event in temp:
+                        if username in event['Attending']:
+                            inEvent.append(event)
+                            events.remove(event)
+                    events=sorted(events, key=lambda x: datetime.datetime.strptime(x["Start"], "%Y-%m-%d"))
+                   
+                    return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks, cevents=calenderEvents,date=str(date.today()))
+    
 
 
-        calenderEvents=[]
-        for event in events:
-            if 'dateTime' in event['start']:
-                calenderEvents.append({"title":event["summary"],"start":event["start"]["dateTime"],"end":event["end"]["dateTime"]})
-            elif "date" in event["start"]:
-                calenderEvents.append({"title":event["summary"],"start":event["start"]["date"],"end":event["end"]["date"]})
-    except:
-        calenderEvents=[]
 
     return render_template('index.html', segment='index',events=events,attend=inEvent, department = department, job_level = job_level, skill1 = res[0], skill2 = res[1], skill3 = res[2], allData = allDataSupplied, data = datatasks, cevents=calenderEvents,date=str(date.today()))
 
