@@ -32,6 +32,7 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import httplib2
 import base64
+import time
 
 
 pysqldf = lambda q: sqldf(q, globals())
@@ -383,6 +384,23 @@ def route_work_employee():
 
 
     return render_template('work_one.html', segment= get_segment(request),ji=ji,wlb=wlb, allData=allDataSupplied)
+
+
+def get_aggregate(fit_service, startTimeMillis, endTimeMillis, dataSourceId):
+    return fit_service.users().dataset().aggregate(userId="me", body={
+        "aggregateBy": [{
+            "dataTypeName": "com.google.step_count.delta",
+            "dataSourceId": dataSourceId
+        }],
+        "bucketByTime": {"durationMillis": 86400000},
+        "startTimeMillis": startTimeMillis,
+        "endTimeMillis": endTimeMillis
+    }).execute()
+
+
+
+def current_milli_time():
+    return int(round(time.time() * 1000))
 
 # employee health
 @blueprint.route('/health')
