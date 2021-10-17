@@ -792,7 +792,6 @@ def sync_function():
     dfCsv = pd.read_csv(csvFile)
     for row in User.query.all():
         username = row.username
-        print(username)
         diction = dfCsv.loc[dfCsv['username'] == username]
         diction=diction.to_dict('records')
         if(len(diction)>0):
@@ -810,7 +809,7 @@ def sync_function():
             row.job_level = diction["job_level"]
             row.rating = diction["rating"]
             row.onsite = diction["onsite"]
-            row.department = diction["Department"]
+            row.department = diction["department"]
             row.salary = diction["salary"]
             row.dob = diction["dob"]
             row.height =str(diction["height"])
@@ -1018,6 +1017,47 @@ def profile(template):
 
     return render_template('profile.html', segment = get_segment(request), resources=CDN.render(), allData =allDataSupplied, done=done,doing=doing)
 
+@blueprint.route('/profile-section')
+def profilesection():
+
+    dropdownList = []
+    for row in User.query.all():
+        if (row.username != "admin"):
+            dropdownList.append(row.username)
+    
+    row = User.query.filter_by(id=current_user.get_id()).first()
+    allDataSupplied = {
+        "username" : row.username,
+        "email" : row.email,
+        "dob" : row.dob,
+        "department" : row.department, 
+        "skills": json.loads(row.skills),
+        "Gender" :row.Gender ,
+        "MaritalStatus" : row.MaritalStatus,
+        "PercentSalaryHike" : row.PercentSalaryHike,
+        "StockOptionLevel"    : row.StockOptionLevel,
+        "extra" : row.extra,
+        "YearsAtCompany"  :int(row.YearsAtCompany), 
+        "YearsInCurrentRole" : row.YearsInCurrentRole,
+        "education" : row.education,
+        "recruitment_type" : row.recruitment_type,
+        "job_level" : row.job_level,
+        'rating' : row.rating,
+        "onsite" : row.onsite,
+        "salary" : row.salary,
+        "height" : row.height,
+        "weight" : row.weight,
+        "SkillPointEarned":int(row.SkillPointEarned)
+    }
+    done=[]
+    doing=[]
+    if "dont" in allDataSupplied["skills"]: 
+        done= allDataSupplied["skills"]["dont"]
+    for x in allDataSupplied["skills"]:
+        if x not in done and x!="skills":
+            doing.append(x)
+
+    return render_template('profilesection.html', segment = get_segment(request), resources=CDN.render(), allData =allDataSupplied, done=done,doing=doing, dropdownList=dropdownList)
 
 
 
@@ -1197,7 +1237,7 @@ def oauth2callback():
     credentials = flow.credentials
     session['credentials'] = credentials_to_dict(credentials)
 
-    return redirect(url_for('.test_api_request'))
+    return redirect('/profile-section')
 
 
 @blueprint.route('/revoke')
@@ -1215,17 +1255,16 @@ def revoke():
 
     status_code = getattr(revoke, 'status_code')
     if status_code == 200:
-        return('Credentials successfully revoked.' + print_index_table())
+        return('Credentials successfully revoked.')
     else:
-        return('An error occurred.' + print_index_table())
+        return('An error occurred.')
 
 
 @blueprint.route('/clear')
 def clear_credentials():
     if 'credentials' in session:
         del session['credentials']
-    return ('Credentials have been cleared.<br><br>' +
-            print_index_table())
+    return ('Credentials have been cleared.<br><br>')
 
 
 def credentials_to_dict(credentials):
