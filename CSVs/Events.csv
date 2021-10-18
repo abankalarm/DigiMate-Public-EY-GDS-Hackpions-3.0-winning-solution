@@ -1,7 +1,7 @@
 Id,Event,Start,Description,Attending
-2,Yoga      ,2021-12-03,Health Activity,"['HR1004', 'FEG', 'testsss1', 'test1', 'HR1098']"
-3,Jump rope ,2021-12-04,Health Activity,"['HR1004', 'HR1098', 'FEG', 'tessssst1', 'test1']"
-5,Aerobics  ,2021-12-06,Health Activity,"['HR1004', 'FEG', 'tessssst1', 'HR1098']"
-1,Stair Mill,2021-12-25,Health Activity,"['HR1004', 'FEG', 'tessssst1', 'HR1098']"
-6,Swimming  ,2022-12-07,Health Activity,"['HR1004', 'HR1098', 'FEG', 'teaaast1', 'test1']"
-7,Cardio    ,2022-12-08,Health Activity,"['HR1004', 'HR1098', 'tsssest1']"
+2,Yoga      ,2021-12-03,Health Activity,"[]"
+3,Jump rope ,2021-12-04,Health Activity,"[]"
+5,Aerobics  ,2021-12-06,Health Activity,"[]"
+1,Stair Mill,2021-12-25,Health Activity,"[]"
+6,Swimming  ,2022-12-07,Health Activity,"[]"
+7,Cardio    ,2022-12-08,Health Activity,"[]"

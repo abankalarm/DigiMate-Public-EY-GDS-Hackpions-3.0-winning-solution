@@ -2,17 +2,22 @@ import sqlite3
 import pandas as pd
 import hashlib, binascii, os
 import json
-dfActivity = pd.read_csv("./CSVs/EmployeeActivity.csv").to_dict("records")
-dfHealth = pd.read_csv("./CSVs/EmployeeHealth.csv").to_dict("records")
-dfEvent=pd.read_csv("./CSVs/Events.csv", converters={'Attending':pd.eval}).to_dict("records")
+# dfActivity = pd.read_csv("./CSVs/EmployeeActivity.csv").to_dict("records")
+# dfHealth = pd.read_csv("./CSVs/EmployeeHealth.csv").to_dict("records")
+# dfEvent=pd.read_csv("./CSVs/Events.csv", converters={'Attending':pd.eval}).to_dict("records")
 con = sqlite3.connect("db.sqlite3")
 
 
-# cur=con.cursor()
+cur=con.cursor()
+# cur.execute("DELETE FROM EmployeeActivity WHERE username=?",("test1",))
+# con.commit()
+
 # cur.execute("CREATE TABLE EmployeeActivity (username,Month,SystemLoggedInTime,Email,Meetings,WorkingOnIssues,SystemInactiveTime,Offs,SkillPointEarned);")
 # con.commit()
 # cur.execute("CREATE TABLE EmployeeHealth (username,ActivityDate,TotalSteps,TotalDistance,TrackerDistance,LoggedActivitiesDistance,VeryActiveDistance,ModeratelyActiveDistance,LightActiveDistance,SedentaryActiveDistance,VeryActiveMinutes,FairlyActiveMinutes,LightlyActiveMinutes,SedentaryMinutes,Calories);")
+# con.commit()
 # cur.execute("CREATE TABLE Events (Id,Event,Start,Description,Attending);")
+# con.commit()
 
 # sqlite_insert_with_param = """INSERT INTO EmployeeActivity 
 #     (
