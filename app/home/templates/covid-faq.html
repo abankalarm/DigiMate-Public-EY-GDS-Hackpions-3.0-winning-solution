@@ -112,7 +112,7 @@
                                     Description
                                 </h6>
                             </div>
-                            <h3 style="margin: auto;">Nearby Vaccination Centres</h3>
+                            <h3 id = "nearby" style="margin: auto;">Nearby Vaccination Centres</h3>
                             <div class="card-block" id="whole">
                                 <div class="row">
                                     <div class = "col" id = "c1">
@@ -240,14 +240,22 @@
 <script>
         $(document).ready(function() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
+                navigator.geolocation.getCurrentPosition(showPosition, errorCallback);
             } else {
-                document.getElementById("whole").style.visibility = "hidden";
+                document.getElementById("whole").style.display = "none";
                 var k = document.getElementById("desc").innerHTML;
-                console.log(k);
+                //console.log(k);
+                document.getElementById("nearby").style.display = "none";
                 document.getElementById("desc").innerHTML = k + "<br> Location not allowed for vaccination centres availability.";
             }
         });
+    
+        function errorCallback(error) {
+            document.getElementById("whole").style.display = "none";
+            var k = document.getElementById("desc").innerHTML;
+            document.getElementById("nearby").style.display = "none";
+            document.getElementById("desc").innerHTML = k + "<br> Location not allowed for vaccination centres availability.";
+        }
 
         function showPosition(position) {
             $.ajax({
