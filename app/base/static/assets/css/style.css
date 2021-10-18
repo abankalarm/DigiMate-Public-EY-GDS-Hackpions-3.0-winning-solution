@@ -19,6 +19,9 @@ body {
     font-weight: 400;
     background: #f4f7fa;
     position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('https://wallpaperbat.com/img/455851-showing-post-media-for-wallpaper-clouds-sky-cartoon-cartoon-clouds-cloud-wallpaper-blue-sky-wallpaper.jpg');
 }
 
 *:focus {

@@ -32,6 +32,14 @@
         white-space: pre-line;
         line-height: 2em;
         font-weight: bold;
+        color: rgb(0, 247, 255);
+    }
+
+    #desc3 {
+        white-space: pre-line;
+        line-height: 2em;
+        font-weight: bold;
+        color: black;
     }
 
     #three {
@@ -44,12 +52,18 @@
         margin: 20px;
         padding: 20px;
         background-repeat: no-repeat;
-        background: pink;
+        background: rgb(36, 112, 160);
         border-color: red;
     }
 
     #name1, #name2, #name3, #name4, #name5, #name6 {
-        color: red;
+        color: white;
+        font-weight: bolder;
+        text-align: center;
+    }
+
+    #name3 {
+        color: rgb(36, 112, 160);
         font-weight: bolder;
         text-align: center;
     }
@@ -72,7 +86,7 @@
         border-radius: 12px;
         font-size: 16px;
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-        background-color: #f44336;
+        background-color: rgb(36, 112, 160);
         color: white;
         padding: 10px 20px;
         text-align: center;
@@ -87,7 +101,7 @@
         margin-top: 10px;
     }
     .button:hover {
-        background-color: pink;
+        background-color: cyan;
         color: black;
     }
 
@@ -173,7 +187,9 @@
         document.getElementById("name2").innerHTML = "Symptoms";
         document.getElementById("desc2").innerHTML = data.symptoms;
 
-        document.getElementById('bg').src = data.img;
+        //document.getElementById('bg').src = data.img;
+
+        document.getElementById('bg').src = 'https://wallpaperbat.com/img/455851-showing-post-media-for-wallpaper-clouds-sky-cartoon-cartoon-clouds-cloud-wallpaper-blue-sky-wallpaper.jpg';
 
         if(data.name == "Workplace Mental Health") {
             document.getElementById("name3").innerHTML = "How can you manage this?";

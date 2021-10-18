@@ -48,12 +48,14 @@
         display: inline-block;
         cursor: pointer;
         font-weight: bold;
+        color: rgb(50, 107, 182);;
     }
     
     .faq_answer_container {
         height: 0px;
         overflow: hidden;
         padding: 0px;
+        background-color: rgb(36, 112, 160);
     }
 
     .card-block {
@@ -109,7 +111,7 @@
                             </div>
                             <div class="card-block">
                                 <h6 id = "desc">
-                                    Description
+                                    COVID-19 has changed the way we live for the past couple of years. We are all in this fight together. Get vaccinated at the nearest centres below.<br>
                                 </h6>
                             </div>
                             <h3 id = "nearby" style="margin: auto;">Nearby Vaccination Centres</h3>
@@ -263,7 +265,7 @@
                 type: 'GET',
                 dataType: 'json', // added data type
                 success: function(res) {
-                    console.log(res);
+                    //console.log(res);
                     var lookup = {};
                     var items = res.centers;
                     var result = [];
@@ -286,7 +288,7 @@
                     var mm = today.getMonth() + 1;
                     var yyyy = today.getFullYear();
                     var d = dd + '-' + mm + '-' + yyyy;
-                    console.log(d)
+                    //console.log(d)
 
                     var totalCentres = [];
                     
@@ -328,7 +330,7 @@
                                                 }
                                             });
                                         } else {
-                                            console.log(totalCentres);
+                                            //console.log(totalCentres);
                                             document.getElementById("c1-name").innerHTML = totalCentres[0].name;
                                             document.getElementById("c2-name").innerHTML = totalCentres[1].name;
                                             document.getElementById("c3-name").innerHTML = totalCentres[2].name;
@@ -362,7 +364,7 @@
                                     }
                                 });
                             }  else {
-                                console.log(totalCentres);
+                                //console.log(totalCentres);
                                 document.getElementById("c1-name").innerHTML = totalCentres[0].name;
                                 document.getElementById("c2-name").innerHTML = totalCentres[1].name;
                                 document.getElementById("c3-name").innerHTML = totalCentres[2].name;

@@ -232,7 +232,7 @@
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
     <script>
         var allData = JSON.parse('{{allData | tojson}}');
-        console.log(allData)
+        //console.log(allData)
         $(document).ready(function() {
             setTimeout(function() {
 
@@ -666,7 +666,7 @@
                                 EmailC: Math.round(emailC)
                             });
                         }
-                        console.log(chartData);
+                        //console.log(chartData);
                         return chartData;
                     }  
                 });
@@ -682,7 +682,7 @@
                     am4core.ready(function() {
                         // Themes begin
                         var chart = am4core.create("chartdiv-meetings", am4charts.XYChart);
-                    console.log(allData)
+                    //console.log(allData)
 
                     chart.colors.step = 2;
 
@@ -1030,7 +1030,7 @@
                 setTimeout(function() {
                     am4core.ready(function() {
                         var chart = am4core.create("chartdiv-issues", am4charts.XYChart);
-                    console.log(allData)
+                    //console.log(allData)
 
                     chart.colors.step = 2;
 

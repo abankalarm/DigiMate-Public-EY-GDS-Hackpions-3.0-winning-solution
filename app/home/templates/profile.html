@@ -137,12 +137,12 @@
                                 //let awards = ['{{fitnesstrophy}}', '{{eventtrophy}}', '{{m1trophy}}', '{{m6trophy}}', '{{medaltrophy}}'];
                                 var allData = JSON.parse('{{allData | tojson}}');
                                 var ecount = parseInt('{{ecount}}') 
-                                console.log(ecount)
+                                //console.log(ecount)
                                 x = 0
                                 y = 0
                                 awards = [1, 0, 1, 0, 0];
-                                console.log("this")
-                                console.log(allData['OffsThisMonth'])
+                                //console.log("this")
+                                //console.log(allData['OffsThisMonth'])
                                 if (allData['SkillPointEarned'] >500)
                                     awards[4]=1
                                 if (allData['YearsAtCompany'] >4)

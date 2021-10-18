@@ -151,7 +151,7 @@
                     value: Math.round(compTotal / 10)
                 }]
 
-                console.log(chart.data)
+                //console.log(chart.data)
                 var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
                 categoryAxis.dataFields.category = "name";
                 categoryAxis.renderer.minGridDistance = 10;
@@ -492,7 +492,7 @@
             range.label.fontSize = "0.9em";
         }
 
-        console.log(data)
+        //console.log(data)
 
         var matchingGrade = lookUpGrade(data.score, data.gradingData);
 

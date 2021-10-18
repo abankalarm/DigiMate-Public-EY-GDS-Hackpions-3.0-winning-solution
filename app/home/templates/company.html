@@ -198,7 +198,7 @@
                         var chart = am4core.create("chartdiv-department", am4charts.XYChart);
                         var data = [];
                         var value = 100050;
-                        console.log(Date.parse(d[0].Month));
+                        //console.log(Date.parse(d[0].Month));
                         for (var i = 0; i < 12; i++) {
                             dates = d[i].Month.split("-")
                             dt = dates[1] + "-" + dates[0] + "-" + dates[2];
@@ -209,7 +209,7 @@
                         }
 
                         chart.data = data;
-                        console.log("Email", chart.data);
+                        //console.log("Email", chart.data);
                         // Create axes
                         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
                         dateAxis.renderer.minGridDistance = 60;
@@ -258,7 +258,7 @@
                     }
 
                     chart.data = data;
-                    console.log("issues", chart.data)
+                    //console.log("issues", chart.data)
                         // Create axes
                     var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
                     dateAxis.renderer.minGridDistance = 60;

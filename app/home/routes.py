@@ -83,7 +83,7 @@ def apiauth(username,password):
     user = User.query.filter_by(username=username).first()
     for row in User.query.filter_by(username='test').all():
         print(type(row))
-        print(row.skills1)
+        #print(row.skills1)
         #print(row.fullname)
     # Check the password
     if user and verify_pass( password, user.password):
@@ -146,7 +146,7 @@ def listtask1():
         tasks = json.loads(task)
     else:
         tasks = json.dumps({1:'enter your first task'})
-    print("gsdhfdjgkfjg",tasks)
+    #print("gsdhfdjgkfjg",tasks)
     return tasks
 
 
@@ -171,7 +171,7 @@ def index():
         service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
 
         now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
+        #print('Getting the upcoming 10 events')
         events_result = service.events().list(calendarId='primary', timeMin=now,
                                             maxResults=10, singleEvents=True,
                                             orderBy='startTime').execute()
@@ -241,31 +241,37 @@ def index():
         allDataSupplied = {
             'numberOfEmployees': {},
             'totalWorkingThisMonth': 0,
-            'totalWorkingLastMonth': 0
+            'totalWorkingLastMonth': 0,
         }
 
         NumberEmployees = pysqldf("""Select department, count(*) as Count from dfEmployee group by department""")
 
         Work = pysqldf("""Select avg(SystemLoggedInTime) as Work from dfActivity group by Month""").to_dict()
 
+        
         allDataSupplied['numberOfEmployees'] = NumberEmployees.to_dict()
         allDataSupplied['totalWorkingThisMonth'] = Work['Work'][11]
         allDataSupplied['totalWorkingLastMonth'] = Work['Work'][10]
+        
         return render_template('admin.html', segment='index',allData=allDataSupplied,events=events)
     
     allDataSupplied = {
         'OffsThisMonth': 0,
         'OffsLastMonth': 0,
         'LoggedInThisMonth': 0,
-        'LoggedInLastMonth': 0
+        'LoggedInLastMonth': 0,
+        'empSkill': {}
     }
 
     EmployeeDetails = pysqldf("""Select Offs, SystemLoggedInTime from dfActivity where username = '{}'""".format(username)).to_dict()
+
+    EmpSkill = pysqldf("""Select username, SkillPointEarned as Points from dfEmployee order by SkillPointEarned desc limit 5""")
 
     allDataSupplied['OffsThisMonth'] = EmployeeDetails['Offs'][11]
     allDataSupplied['OffsLastMonth'] = EmployeeDetails['Offs'][10]
     allDataSupplied['LoggedInThisMonth'] = EmployeeDetails['SystemLoggedInTime'][11]
     allDataSupplied['LoggedInLastMonth'] = EmployeeDetails['SystemLoggedInTime'][10]
+    allDataSupplied['empSkill'] = EmpSkill.to_dict()
 
 
     datatasks = listtask1()
@@ -279,13 +285,13 @@ def index():
             for event in events:
                 if(event["Id"]==registerEvent and username not in event["Attending"] ) :
                   
-                    print(event)
+                    #print(event)
                     sfix="T10:00:00.000Z"
                     efix="T17:00:00.000Z"
                     ts=service.events().insert(calendarId='primary', body={"summary":event["Event"],"description":event["Description"],'start': {'dateTime': event["Start"]+sfix,},'end': {'dateTime': event["Start"]+efix,}}).execute()
                     print ('Event created: %s' % (ts.get('htmlLink')))
                     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-                    print('Getting the upcoming 10 events')
+                    #print('Getting the upcoming 10 events')
                     events_result = service.events().list(calendarId='primary', timeMin=now,
                                                         maxResults=10, singleEvents=True,
                                                         orderBy='startTime').execute()
@@ -529,7 +535,7 @@ def root():
     for row in User.query.filter_by(id=current_user.get_id()).all():
 
             res=json.loads(row.skills)
-            print(res)
+            #print(res)
             try:
                 dept=row.department
                 jlevel=row.job_level
@@ -561,7 +567,7 @@ def oneskill(template):
     dates={"start":"Begin Today","end":"Take your time"}
     for row in User.query.filter_by(id=current_user.get_id()).all():
         res=json.loads(row.skills)
-        print(res)
+        #print(res)
         if template in res:
             dates=res[template]
     
@@ -593,36 +599,36 @@ def oneskill(template):
                     db.session.commit()
                 pathlib.Path("Certificates/"+username).mkdir(parents=True, exist_ok=True)
                 pdf.save( "Certificates/"+username+"/"+pdf.filename)          
-                print("score+")
+                #print("score+")
                 if "start" not in dates:
                     dates={"start":"Begin Today","end":"Take your time"}
                 if "end" not in dates:
                     dates["end"]="Take your time"
-                print("here",dates)
+                #print("here",dates)
                 return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=dates)
         elif "start" in request.form:
-            print("@!#@$#$%I^^%$#%@$$#$#$")
+            #print("@!#@$#$%I^^%$#%@$$#$#$")
             for row in User.query.filter_by(id=current_user.get_id()).all(): 
                     res=json.loads(row.skills)
                     if template not in res:
                         res[template]={}
                     res[template]["start"]=str(datetime.datetime.today())
-                    print(res)
+                    #print(res)
                     dates=res[template]
                     row.skills=str(json.dumps(res))
                     db.session.commit()
-                    print(row.skills)
+                    #print(row.skills)
             if "start" not in dates:
                 dates={"start":"Begin Today","end":"Take your time"}
             if "end" not in dates:
                 dates["end"]="Take your time"
-            print(res)
+            #print(res)
             return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=dates)
     if "start" not in dates:
         dates={"start":"Begin Today","end":"Take your time"}
     if "end" not in dates:
         dates["end"]="Take your time"
-    print(dates)
+    #print(dates)
     
       
     
@@ -683,7 +689,7 @@ def exercise():
         else:
             test[i] = [employee[i]]
 
-    print(exercise_data['WLB'])
+    #print(exercise_data['WLB'])
     if getWorkLifeBalance(test)[0] >= 3:
         exercise_data['WLB'] = 1
     else:
@@ -692,12 +698,12 @@ def exercise():
 
 @blueprint.route('/covid-faq')
 def covidfaq():
-    print(covid_data)
+    #print(covid_data)
     return render_template('covid-faq.html', segment = get_segment(request), allData = covid_data)
 
 @blueprint.route('/physical-pain')
 def physical():
-    print(physical_data)
+    #print(physical_data)
     return render_template('physical-pain.html', segment = get_segment(request), allData = physical_data)
 
 @blueprint.route('/yoga')
@@ -931,7 +937,7 @@ def route_enterEmployeeCsv():
    
         for row in User.query.all():
             username = row.username
-            print(username)
+            #print(username)
             diction = dfCsv.loc[dfCsv['username'] == username]
             diction=diction.to_dict('records')
             if(len(diction)>0):
@@ -1176,7 +1182,7 @@ def profile(template):
     username = template
 
     
-    print(template)
+    #print(template)
     row = User.query.filter_by(username=template ).first()
     allDataSupplied = {
         "username" : template,
@@ -1401,7 +1407,7 @@ def authorize():
     # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
     # error.
     flow.redirect_uri = url_for('.oauth2callback', _external=True)
-    print(flow.redirect_uri)
+    #print(flow.redirect_uri)
     authorization_url, state = flow.authorization_url(
         # Enable offline access so that you can refresh an access token without
         # re-prompting the user for permission. Recommended for web server apps.
@@ -1412,7 +1418,7 @@ def authorize():
 
     # Store the state so the callback can verify the auth server response.
     session['state'] = state
-    print(authorization_url)
+    #print(authorization_url)
     return redirect(authorization_url)
 
 

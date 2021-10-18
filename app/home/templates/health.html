@@ -507,6 +507,7 @@
         font-size: 17px;
         font-weight: 500;
         letter-spacing: 0.5px;
+        text-align: left;
     }
     
     #dca_plan_tab .content div.col-8 span:last-child {
@@ -515,6 +516,7 @@
         color: rgba(85, 71, 107, 0.6);
         letter-spacing: 0.5px;
         width: 400px;
+        text-align: left;
     }
     
     #dca_plan_tab span.circle {
@@ -720,7 +722,6 @@
 <script src="https://cdn.amcharts.com/lib/4/plugins/bullets.js"></script>
 <script>
     var allData = JSON.parse('{{allData | tojson}}');
-    console.log(allData);
 
     document.getElementById("step-count").innerHTML = allData.steps_fit;
     document.getElementById("calorie-count").innerHTML = (allData.calorie_fit).toFixed(2);
@@ -737,6 +738,10 @@
         verdict = "Obese";
     }
 
+    //verdict = "Obese";
+    if(Number.isNaN(bmi)) {
+        bmi = 0;
+    }
     var nut = allData.nutrition_data[verdict];
 
     document.getElementById('sleep').innerHTML = nut.sleep;
@@ -820,7 +825,7 @@
                     value: Math.round(compTotal / 10)
                 }]
 
-                console.log(chart.data)
+                //console.log(chart.data)
                 var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
                 categoryAxis.dataFields.category = "name";
                 categoryAxis.renderer.minGridDistance = 10;
@@ -1161,7 +1166,7 @@
             range.label.fontSize = "0.9em";
         }
 
-        console.log(data)
+        //console.log(data)
 
         var matchingGrade = lookUpGrade(data.score, data.gradingData);
 
