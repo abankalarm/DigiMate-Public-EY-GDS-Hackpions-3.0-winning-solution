@@ -228,43 +228,49 @@
 
                             <script>
                                 //let awards = ['{{fitnesstrophy}}', '{{eventtrophy}}', '{{m1trophy}}', '{{m6trophy}}', '{{medaltrophy}}'];
-                                let x = 0
-                                let y = 0
-                                console.log("{{allData['SkillPointEarned'] >500}}")
-                                if ("{{allData['SkillPointEarned'] >100500}}")
-                                    x = 4
-                                else
-                                    x = 0
-                                if ("{{allData['YearsAtCompany'] >4}}")
-                                    y = 4
-                                else
-                                    y = 0
-                                let awards = [1, 2, 4, 0, 0];
-                                awards[4] = x
-                                awards[3] = y
+                                var allData = JSON.parse('{{allData | tojson}}');
+                                var ecount = parseInt('{{ecount}}') 
+                                console.log(ecount)
+                                x = 0
+                                y = 0
+                                awards = [1,0 , 1, 0, 0];
+                                console.log("this")
+                                console.log(allData['OffsThisMonth'])
+                                if (allData['SkillPointEarned'] >500)
+                                    awards[4]=1
+                                if (allData['YearsAtCompany'] >4)
+                                    awards[3]=1
+                                if (allData['OffsThisMonth'] >0)
+                                    awards[2]=0
+                                if (ecount >2)
+                                    awards[1]=1
+                                    
+                                    
+                                
                                 console.log(awards)
-                                console.log(parseInt(awards[0]));
                                 if (parseInt(awards[0]) > 0) {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/fitness.png" width="80" > {{fitnesstropy}} rewarded for fitness</div>');
                                 } else {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/notrophy.png" width="80" >pending, rewarded for fitness</div>')
                                 }
                                 if (parseInt(awards[1]) > 0) {
-                                    document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/events.png" width="80" > {{eventtrophy}} rewarded for every 5 events attended</div>');
+                                    document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/events.png" width="80" > {{eventtrophy}} rewarded for atleast 3 events </div>');
                                 } else {
-                                    document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/notrophy.png" width="80" >pending, rewarded for every 5 events attended</div>')
+                                    document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/notrophy.png" width="80" >pending, rewarded for atleast 3 events </div>')
                                 }
                                 if (parseInt(awards[2]) > 0) {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/starfor1m.png" width="80" > {{m1trophy}} rewarded for No Off in the month</div>');
                                 } else {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/notrophy.png" width="80" >rewarded for No Off in the month</div>')
                                 }
-                                if (parseInt(awards[3]) == 0) {
+                                if (parseInt(awards[3]) > 0) {
+                                    
                                     document.write('<br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/starfor6m.png" width="80" > {{m6trophy}} rewarded for being veteran</div>');
                                 } else {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/notrophy.png" width="80" >pending, rewarded for being veteran</div>')
                                 }
                                 if (parseInt(awards[4]) > 0) {
+                                    
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/medal.png" width="80" > {{medaltrophy}} rewarded for getting over 500 points</div>');
                                 } else {
                                     document.write('<br><br><br><br><br><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/static/assets/images/trophies/notrophy.png" width="80" >pending,  rewarded for getting over 500 points</div>')

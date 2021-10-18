@@ -1113,8 +1113,16 @@ def profile(template):
     for x in allDataSupplied["skills"]:
         if x not in done and x!="skills":
             doing.append(x)
+    EmployeeDetails = pysqldf("""Select Offs, SystemLoggedInTime from dfActivity where username = '{}'""".format(allDataSupplied["username"])).to_dict()
 
-    return render_template('profile.html', segment = get_segment(request), resources=CDN.render(), allData =allDataSupplied, done=done,doing=doing)
+    ecount=0
+    allDataSupplied['OffsThisMonth'] = int(EmployeeDetails['Offs'][11])
+    with open('CSVs/Events.csv','r') as data:
+        for line in csv.DictReader(data):
+            line["Attending"]=ast.literal_eval(line["Attending"])
+            if allDataSupplied["username"] in line["Attending"]:
+                ecount+=1
+    return render_template('profile.html', segment = get_segment(request), resources=CDN.render(), ecount=ecount,allData =allDataSupplied, done=done,doing=doing)
 
 @blueprint.route('/profile-section')
 def profilesection():
@@ -1155,8 +1163,16 @@ def profilesection():
     for x in allDataSupplied["skills"]:
         if x not in done and x!="skills":
             doing.append(x)
-
-    return render_template('profilesection.html', segment = get_segment(request), resources=CDN.render(), allData =allDataSupplied, done=done,doing=doing, dropdownList=dropdownList)
+    EmployeeDetails = pysqldf("""Select Offs, SystemLoggedInTime from dfActivity where username = '{}'""".format(allDataSupplied["username"])).to_dict()
+    ecount=0
+    allDataSupplied['OffsThisMonth'] = int(EmployeeDetails['Offs'][11])
+    with open('CSVs/Events.csv','r') as data:
+        for line in csv.DictReader(data):
+            line["Attending"]=ast.literal_eval(line["Attending"])
+            if allDataSupplied["username"] in line["Attending"]:
+                ecount+=1
+    
+    return render_template('profilesection.html', segment = get_segment(request), resources=CDN.render(), ecount=ecount,allData =allDataSupplied, done=done,doing=doing, dropdownList=dropdownList)
 
 
 
