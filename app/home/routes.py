@@ -136,6 +136,19 @@ def getCourses(allData,query):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] == "pdf"
 
+def listtask1():
+    row = User.query.filter_by(id=current_user.get_id()).first()
+    
+    task = row.tasks
+    if (task=="null" or task==""):
+        tasks = json.dumps({1:'enter your first task'})
+    if task:
+        tasks = json.loads(task)
+    else:
+        tasks = json.dumps({1:'enter your first task'})
+    print("gsdhfdjgkfjg",tasks)
+    return tasks
+
 
 @blueprint.route('/index',methods=["GET","POST"])
 @login_required
@@ -148,7 +161,7 @@ def index():
         res=res["skills"]  
     #TODO use thoughtgit
     thought=getThought()
-    print(thought)
+
     events=[]
     temp=[]
     try:
@@ -253,19 +266,6 @@ def index():
     allDataSupplied['OffsLastMonth'] = EmployeeDetails['Offs'][10]
     allDataSupplied['LoggedInThisMonth'] = EmployeeDetails['SystemLoggedInTime'][11]
     allDataSupplied['LoggedInLastMonth'] = EmployeeDetails['SystemLoggedInTime'][10]
-    
-    def listtask1():
-        row = User.query.filter_by(id=current_user.get_id()).first()
-        
-        task = row.tasks
-        if (task=="null" or task==""):
-            tasks = json.dumps({1:'enter your first task'})
-        if task:
-            tasks = json.loads(task)
-        else:
-            tasks = json.dumps({1:'enter your first task'})
-        print("gsdhfdjgkfjg",tasks)
-        return tasks
 
 
     datatasks = listtask1()
@@ -430,67 +430,70 @@ def route_health_individual():
         'nutrition_data': nutrition_data
     }
 
-
-    credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-    if 'credentials' not in session:
+    try:
         credentials = google.oauth2.credentials.Credentials(**session['credentials'])
-    service = googleapiclient.discovery.build('fitness', 'v1', credentials=credentials)
-    
-    
-    end_time_millis = int(round(time.time() * 1000))
-    start_time_millis =  end_time_millis - 7 * 86400000
-    steps = "derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas"
-    calorie = "derived:com.google.calories.expended:com.google.android.gms:merge_calories_expended"
-    height = "derived:com.google.height:com.google.android.gms:merge_height"
-    #heart = "derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm"
-    #sleep = "derived:com.google.sleep.segment:com.google.android.gms:sleep_from_activity<-raw:com.google.activity.segment:com.heytap.wearable.health:stream_sleep"
-    weight = "derived:com.google.weight:com.google.android.gms:merge_weight"
-
-    calory_data = get_aggregate(service, start_time_millis, end_time_millis, calorie)
-    for daily_calory_data in calory_data['bucket']:
-       # use local date as the key
-        data_point = daily_calory_data['dataset'][0]['point']
-        if data_point:
-            calories = data_point[0]['value'][0]['fpVal']
-            data_source_id = data_point[0]['originDataSourceId']
-            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
-
-    allDataSupplied['calorie_fit'] = daily_calories['calories']
-
-    calory_data = get_aggregate(service, start_time_millis, end_time_millis, steps)
-    
-    for daily_calory_data in calory_data['bucket']:
-       # use local date as the key
-        data_point = daily_calory_data['dataset'][0]['point']
-        if data_point:
-            calories = data_point[0]['value'][0]['intVal']
-            data_source_id = data_point[0]['originDataSourceId']
-            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
-    
+        if 'credentials' not in session:
+            credentials = google.oauth2.credentials.Credentials(**session['credentials'])
+        service = googleapiclient.discovery.build('fitness', 'v1', credentials=credentials)
         
-    allDataSupplied['steps_fit'] = daily_calories['calories']
-
-    calory_data = get_aggregate(service, start_time_millis, end_time_millis, height)
-    for daily_calory_data in calory_data['bucket']:
-       # use local date as the key
-        data_point = daily_calory_data['dataset'][0]['point']
-        if data_point:
-            calories = data_point[0]['value'][0]['fpVal']
-            data_source_id = data_point[0]['originDataSourceId']
-            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
-    
         
-    allDataSupplied['height_fit'] = daily_calories['calories']
-    calory_data = get_aggregate(service, start_time_millis, end_time_millis, weight)
-    for daily_calory_data in calory_data['bucket']:
-       # use local date as the key
-        data_point = daily_calory_data['dataset'][0]['point']
-        if data_point:
-            calories = data_point[0]['value'][0]['fpVal']
-            data_source_id = data_point[0]['originDataSourceId']
-            daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+        end_time_millis = int(round(time.time() * 1000))
+        start_time_millis =  end_time_millis - 7 * 86400000
+        steps = "derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas"
+        calorie = "derived:com.google.calories.expended:com.google.android.gms:merge_calories_expended"
+        height = "derived:com.google.height:com.google.android.gms:merge_height"
+        #heart = "derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm"
+        #sleep = "derived:com.google.sleep.segment:com.google.android.gms:sleep_from_activity<-raw:com.google.activity.segment:com.heytap.wearable.health:stream_sleep"
+        weight = "derived:com.google.weight:com.google.android.gms:merge_weight"
 
-    allDataSupplied['weight_fit'] = daily_calories['calories']
+        calory_data = get_aggregate(service, start_time_millis, end_time_millis, calorie)
+        for daily_calory_data in calory_data['bucket']:
+        # use local date as the key
+            data_point = daily_calory_data['dataset'][0]['point']
+            if data_point:
+                calories = data_point[0]['value'][0]['fpVal']
+                data_source_id = data_point[0]['originDataSourceId']
+                daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+
+        allDataSupplied['calorie_fit'] = daily_calories['calories']
+
+        calory_data = get_aggregate(service, start_time_millis, end_time_millis, steps)
+        
+        for daily_calory_data in calory_data['bucket']:
+        # use local date as the key
+            data_point = daily_calory_data['dataset'][0]['point']
+            if data_point:
+                calories = data_point[0]['value'][0]['intVal']
+                data_source_id = data_point[0]['originDataSourceId']
+                daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+        
+            
+        allDataSupplied['steps_fit'] = daily_calories['calories']
+
+        calory_data = get_aggregate(service, start_time_millis, end_time_millis, height)
+        for daily_calory_data in calory_data['bucket']:
+        # use local date as the key
+            data_point = daily_calory_data['dataset'][0]['point']
+            if data_point:
+                calories = data_point[0]['value'][0]['fpVal']
+                data_source_id = data_point[0]['originDataSourceId']
+                daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+        
+            
+        allDataSupplied['height_fit'] = daily_calories['calories']
+        calory_data = get_aggregate(service, start_time_millis, end_time_millis, weight)
+        for daily_calory_data in calory_data['bucket']:
+        # use local date as the key
+            data_point = daily_calory_data['dataset'][0]['point']
+            if data_point:
+                calories = data_point[0]['value'][0]['fpVal']
+                data_source_id = data_point[0]['originDataSourceId']
+                daily_calories = {'calories': calories, 'originDataSourceId': data_source_id}
+
+        allDataSupplied['weight_fit'] = daily_calories['calories']
+    except:
+        print("not signed in")
+
 
     for row in User.query.filter_by(id=current_user.get_id()).all():
         username = row.username
@@ -1069,7 +1072,99 @@ def completetask(id):
 
 
 
+@blueprint.route('/api/task/list')
+def apilisttask():
+    if 'x-access-tokens' in request.headers:
+        token = request.headers['x-access-tokens']
+    else:
+        return jsonify({'message': 'no access token'})
+    
+    
+    try:
+        token_decoded = base64.b64decode(token).decode("utf-8")
+    except:
+        return jsonify({'message': 'token is invalid'})
+    userpass = token_decoded.split(':')
+    if apiauth(userpass[0],userpass[1])==False:
+        return jsonify({'message': 'token is invalid'})
 
+    row = User.query.filter_by(username=userpass[0]).first()
+    try:
+        tasks = row.tasks
+        if tasks:
+            return json.loads(tasks)
+
+        tasks = {'message':'empty'}
+        return jsonify(tasks)
+    except:
+        tasks = {'message':'error'}
+        return jsonify(tasks) 
+
+@blueprint.route('/api/task/add', methods=['POST'])
+def apiaddtask():
+    if 'x-access-tokens' in request.headers:
+        token = request.headers['x-access-tokens']
+    else:
+        return jsonify({'message': 'no access token'})
+    
+    
+    try:
+        token_decoded = base64.b64decode(token).decode("utf-8")
+    except:
+        return jsonify({'message': 'token is invalid'})
+    userpass = token_decoded.split(':')
+    if apiauth(userpass[0],userpass[1])==False:
+        return jsonify({'message': 'token is invalid'})
+
+    row = User.query.filter_by(username=userpass[0]).first()
+    task = row.tasks
+    if (task=="null"):
+        tasks = {1:'enter your first task'}
+    if task:
+        tasks = json.loads(task)
+    else:
+        tasks = {1:'enter your first task'}
+
+    todo = request.form['todoitem']
+    id = random.randint(1,10000)
+    # newtask = {id,todo}
+    # tasks.update(newtask)
+    tasks[id]=todo
+    row.tasks = json.dumps(tasks)
+    db.session.commit()
+    return redirect('/')
+
+  
+@blueprint.route('/api/task/delete/<id>')
+def apicompletetask(id):
+    if 'x-access-tokens' in request.headers:
+        token = request.headers['x-access-tokens']
+    else:
+        return jsonify({'message': 'no access token'})
+    
+    
+    try:
+        token_decoded = base64.b64decode(token).decode("utf-8")
+    except:
+        return jsonify({'message': 'token is invalid'})
+    userpass = token_decoded.split(':')
+    if apiauth(userpass[0],userpass[1])==False:
+        return jsonify({'message': 'token is invalid'})
+
+    try:
+        row = User.query.filter_by(username=userpass[0]).first()
+        task = row.tasks
+        tasks = json.loads(task)
+        try:
+            del tasks[id]
+            row.tasks = json.dumps(tasks)
+            db.session.commit()
+            return jsonify({"message":"deleted"})
+        except:
+            return jsonify({"message":"id doesnt exist"})
+
+    except:
+        return jsonify({"message":"id is invalid"})
 
 
 

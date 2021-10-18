@@ -3,103 +3,116 @@
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
 <style>
-    * {box-sizing:border-box}
-
+    * {
+        box-sizing: border-box
+    }
     /* Slideshow container */
+    
     .slideshow-container {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
+        max-width: 1000px;
+        position: relative;
+        margin: auto;
     }
-
     /* Make the images invisible by default */
+    
     .Containers {
-    display: none;
+        display: none;
     }
-
     /* forward & Back buttons */
-    .Back, .forward {
-    cursor: pointer;
-    position: absolute;
-    top: 48%;
-    width: auto;
-    margin-top: -23px;
-    padding: 17px;
-    color: grey;
-    font-weight: bold;
-    font-size: 19px;
-    transition: 0.4s ease;
-    border-radius: 0 5px 5px 0;
-    user-select: none;
-    }
-
-    /* Place the "forward button" to the right */
+    
+    .Back,
     .forward {
-    right: 0;
-    border-radius: 4px 0 0 4px;
+        cursor: pointer;
+        position: absolute;
+        top: 48%;
+        width: auto;
+        margin-top: -23px;
+        padding: 17px;
+        color: grey;
+        font-weight: bold;
+        font-size: 19px;
+        transition: 0.4s ease;
+        border-radius: 0 5px 5px 0;
+        user-select: none;
     }
-
+    /* Place the "forward button" to the right */
+    
+    .forward {
+        right: 0;
+        border-radius: 4px 0 0 4px;
+    }
     /*when the user hovers,add a black background with some little opacity */
-    .Back:hover, .forward:hover {
-    background-color: rgba(0,0,0,0.8);
+    
+    .Back:hover,
+    .forward:hover {
+        background-color: rgba(0, 0, 0, 0.8);
     }
-
     /* Caption Info */
+    
     .Info {
-    color: black;
-    background-color: white;
-    font-size: 18px;
-    padding: 10px 14px;
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
+        color: black;
+        background-color: white;
+        font-size: 18px;
+        padding: 10px 14px;
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
     }
-
     /* Worknumbering (1/3 etc) */
+    
     .MessageInfo {
-    color: black;
-    background-color: white;
-    font-size: 28px;
-    padding: 10px 14px;
-    position: absolute;
-    top: 0;
+        color: black;
+        background-color: white;
+        font-size: 28px;
+        padding: 10px 14px;
+        position: absolute;
+        top: 0;
     }
-
     /* The circles or bullets and indicators */
+    
     .dots {
-    cursor: pointer;
-    height: 16px;
-    width: 16px;
-    margin: 0 3px;
-    background-color: #acc;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.5s ease;
+        cursor: pointer;
+        height: 16px;
+        width: 16px;
+        margin: 0 3px;
+        background-color: #acc;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.5s ease;
     }
-
-    .enable, .dots:hover {
-    background-color: #717161;
+    
+    .enable,
+    .dots:hover {
+        background-color: #717161;
     }
-
     /* Faint animation */
+    
     .fade {
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 1.4s;
-    animation-name: fade;
-    animation-duration: 1.4s;
+        -webkit-animation-name: fade;
+        -webkit-animation-duration: 1.4s;
+        animation-name: fade;
+        animation-duration: 1.4s;
     }
-
+    
     @-webkit-keyframes fade {
-    from {opacity: .5}
-    to {opacity: 2}
+        from {
+            opacity: .5
+        }
+        to {
+            opacity: 2
+        }
     }
-
+    
     @keyframes fade {
-    from {opacity: .5}
-    to {opacity: 2}
+        from {
+            opacity: .5
+        }
+        to {
+            opacity: 2
+        }
     }
-
+    
     .col {
         color: black;
         float: left;
@@ -107,18 +120,17 @@
         text-align: center;
         margin-bottom: 5px;
     }
-
     /* Clear floats after the columns */
+    
     .row:after {
-    content: "";
-    display: table;
-    clear: both;
+        content: "";
+        display: table;
+        clear: both;
     }
-
+    
     #container {
         margin: auto;
     }
-
 </style>
 {% endblock stylesheets %} {% block content %}
 
@@ -133,28 +145,27 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 id = "name">
+                                <h5 id="name">
                                     Yoga Exercises
                                 </h5>
                             </div>
                             <div class="card-block">
-                                <h6 id = "desc">
-                                    Yoga is usually defined as union: union between the limited self and the Divine Self. The aim of Yoga is not really to unite us with anything for we are already united. It is to help us realize our identity with the Divine Self, to make us know and tune into our intrinsic nature.<br>
-                                    There are many definitions of Yoga, which apply to all levels of existence and awareness. At the physical level, we need to harmonize the functions of different organs, muscles and nerves so that they do not hamper or oppose each other. Disharmony in various body parts and systems brings about inefficiency and lethargy or clumsiness. <br>
-                                    Moreover, it manifests in diseases in the body.
-                                    In this context we can define Yoga as physical harmony & health and mental balance & peace.
+                                <h6 id="desc">
+                                    Yoga is usually defined as union: union between the limited self and the Divine Self. The aim of Yoga is not really to unite us with anything for we are already united. It is to help us realize our identity with the Divine Self, to make us know and tune
+                                    into our intrinsic nature.<br> There are many definitions of Yoga, which apply to all levels of existence and awareness. At the physical level, we need to harmonize the functions
+                                    of different organs, muscles and nerves so that they do not hamper or oppose each other. Disharmony in various body parts and systems brings about inefficiency and lethargy or clumsiness. <br> Moreover, it manifests
+                                    in diseases in the body. In this context we can define Yoga as physical harmony & health and mental balance & peace.
                                 </h6>
                             </div>
                             <div class="card-header">
-                                <h5 id = "name">
+                                <h5 id="name">
                                     Prayanam Exercises
                                 </h5>
                             </div>
                             <div class="card-block">
-                                <h6 id = "desc">
-                                    Pranayama is the ancient practice of controlling your breath. You control the timing, duration, and frequency of every breath and hold.<br>
-The goal of pranayama is to connect your body and mind. It also supplies your body with oxygen while removing toxins. This is meant to provide healing physiological benefits.
-These exercises can be performed while sitting right at the desk.
+                                <h6 id="desc">
+                                    Pranayama is the ancient practice of controlling your breath. You control the timing, duration, and frequency of every breath and hold.<br> The goal of pranayama is to connect your body and mind. It also supplies your
+                                    body with oxygen while removing toxins. This is meant to provide healing physiological benefits. These exercises can be performed while sitting right at the desk.
                                 </h6>
                             </div>
                             <div class="slideshow-container" id="ss1">
@@ -188,28 +199,28 @@ These exercises can be performed while sitting right at the desk.
                                 
                                 <a class="Back" onclick="plusSlides(-1)">&#10094;</a>
                                 <a class="forward" onclick="plusSlides(1)">&#10095;</a>-->
-                              </div>
-                              <br>
-                              
-                              <!-- The circles/dots -->
-                              <div id = "dot-c" style="text-align:center">
+                            </div>
+                            <br>
+
+                            <!-- The circles/dots -->
+                            <div id="dot-c" style="text-align:center">
                                 <!--<span class="dots" onclick="currentSlide(1)"></span>
                                 <span class="dots" onclick="currentSlide(2)"></span>
                                 <span class="dots" onclick="currentSlide(3)"></span>
                                 <span class="dots" onclick="currentSlide(4)"></span>
                                 <span class="dots" onclick="currentSlide(5)"></span>-->
-                              </div> 
+                            </div>
                             <div class="card-header">
-                                <h5 id = "name">
+                                <h5 id="name">
                                     Other Exercises
                                 </h5>
                             </div>
                             <div class="card-block">
-                                <h6 id = "desc">
+                                <h6 id="desc">
                                     These exercises can be performed in the Yoga room or at home. You just require a Yoga mat and bit of dedication in exchange for a healthy lifestyle.
                                 </h6>
                             </div>
-                            <div id = "container"></div>
+                            <div id="container"></div>
                         </div>
                     </div>
                 </div>
@@ -223,95 +234,97 @@ These exercises can be performed while sitting right at the desk.
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-    
-        var data = JSON.parse('{{allData | tojson}}');
-        /*document.getElementById("one-i").src = data.prayanama[0].img_url;
-        document.getElementById("one-c").innerHTML = "Tap on image to know more";
-        document.getElementById("one-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[0].sanskrit_name;
-        });
+    var data = JSON.parse('{{allData | tojson}}');
+    /*document.getElementById("one-i").src = data.prayanama[0].img_url;
+    document.getElementById("one-c").innerHTML = "Tap on image to know more";
+    document.getElementById("one-i").addEventListener('click', function() {
+        window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[0].sanskrit_name;
+    });
 
-        document.getElementById("two-i").src = data.prayanama[1].img_url;
-        document.getElementById("two-c").innerHTML = "Tap on image to know more";
-        document.getElementById("two-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[1].sanskrit_name;
-        });
+    document.getElementById("two-i").src = data.prayanama[1].img_url;
+    document.getElementById("two-c").innerHTML = "Tap on image to know more";
+    document.getElementById("two-i").addEventListener('click', function() {
+        window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[1].sanskrit_name;
+    });
 
-        document.getElementById("three-i").src = data.prayanama[2].img_url;
-        document.getElementById("three-c").innerHTML = "Tap on image to know more";
-        document.getElementById("three-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[2].sanskrit_name;
-        });
+    document.getElementById("three-i").src = data.prayanama[2].img_url;
+    document.getElementById("three-c").innerHTML = "Tap on image to know more";
+    document.getElementById("three-i").addEventListener('click', function() {
+        window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[2].sanskrit_name;
+    });
 
-        document.getElementById("four-i").src = data.prayanama[3].img_url;
-        document.getElementById("four-c").innerHTML = "Tap on image to know more";
-        document.getElementById("four-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[3].sanskrit_name;
-        });
+    document.getElementById("four-i").src = data.prayanama[3].img_url;
+    document.getElementById("four-c").innerHTML = "Tap on image to know more";
+    document.getElementById("four-i").addEventListener('click', function() {
+        window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[3].sanskrit_name;
+    });
 
-        document.getElementById("five-i").src = data.prayanama[4].img_url;
-        document.getElementById("five-c").innerHTML = "Tap on image to know more";
-        document.getElementById("five-i").addEventListener('click', function() {
-            window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[4].sanskrit_name;
-        });*/
+    document.getElementById("five-i").src = data.prayanama[4].img_url;
+    document.getElementById("five-c").innerHTML = "Tap on image to know more";
+    document.getElementById("five-i").addEventListener('click', function() {
+        window.location.href = window.location.pathname + "/prayanama/" + data.prayanama[4].sanskrit_name;
+    });*/
 
 
-        var e = "";
-        var p = []
-        var tot = Object.keys(data.prayanama).length;
-        for(var i = 0; i < tot; i++) {
-            p[i] = window.location.pathname + "/prayanama/" + data.prayanama[i].sanskrit_name;
-            e += "<div class='Containers'><div class='MessageInfo'>" + (i + 1) + "/" + tot + "</div><img src='"+ data.prayanama[i].img_url +"' style='width:100%;' onclick = 'myFunction(" + i + ")'><div class='Info'>Tap on Image to know more</div></div>"
-        }
+    var e = "";
+    var p = []
+    var tot = Object.keys(data.prayanama).length;
+    for (var i = 0; i < tot; i++) {
+        p[i] = window.location.pathname + "/prayanama/" + data.prayanama[i].sanskrit_name;
+        e += "<div class='Containers'><div class='MessageInfo'>" + (i + 1) + "/" + tot + "</div><img src='" + data.prayanama[i].img_url + "' style='width:100%;' onclick = 'myFunction(" + i + ")'><div class='Info'>Tap on Image to know more</div></div>"
+    }
 
-        function myFunction(n) {
-            window.location.href = p[n];
-        }
+    function myFunction(n) {
+        window.location.href = p[n];
+    }
 
-        e += "<a class='Back' onclick='plusSlides(-1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a>"
-        var k = "";
-        for(var i = 0; i < tot; i++) {
-            k += "<span class='dots' onclick='currentSlide(" + (i + 1) + ")'></span>";
-        }
-        document.getElementById("ss1").innerHTML = e;
-        document.getElementById("dot-c").innerHTML = k;
+    e += "<a class='Back' onclick='plusSlides(-1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a>"
+    var k = "";
+    for (var i = 0; i < tot; i++) {
+        k += "<span class='dots' onclick='currentSlide(" + (i + 1) + ")'></span>";
+    }
+    document.getElementById("ss1").innerHTML = e;
+    document.getElementById("dot-c").innerHTML = k;
 
-        var element = "";
-        var total = Object.keys(data.otherexercise).length;
-        for(var ele = 0; ele < total; ele+=3) {
-            element += "<div class='row'><div class = 'col'><img src='" + data.otherexercise[ele].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele].sanskrit_name + "(" + data.otherexercise[ele].english_name + ")" + " </div></div><div class = 'col'><img src='" + data.otherexercise[ele + 1].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele + 1].sanskrit_name + "(" + data.otherexercise[ele + 1].english_name + ")" + " </div></div><div class = 'col'><img src='" + data.otherexercise[ele + 2].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele + 2].sanskrit_name + "(" + data.otherexercise[ele + 2].english_name + ")" + " </div></div></div>";
-        }
-        document.getElementById("container").innerHTML = element;
+    var element = "";
+    var total = Object.keys(data.otherexercise).length;
+    for (var ele = 0; ele < total; ele += 3) {
+        element += "<div class='row'><div class = 'col'><img src='" + data.otherexercise[ele].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele].sanskrit_name + "(" + data.otherexercise[ele].english_name + ")" + " </div></div><div class = 'col'><img src='" + data.otherexercise[ele + 1].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele + 1].sanskrit_name + "(" + data.otherexercise[ele + 1].english_name + ")" + " </div></div><div class = 'col'><img src='" + data.otherexercise[ele + 2].img_url + "' style='width:50%'><div class='info'>" + data.otherexercise[ele + 2].sanskrit_name + "(" + data.otherexercise[ele + 2].english_name + ")" + " </div></div></div>";
+    }
+    document.getElementById("container").innerHTML = element;
 
     var slidePosition = 1;
     SlideShow(slidePosition);
 
     // forward/Back controls
     function plusSlides(n) {
-    SlideShow(slidePosition += n);
+        SlideShow(slidePosition += n);
     }
 
     //  images controls
     function currentSlide(n) {
-    SlideShow(slidePosition = n);
+        SlideShow(slidePosition = n);
     }
 
     function SlideShow(n) {
-    var i;
-    var slides = document.getElementsByClassName("Containers");
-    var circles = document.getElementsByClassName("dots");
-    if (n > slides.length) {slidePosition = 1}
-    if (n < 1) {slidePosition = slides.length}
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
+        var i;
+        var slides = document.getElementsByClassName("Containers");
+        var circles = document.getElementsByClassName("dots");
+        if (n > slides.length) {
+            slidePosition = 1
+        }
+        if (n < 1) {
+            slidePosition = slides.length
+        }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < circles.length; i++) {
+            circles[i].className = circles[i].className.replace(" enable", "");
+        }
+        slides[slidePosition - 1].style.display = "block";
+        circles[slidePosition - 1].className += " enable";
     }
-    for (i = 0; i < circles.length; i++) {
-        circles[i].className = circles[i].className.replace(" enable", "");
-    }
-    slides[slidePosition-1].style.display = "block";
-    circles[slidePosition-1].className += " enable";
-    } 
-
 </script>
 
 {% endblock javascripts %}
