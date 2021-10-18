@@ -375,7 +375,7 @@
         //"<div class='Containers'><div class='MessageInfo'>" + (i + 1) + "/" + tot + "</div><img src='"+ data.prayanama[i].img_url +"' style='width:100%;' onclick = 'myFunction(" + i + ")'><div class='Info'>Tap on Image to know more</div></div>"
 
         for(var i = 0; i < 5; i++) {
-            e += "<div class='Containers'><div class='MessageInfo'></div><div class = 'videowrapper'>" + prepExer[i].video +"</div><div class='Info'>" + prepExer[i].name + "<br>Muscle group worked: " + prepExer[i].part + "</div></div>"
+            e += "<div class='Containers'><div class='MessageInfo'></div><div class = 'videowrapper'>" + prepExer[i].video +"</div><div class='Info'>" + prepExer[i].name + "<br>Muscle group worked: " + prepExer[i].part + "<br> Type : " + prepExer[i].type + "</div></div>"
         }
 
         e += "<a class='Back' onclick='plusSlides(-1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a>"

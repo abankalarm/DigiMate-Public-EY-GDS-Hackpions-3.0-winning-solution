@@ -3,109 +3,128 @@
         {
             "name": "Tricep Dips",
             "part": "Triceps and Chest",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Desk Exercise"
         },
         {
             "name": "Desk Pushup",
             "part": "Triceps and Chest",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
-            
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Desk Exercise"
         },
         {
             "name": "Calf Raises",
             "part": "Calves",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Desk Exercise"
         },
         {
             "name": "Desk Planks",
             "part": "Shoulders",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Desk Exercise"
         },
         {
             "name": "Desk Donkey Kicks",
             "part": "Hamstrings",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Desk Exercise"
         }
     ],
     "standing": [
         {
             "name": "Lunges",
             "part": "Hamstrings",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Standing Exercise"
         },
         {
             "name": "Single-Leg Deadlifts",
             "part": "Hamstrings",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Standing Exercise"
         },
         {
             "name": "Wall Sit",
             "part": "Hamstrings",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Standing Exercise"
         },
         {
             "name": "Step-Ups",
             "part": "Hamstrings",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Standing Exercise"
         },
         {
             "name": "Side Lunges",
             "part": "Hamstrings",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Standing Exercise"
         }
     ],
     "sitting": [
         {
             "name": "Seated Bicycles",
             "part": "Abdominal Muscles",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Sitting Exercise"
         },
         {
             "name": "Seated Knee-To-Chin",
             "part": "Abdominal Muscles",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Sitting Exercise"
         },
         {
             "name": "Seated Leg Extensions",
             "part": "Quads",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Sitting Exercise"
         },
         {
             "name": "Seated Windshield Wipers",
             "part": "Abdominal Muscles",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Sitting Exercise"
         },
         {
             "name": "Seated Flutter Kicks",
             "part": "Abdominal Muscles",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Sitting Exercise"
         }
     ],
     "withweights": [
         {
             "name": "Seated Shoulder Press",
             "part": "Shoulders",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Gym Exercise"
         },
         {
             "name": "Bent Over Rows",
             "part": "Upper Back and Lats",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Gym Exercise"
         },
         {
             "name": "Front Raises",
             "part": "Shoulders",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Gym Exercise"
         },
         {
             "name": "Russian Twists",
             "part": "Shoulders",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Gym Exercise"
         },
         {
             "name": "Romanian Deadlifts",
             "part": "Hamstrings",
-            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>"
+            "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/CAq9vV7gkrs' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>",
+            "type": "Gym Exercise"
         }
     ], 
     "Five": "Perform each exercise one after the other, without rest between exercises. Do one set of each.",
