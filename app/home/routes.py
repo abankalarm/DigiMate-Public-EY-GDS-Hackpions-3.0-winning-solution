@@ -1038,11 +1038,11 @@ def addtask():
     row = User.query.filter_by(id=current_user.get_id()).first()
     task = row.tasks
     if (task=="null"):
-        tasks = {1:'enter your first task'}
+        tasks = {1:'delete your first task'}
     if task:
         tasks = json.loads(task)
     else:
-        tasks = {1:'enter your first task'}
+        tasks = {1:'delete your first task'}
 
     todo = request.form['todoitem']
     id = random.randint(1,10000)
