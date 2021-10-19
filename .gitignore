@@ -26,3 +26,4 @@ _templates
 # javascript
 package-lock.json
 .vscode/symbols.json
+client_secret.json
