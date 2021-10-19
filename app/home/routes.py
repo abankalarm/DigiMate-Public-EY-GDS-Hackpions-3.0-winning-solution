@@ -148,7 +148,7 @@ def listtask1():
 @blueprint.route('/index',methods=["GET","POST"])
 @login_required
 def index():
-    for row in User.query.filter_by(id=current_user.get_id()).first():
+    for row in User.query.filter_by(id=current_user.get_id()).all():
         username = row.username
         department = row.department
         job_level = row.job_level
@@ -355,7 +355,7 @@ def route_template(template):
 # employee entire work all graphs of indivituals to be shown here
 @blueprint.route('/work')
 def route_work_employee():
-    for row in User.query.filter_by(id=current_user.get_id()).first():
+    for row in User.query.filter_by(id=current_user.get_id()).all():
         username = row.username
         department = row.department
         
@@ -496,7 +496,7 @@ def route_health_individual():
         print("not signed in")
 
 
-    for row in User.query.filter_by(id=current_user.get_id()).first():
+    for row in User.query.filter_by(id=current_user.get_id()).all():
         username = row.username
         department = row.department
 
@@ -527,7 +527,7 @@ def route_health_individual():
 def root():
     
     flag=True
-    for row in User.query.filter_by(id=current_user.get_id()).first():
+    for row in User.query.filter_by(id=current_user.get_id()).all():
 
             res=json.loads(row.skills)
             #print(res)
@@ -560,7 +560,7 @@ def oneskill(template):
     Graph=[]
     buildGraph(name1,Graph)
     dates={"start":"Begin Today","end":"Take your time"}
-    for row in User.query.filter_by(id=current_user.get_id()).first():
+    for row in User.query.filter_by(id=current_user.get_id()).all():
         res=json.loads(row.skills)
         #print(res)
         if template in res:
@@ -577,7 +577,7 @@ def oneskill(template):
                 return redirect(request.url)
             if pdf and allowed_file(pdf.filename):
                
-                for row in User.query.filter_by(id=current_user.get_id()).first():
+                for row in User.query.filter_by(id=current_user.get_id()).all():
                     username = row.username
                     row.SkillPointEarned=str(int(row.SkillPointEarned)+100)
                     res=json.loads(row.skills)
@@ -603,7 +603,7 @@ def oneskill(template):
                 return render_template('one-skill.html', segment = get_segment(request), name1=name1,allData = allData, allData1=Graph,res=dates)
         elif "start" in request.form:
             #print("@!#@$#$%I^^%$#%@$$#$#$")
-            for row in User.query.filter_by(id=current_user.get_id()).first(): 
+            for row in User.query.filter_by(id=current_user.get_id()).all(): 
                     res=json.loads(row.skills)
                     if template not in res:
                         res[template]={}
@@ -632,7 +632,7 @@ def oneskill(template):
 
 @blueprint.route('/exercise')
 def exercise():
-    for row in User.query.filter_by(id=current_user.get_id()).first():
+    for row in User.query.filter_by(id=current_user.get_id()).all():
         username = row.username
         department = row.department
         Gender = row.Gender
@@ -1015,7 +1015,7 @@ def apiprofile():
     if apiauth(userpass[0],userpass[1])==False:
         return jsonify({'message': 'token is invalid'})
     
-    for row in User.query.filter_by(username=userpass[0]).first():
+    for row in User.query.filter_by(username=userpass[0]).all():
         return jsonify({'username':row.username,'department':row.department,'job_level':row.job_level,'fullname':row.extra,'gender':row.Gender,'MaritalStatus ':row.MaritalStatus,'PercentSalaryHike':row.PercentSalaryHike,'StockOptionLevel':row.StockOptionLevel,'YearsAtCompany ':row.YearsAtCompany,'YearsInCurrentRole': row.YearsInCurrentRole,'education ':row.education,'recruitment_type ':row.recruitment_type,'job_level ':row.job_level,'rating ':row.rating,'onsite ':row.onsite})
     return jsonify({'message': 'user not synced'})
 
