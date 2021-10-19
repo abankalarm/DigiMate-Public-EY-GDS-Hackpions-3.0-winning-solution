@@ -389,7 +389,8 @@ body .fc {
 
 .fc-day-grid-event>.fc-content {
     white-space: nowrap;
-    overflow: hidden
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .fc-day-grid-event .fc-time {
