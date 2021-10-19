@@ -81,11 +81,6 @@ with open('app/base/static/assets/data/nutrition_data.json') as json_file:
 
 def apiauth(username,password):
     user = User.query.filter_by(username=username).first()
-    for row in User.query.filter_by(username='test').all():
-        print(type(row))
-        #print(row.skills1)
-        #print(row.fullname)
-    # Check the password
     if user and verify_pass( password, user.password):
         return True
     return False
