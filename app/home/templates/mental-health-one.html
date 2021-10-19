@@ -1,4 +1,4 @@
-{% extends "layouts/base.html" %} {% block title %} Page Blank {% endblock %}
+{% extends "layouts/base.html" %} {% block title %} {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -9,45 +9,54 @@
         width: 50%;
         margin-bottom: 5px;
     }
-
+    
     .col1 {
         color: black;
         float: left;
         width: 100%;
         margin-bottom: 5px;
     }
-
     /* Clear floats after the columns */
+    
     .row:after {
-    content: "";
-    display: table;
-    clear: both;
+        content: "";
+        display: table;
+        clear: both;
     }
-
+    
     #container {
         margin: 10px;
     }
-
-    #desc1, #desc2, #desc3, #desc4, #desc5, #desc6 {
+    
+    #desc1,
+    #desc2,
+    #desc3,
+    #desc4,
+    #desc5,
+    #desc6 {
         white-space: pre-line;
         line-height: 2em;
         font-weight: bold;
         color: rgb(0, 247, 255);
     }
-
+    
     #desc3 {
         white-space: pre-line;
         line-height: 2em;
         font-weight: bold;
         color: black;
     }
-
+    
     #three {
         margin-top: 10px;
         padding: 10px;
     }
-
-    #one, #two, #four, #five, #six {
+    
+    #one,
+    #two,
+    #four,
+    #five,
+    #six {
         border-radius: 20%;
         margin: 20px;
         padding: 20px;
@@ -55,37 +64,41 @@
         background: rgb(36, 112, 160);
         border-color: red;
     }
-
-    #name1, #name2, #name3, #name4, #name5, #name6 {
+    
+    #name1,
+    #name2,
+    #name3,
+    #name4,
+    #name5,
+    #name6 {
         color: white;
         font-weight: bolder;
         text-align: center;
     }
-
+    
     #name3 {
         color: rgb(36, 112, 160);
         font-weight: bolder;
         text-align: center;
     }
-
+    
     #bg {
-        position: fixed; 
-        top: 0; 
-        left: 0; 
-            
+        position: fixed;
+        top: 0;
+        left: 0;
         /* Preserve aspet ratio */
         min-width: 100%;
         min-height: 100%;
     }
-
+    
     .card {
         background: none;
     }
-
+    
     .button {
         border-radius: 12px;
         font-size: 16px;
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         background-color: rgb(36, 112, 160);
         color: white;
         padding: 10px 20px;
@@ -100,12 +113,11 @@
         margin: auto;
         margin-top: 10px;
     }
+    
     .button:hover {
         background-color: cyan;
         color: black;
     }
-
-
 </style>
 {% endblock stylesheets %} {% block content %}
 
@@ -115,54 +127,54 @@
         <!-- [ breadcrumb ] end -->
         <div class="main-body">
             <div class="page-wrapper">
-                <img src = "" id="bg" style="width: 100%;">
+                <img src="" id="bg" style="width: 100%;">
                 <!-- [ Main Content ] start -->
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="card">
-                            <div class="card-header" style = "background-color: white;">
-                                <h5 id = "name">
-                                    
+                            <div class="card-header" style="background-color: white;">
+                                <h5 id="name">
+
                                 </h5>
                             </div>
-                            <div class="card-block" style = "background-color: white;">
-                                <h6 id = "desc">
+                            <div class="card-block" style="background-color: white;">
+                                <h6 id="desc">
 
                                 </h6>
                             </div>
                             <div class="card-block">
-                                <div class = 'row'>
-                                    <div class = 'col' id = "one">
-                                        <h5 id = "name1">
-                                            
+                                <div class='row'>
+                                    <div class='col' id="one">
+                                        <h5 id="name1">
+
                                         </h5>
                                         <div class="card-block">
-                                            <h6 id = "desc1">
+                                            <h6 id="desc1">
 
                                             </h6>
                                         </div>
                                     </div>
-                                    <div class = 'col' id = "two">
-                                        <h5 id = "name2">
-                                            
+                                    <div class='col' id="two">
+                                        <h5 id="name2">
+
                                         </h5>
-                                        <div class = "card-block">
-                                            <h6 id = "desc2">
+                                        <div class="card-block">
+                                            <h6 id="desc2">
 
                                             </h6>
                                         </div>
                                     </div>
-                                    <div class = 'col1' id ="three" style = "background-color: white;">
-                                        <h5 id = "name3">
-                                            
+                                    <div class='col1' id="three" style="background-color: white;">
+                                        <h5 id="name3">
+
                                         </h5>
                                         <div>
-                                            <h6 id = "desc3">
+                                            <h6 id="desc3">
 
                                             </h6>
                                         </div>
                                     </div>
-                                    <button class = "button" id = "test">GET A TEST DONE</button>
+                                    <button class="button" id="test">GET A TEST DONE</button>
                                 </div>
                             </div>
                         </div>
@@ -178,31 +190,29 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-    
-        var data = JSON.parse('{{allData | tojson}}');
-        document.getElementById("name").innerHTML = data.name;
-        document.getElementById("desc").innerHTML = data.overview;
-        document.getElementById("name1").innerHTML = "Causes";
-        document.getElementById("desc1").innerHTML = data.causes;
-        document.getElementById("name2").innerHTML = "Symptoms";
-        document.getElementById("desc2").innerHTML = data.symptoms;
+    var data = JSON.parse('{{allData | tojson}}');
+    document.getElementById("name").innerHTML = data.name;
+    document.getElementById("desc").innerHTML = data.overview;
+    document.getElementById("name1").innerHTML = "Causes";
+    document.getElementById("desc1").innerHTML = data.causes;
+    document.getElementById("name2").innerHTML = "Symptoms";
+    document.getElementById("desc2").innerHTML = data.symptoms;
 
-        //document.getElementById('bg').src = data.img;
+    //document.getElementById('bg').src = data.img;
 
-        document.getElementById('bg').src = 'https://wallpaperbat.com/img/455851-showing-post-media-for-wallpaper-clouds-sky-cartoon-cartoon-clouds-cloud-wallpaper-blue-sky-wallpaper.jpg';
+    document.getElementById('bg').src = 'https://wallpaperbat.com/img/455851-showing-post-media-for-wallpaper-clouds-sky-cartoon-cartoon-clouds-cloud-wallpaper-blue-sky-wallpaper.jpg';
 
-        if(data.name == "Workplace Mental Health") {
-            document.getElementById("name3").innerHTML = "How can you manage this?";
-            document.getElementById("desc3").innerHTML = data.manage;
-        } else {
-            document.getElementById("name3").innerHTML = "When should you consult a doctor?";
-            document.getElementById("desc3").innerHTML = data.doctor;
-        }
+    if (data.name == "Workplace Mental Health") {
+        document.getElementById("name3").innerHTML = "How can you manage this?";
+        document.getElementById("desc3").innerHTML = data.manage;
+    } else {
+        document.getElementById("name3").innerHTML = "When should you consult a doctor?";
+        document.getElementById("desc3").innerHTML = data.doctor;
+    }
 
-        document.getElementById("test").addEventListener('click', function() {
-            window.location.href = data.test_link;
-        })
-
+    document.getElementById("test").addEventListener('click', function() {
+        window.location.href = data.test_link;
+    })
 </script>
 
 {% endblock javascripts %}

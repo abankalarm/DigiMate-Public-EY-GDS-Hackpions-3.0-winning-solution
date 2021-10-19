@@ -1,117 +1,131 @@
-{% extends "layouts/base.html" %} {% block title %} Page Blank {% endblock %}
+{% extends "layouts/base.html" %} {% block title %} {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
 <style>
     .slideshow-container {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
+        max-width: 1000px;
+        position: relative;
+        margin: auto;
     }
-
     /* Make the images invisible by default */
+    
     .Containers {
-    display: none;
+        display: none;
     }
-
     /* forward & Back buttons */
-    .Back, .forward {
-    cursor: pointer;
-    position: absolute;
-    top: 48%;
-    width: auto;
-    margin-top: -23px;
-    padding: 17px;
-    color: grey;
-    font-weight: bold;
-    font-size: 19px;
-    transition: 0.4s ease;
-    border-radius: 0 5px 5px 0;
-    user-select: none;
-    }
-
-    /* Place the "forward button" to the right */
+    
+    .Back,
     .forward {
-    right: 0;
-    border-radius: 4px 0 0 4px;
+        cursor: pointer;
+        position: absolute;
+        top: 48%;
+        width: auto;
+        margin-top: -23px;
+        padding: 17px;
+        color: grey;
+        font-weight: bold;
+        font-size: 19px;
+        transition: 0.4s ease;
+        border-radius: 0 5px 5px 0;
+        user-select: none;
     }
-
+    /* Place the "forward button" to the right */
+    
+    .forward {
+        right: 0;
+        border-radius: 4px 0 0 4px;
+    }
     /*when the user hovers,add a black background with some little opacity */
-    .Back:hover, .forward:hover {
-    background-color: rgba(0,0,0,0.8);
+    
+    .Back:hover,
+    .forward:hover {
+        background-color: rgba(0, 0, 0, 0.8);
     }
-
     /* Caption Info */
+    
     .Info {
-    color: black;
-    background-color: white;
-    font-size: 18px;
-    padding: 10px 14px;
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
+        color: black;
+        background-color: white;
+        font-size: 18px;
+        padding: 10px 14px;
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
     }
-
     /* Worknumbering (1/3 etc) */
+    
     .MessageInfo {
-    color: black;
-    background-color: white;
-    font-size: 28px;
-    padding: 10px 14px;
-    position: absolute;
-    top: 0;
+        color: black;
+        background-color: white;
+        font-size: 28px;
+        padding: 10px 14px;
+        position: absolute;
+        top: 0;
     }
-
+    
     #ss1 {
         background-color: white;
     }
-
     /* The circles or bullets and indicators */
+    
     .dots {
-    cursor: pointer;
-    height: 16px;
-    width: 16px;
-    margin: 0 3px;
-    background-color: white;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.5s ease;
+        cursor: pointer;
+        height: 16px;
+        width: 16px;
+        margin: 0 3px;
+        background-color: white;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.5s ease;
     }
-
-    .enable, .dots:hover {
-    background-color: #717161;
+    
+    .enable,
+    .dots:hover {
+        background-color: #717161;
     }
-
     /* Faint animation */
+    
     .fade {
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 1.4s;
-    animation-name: fade;
-    animation-duration: 1.4s;
+        -webkit-animation-name: fade;
+        -webkit-animation-duration: 1.4s;
+        animation-name: fade;
+        animation-duration: 1.4s;
     }
-
+    
     @-webkit-keyframes fade {
-    from {opacity: .5}
-    to {opacity: 2}
+        from {
+            opacity: .5
+        }
+        to {
+            opacity: 2
+        }
     }
-
+    
     @keyframes fade {
-    from {opacity: .5}
-    to {opacity: 2}
+        from {
+            opacity: .5
+        }
+        to {
+            opacity: 2
+        }
     }
-    .loader-bg, .loader-track {
+    
+    .loader-bg,
+    .loader-track {
         height: 0px !important;
     }
+    
     #modules {
-    padding: 20px;
-    background: #eee;
-    margin-bottom: 20px;
-    z-index: 1;
-    border-radius: 10px;
+        padding: 20px;
+        background: #eee;
+        margin-bottom: 20px;
+        z-index: 1;
+        border-radius: 10px;
     }
-
-    .videowrapper { 
+    
+    .videowrapper {
         float: none;
         clear: both;
         width: 700px;
@@ -124,40 +138,39 @@
         margin: 0 auto;
         max-width: 100%;
     }
-
+    
     #dropzone {
-    padding: 20px;
-    background: #eee;
-    min-height: 100px;
-    margin-bottom: 20px;
-    z-index: 0;
-    border-radius: 10px;
-    }
-
-    .active {
-    outline: 1px solid red;
-    }
-
-    .hover {
-    outline: 1px solid blue;
-    }
-
-    .drop-item {
-    cursor: pointer;
-    margin-bottom: 10px;
-    background-color: rgb(255, 255, 255);
-    padding: 5px 10px;
-    border-radius: 3px;
-    border: 1px solid rgb(204, 204, 204);
-    position: relative;
-    }
-
-    .drop-item .remove {
-    position: absolute;
-    top: 4px;
-    right: 4px;
+        padding: 20px;
+        background: #eee;
+        min-height: 100px;
+        margin-bottom: 20px;
+        z-index: 0;
+        border-radius: 10px;
     }
     
+    .active {
+        outline: 1px solid red;
+    }
+    
+    .hover {
+        outline: 1px solid blue;
+    }
+    
+    .drop-item {
+        cursor: pointer;
+        margin-bottom: 10px;
+        background-color: rgb(255, 255, 255);
+        padding: 5px 10px;
+        border-radius: 3px;
+        border: 1px solid rgb(204, 204, 204);
+        position: relative;
+    }
+    
+    .drop-item .remove {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+    }
 </style>
 {% endblock stylesheets %} {% block content %}
 <div class="pcoded-content">
@@ -169,58 +182,58 @@
                 <div class="container">
                     <div class="card">
                         <div class="card-header">
-                            <h5 id = "name">
+                            <h5 id="name">
                                 Let's Do A Small Workout
                             </h5>
                         </div>
-                        <dv class = "card-block">
+                        <dv class="card-block">
                             <h5>
                                 Drag the parts you wish to focus during this session to the gym and click save. We'll make a customized workout for you.
                             </h5>
                         </dv>
                     </div>
                     <div class="row">
-                    <div class="col-sm-6">
-                        <h4 style = "text-align: center;">Parts</h4>
-                        <div id="modules">
+                        <div class="col-sm-6">
+                            <h4 style="text-align: center;">Parts</h4>
+                            <div id="modules">
 
-                        </div>
-                    </div>
-                
-                    <div class="col-sm-6">
-                        <h4 style = "text-align: center;">Gym</h4>
-                        <div id="dropzone"></div>
-                        <div class = "row">
-                            <div class = "col">
-                                <h5><b>Time</b></h5>
-                            </div>
-                            <div class = "col">
-                                <button class="btn btn-primary pull-right" onclick = 'myFuncWorkout(10)'>10 Minute</button>
-                                <button class="btn btn-primary pull-right" onclick = 'myFuncWorkout(5)'>5 Minute</button>
                             </div>
                         </div>
-                        <button class="btn btn-primary pull-right" style = "margin-top: 10px; background-color: rgb(14, 212, 113);" onclick = 'myFunc()'>Save</button>
-                    </div>
+
+                        <div class="col-sm-6">
+                            <h4 style="text-align: center;">Gym</h4>
+                            <div id="dropzone"></div>
+                            <div class="row">
+                                <div class="col">
+                                    <h5><b>Time</b></h5>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-primary pull-right" onclick='myFuncWorkout(10)'>10 Minute</button>
+                                    <button class="btn btn-primary pull-right" onclick='myFuncWorkout(5)'>5 Minute</button>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary pull-right" style="margin-top: 10px; background-color: rgb(14, 212, 113);" onclick='myFunc()'>Save</button>
+                        </div>
                     </div>
                 </div>
-                <div class="slideshow-container" id="ss1" style = "align-content: center;">
+                <div class="slideshow-container" id="ss1" style="align-content: center;">
 
                     <div class="Containers">
-                        <div class="MessageInfo" id = "five">5 / 5</div>
-                        <div class="Info" id = "five-c"></div>
+                        <div class="MessageInfo" id="five">5 / 5</div>
+                        <div class="Info" id="five-c"></div>
                     </div>
-                  </div>
-                  <br>
-                  <div id = "dot-c" style="text-align:center">
+                </div>
+                <br>
+                <div id="dot-c" style="text-align:center">
                     <span class="dots" onclick="currentSlide(3)"></span>
-                  </div>
-                  <div class="card"  id = "card-header-ww" style="display: none;">
-                  <div class="card-header">
-                        <h5 id = "card-header-w" style = "background-color: white; margin: 10px;">
+                </div>
+                <div class="card" id="card-header-ww" style="display: none;">
+                    <div class="card-header">
+                        <h5 id="card-header-w" style="background-color: white; margin: 10px;">
                         </h5>
                     </div>
-                    </div>
-                  <div id="time-w" style = "margin: 10px;"></div>
+                </div>
+                <div id="time-w" style="margin: 10px;"></div>
             </div>
         </div>
     </div>
@@ -243,15 +256,15 @@
     function myFuncWorkout(n) {
         time = n;
     }
-    
+
     function myFunc() {
         var s = {};
         prepExer = [];
         var eles = document.getElementsByTagName("summary");
-        for(var i = 0; i < Object.keys(eles).length; i++) {
+        for (var i = 0; i < Object.keys(eles).length; i++) {
             s[eles[i].innerHTML] = 1;
         }
-        if(allData.WLB == 1) {
+        if (allData.WLB == 1) {
             var lookup = {};
             var items = allData.withweights;
             for (var item, i = 0; item = items[i++];) {
@@ -286,7 +299,7 @@
                 }
             }
 
-            if(Object.keys(prepExer).length < 5) {
+            if (Object.keys(prepExer).length < 5) {
                 var items = allData.withweights;
                 for (var item, i = 0; item = items[i++];) {
                     var name = item.name;
@@ -347,7 +360,7 @@
                 }
             }
 
-            if(Object.keys(prepExer).length < 5) {
+            if (Object.keys(prepExer).length < 5) {
                 var item = allData.sitting
                 for (var item, i = 0; item = items[i++];) {
                     var name = item.name;
@@ -378,15 +391,15 @@
 
         //"<div class='Containers'><div class='MessageInfo'>" + (i + 1) + "/" + tot + "</div><img src='"+ data.prayanama[i].img_url +"' style='width:100%;' onclick = 'myFunction(" + i + ")'><div class='Info'>Tap on Image to know more</div></div>"
 
-        for(var i = 0; i < 5; i++) {
-            e += "<div class='Containers'><div class='MessageInfo'></div><div class = 'videowrapper'>" + prepExer[i].video +"</div><div class='Info'>" + prepExer[i].name + "<br>Muscle group worked: " + prepExer[i].part + "<br> Type : " + prepExer[i].type + "</div></div>"
+        for (var i = 0; i < 5; i++) {
+            e += "<div class='Containers'><div class='MessageInfo'></div><div class = 'videowrapper'>" + prepExer[i].video + "</div><div class='Info'>" + prepExer[i].name + "<br>Muscle group worked: " + prepExer[i].part + "<br> Type : " + prepExer[i].type + "</div></div>"
         }
 
         e += "<a class='Back' onclick='plusSlides(-1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a>"
         document.getElementById("ss1").innerHTML = e;
         document.getElementById("ss1").style.display = "block"
         var k = "";
-        for(var i = 0; i < 5; i++) {
+        for (var i = 0; i < 5; i++) {
             k += "<span class='dots' onclick='currentSlide(" + (i + 1) + ")'></span>";
         }
         document.getElementById("dot-c").innerHTML = k;
@@ -394,13 +407,13 @@
 
         //$('summary').remove();
 
-        if(time == 5) {
+        if (time == 5) {
             var p = "";
             p += allData.Five + "<br><br>";
             some = [8, 3, 4, 5, 6];
-            for(var i = 0; i < 5; i++) {
+            for (var i = 0; i < 5; i++) {
                 no = Math.floor(Math.random() * (4 - 0) + 0);
-                p += (i+1) + ". " + prepExer[i].name + ": " + some[no] + " reps<br><br>";
+                p += (i + 1) + ". " + prepExer[i].name + ": " + some[no] + " reps<br><br>";
             }
             document.getElementById("time-w").innerHTML = p;
 
@@ -408,9 +421,9 @@
             var p = "";
             p += allData.Ten + "<br>";
             some = [16, 6, 8, 10, 12];
-            for(var i = 0; i < 5; i++) {
+            for (var i = 0; i < 5; i++) {
                 no = Math.floor(Math.random() * (4 - 0) + 0);
-                p += (i+1) + ". " + prepExer[i].name + ": " + some[no] + " reps<br><br>";
+                p += (i + 1) + ". " + prepExer[i].name + ": " + some[no] + " reps<br><br>";
             }
             document.getElementById("time-w").innerHTML = p;
         }
@@ -428,123 +441,128 @@
 
     // forward/Back controls
     function plusSlides(n) {
-    SlideShow(slidePosition += n);
+        SlideShow(slidePosition += n);
     }
 
     //  images controls
     function currentSlide(n) {
-    SlideShow(slidePosition = n);
+        SlideShow(slidePosition = n);
     }
 
     function SlideShow(n) {
-    var i;
-    var slides = document.getElementsByClassName("Containers");
-    var circles = document.getElementsByClassName("dots");
-    if (n > slides.length) {slidePosition = 1}
-    if (n < 1) {slidePosition = slides.length}
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    for (i = 0; i < circles.length; i++) {
-        circles[i].className = circles[i].className.replace(" enable", "");
-    }
-    slides[slidePosition-1].style.display = "block";
-    circles[slidePosition-1].className += " enable";
+        var i;
+        var slides = document.getElementsByClassName("Containers");
+        var circles = document.getElementsByClassName("dots");
+        if (n > slides.length) {
+            slidePosition = 1
+        }
+        if (n < 1) {
+            slidePosition = slides.length
+        }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < circles.length; i++) {
+            circles[i].className = circles[i].className.replace(" enable", "");
+        }
+        slides[slidePosition - 1].style.display = "block";
+        circles[slidePosition - 1].className += " enable";
     }
 
-    
+
     var uniqueParts = [];
-    if(allData.WLB == 1) {
+    if (allData.WLB == 1) {
         var lookup = {};
         var items = allData.sitting;
         for (var item, i = 0; item = items[i++];) {
-                var name = item.part;
-                if (!(name in lookup)) {
-                    lookup[name] = 1;
-                    uniqueParts.push(name);
-                }
+            var name = item.part;
+            if (!(name in lookup)) {
+                lookup[name] = 1;
+                uniqueParts.push(name);
+            }
         }
         var items = allData.standing;
         for (var item, i = 0; item = items[i++];) {
-                var name = item.part;
-                if (!(name in lookup)) {
-                    lookup[name] = 1;
-                    uniqueParts.push(name);
-                }
+            var name = item.part;
+            if (!(name in lookup)) {
+                lookup[name] = 1;
+                uniqueParts.push(name);
+            }
         }
         var items = allData.desk;
         for (var item, i = 0; item = items[i++];) {
-                var name = item.part;
-                if (!(name in lookup)) {
-                    lookup[name] = 1;
-                    uniqueParts.push(name);
-                }
+            var name = item.part;
+            if (!(name in lookup)) {
+                lookup[name] = 1;
+                uniqueParts.push(name);
+            }
         }
         var items = allData.withweights;
         for (var item, i = 0; item = items[i++];) {
-                var name = item.part;
-                if (!(name in lookup)) {
-                    lookup[name] = 1;
-                    uniqueParts.push(name);
-                }
+            var name = item.part;
+            if (!(name in lookup)) {
+                lookup[name] = 1;
+                uniqueParts.push(name);
+            }
         }
     } else {
         var lookup = {};
         var items = allData.sitting;
         for (var item, i = 0; item = items[i++];) {
-                var name = item.part;
-                if (!(name in lookup)) {
-                    lookup[name] = 1;
-                    uniqueParts.push(name);
-                }
+            var name = item.part;
+            if (!(name in lookup)) {
+                lookup[name] = 1;
+                uniqueParts.push(name);
+            }
         }
         var items = allData.standing;
         for (var item, i = 0; item = items[i++];) {
-                var name = item.part;
-                if (!(name in lookup)) {
-                    lookup[name] = 1;
-                    uniqueParts.push(name);
-                }
+            var name = item.part;
+            if (!(name in lookup)) {
+                lookup[name] = 1;
+                uniqueParts.push(name);
+            }
         }
         var items = allData.desk;
         for (var item, i = 0; item = items[i++];) {
-                var name = item.part;
-                if (!(name in lookup)) {
-                    lookup[name] = 1;
-                    uniqueParts.push(name);
-                }
+            var name = item.part;
+            if (!(name in lookup)) {
+                lookup[name] = 1;
+                uniqueParts.push(name);
+            }
         }
     }
 
     var ele = "";
 
-    for(var i = 0; i <  Object.keys(uniqueParts).length; i++) {
+    for (var i = 0; i < Object.keys(uniqueParts).length; i++) {
         ele += "<p class='drag'><a class='btn btn-defaul'>" + uniqueParts[i] + "</a></p>";
     }
 
     document.getElementById("modules").innerHTML = ele;
 
-    $('.drag').draggable({ 
-    appendTo: 'body',
-    helper: 'clone'
+    $('.drag').draggable({
+        appendTo: 'body',
+        helper: 'clone'
     });
 
     $('#dropzone').droppable({
-    activeClass: 'active',
-    hoverClass: 'hover',
-    accept: ":not(.ui-sortable-helper)", // Reject clones generated by sortable
-    drop: function (e, ui) {
-        var $el = $('<div class="drop-item"><details><summary>' + ui.draggable.text() + '</summary><div><label>More Data</label><input type="text" /></div></details></div>');
-        $el.append($('<button type="button" class="btn btn-default btn-xs remove"><span class="glyphicon glyphicon-trash"></span></button>').click(function () { $(this).parent().detach(); }));
-        $(this).append($el);
-    }
+        activeClass: 'active',
+        hoverClass: 'hover',
+        accept: ":not(.ui-sortable-helper)", // Reject clones generated by sortable
+        drop: function(e, ui) {
+            var $el = $('<div class="drop-item"><details><summary>' + ui.draggable.text() + '</summary><div><label>More Data</label><input type="text" /></div></details></div>');
+            $el.append($('<button type="button" class="btn btn-default btn-xs remove"><span class="glyphicon glyphicon-trash"></span></button>').click(function() {
+                $(this).parent().detach();
+            }));
+            $(this).append($el);
+        }
     }).sortable({
-    items: '.drop-item',
-    sort: function() {
-        $( this ).removeClass( "active" );
-    }
+        items: '.drop-item',
+        sort: function() {
+            $(this).removeClass("active");
+        }
     });
-
 </script>
 
 {% endblock javascripts %}

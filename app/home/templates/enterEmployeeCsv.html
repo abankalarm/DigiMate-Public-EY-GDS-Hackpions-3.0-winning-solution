@@ -1,4 +1,4 @@
-{% extends "layouts/adminbase.html" %} {% block title %} Page Blank {% endblock %}
+{% extends "layouts/adminbase.html" %} {% block title %} {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %} {% block content %}
@@ -61,7 +61,7 @@
     .show {
         display: block;
     }
-
+    
     #fileUpload {
         border: 1px solid #ccc;
         padding: 6px 12px;
@@ -92,12 +92,12 @@
                     </div>
                 </div>
                 <form method=post enctype=multipart/form-data>
-                    <input id = "fileUpload" type=file name=Csv>
+                    <input id="fileUpload" type=file name=Csv>
                     <br></br>
                     <br></br>
                     <button type="submit" class='form-control' name="register" class="btn btn-primary shadow-2 mb-4">Submit</button>
-                    </div>
-                </form>
+            </div>
+            </form>
         </div>
 
         <script>
@@ -133,5 +133,4 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
-{% endblock javascripts %}
+{% block javascripts %} {% endblock javascripts %}

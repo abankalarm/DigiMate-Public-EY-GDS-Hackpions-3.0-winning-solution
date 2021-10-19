@@ -1,105 +1,118 @@
-{% extends "layouts/base.html" %} {% block title %} Page Blank {% endblock %}
+{% extends "layouts/base.html" %} {% block title %} {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
 <style>
-    * {box-sizing:border-box}
-
+    * {
+        box-sizing: border-box
+    }
     /* Slideshow container */
+    
     .slideshow-container {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
+        max-width: 1000px;
+        position: relative;
+        margin: auto;
     }
-
     /* Make the images invisible by default */
+    
     .Containers {
-    display: none;
+        display: none;
     }
-
     /* forward & Back buttons */
-    .Back, .forward {
-    cursor: pointer;
-    position: absolute;
-    top: 48%;
-    width: auto;
-    margin-top: -23px;
-    padding: 17px;
-    color: grey;
-    font-weight: bold;
-    font-size: 19px;
-    transition: 0.4s ease;
-    border-radius: 0 5px 5px 0;
-    user-select: none;
-    }
-
-    /* Place the "forward button" to the right */
+    
+    .Back,
     .forward {
-    right: 0;
-    border-radius: 4px 0 0 4px;
+        cursor: pointer;
+        position: absolute;
+        top: 48%;
+        width: auto;
+        margin-top: -23px;
+        padding: 17px;
+        color: grey;
+        font-weight: bold;
+        font-size: 19px;
+        transition: 0.4s ease;
+        border-radius: 0 5px 5px 0;
+        user-select: none;
     }
-
+    /* Place the "forward button" to the right */
+    
+    .forward {
+        right: 0;
+        border-radius: 4px 0 0 4px;
+    }
     /*when the user hovers,add a black background with some little opacity */
-    .Back:hover, .forward:hover {
-    background-color: rgba(0,0,0,0.8);
+    
+    .Back:hover,
+    .forward:hover {
+        background-color: rgba(0, 0, 0, 0.8);
     }
-
     /* Caption Info */
+    
     .Info {
-    color: black;
-    background-color: white;
-    font-size: 18px;
-    padding: 10px 14px;
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
+        color: black;
+        background-color: white;
+        font-size: 18px;
+        padding: 10px 14px;
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
     }
-
     /* Worknumbering (1/3 etc) */
+    
     .MessageInfo {
-    color: black;
-    background-color: white;
-    font-size: 28px;
-    padding: 10px 14px;
-    position: absolute;
-    top: 0;
+        color: black;
+        background-color: white;
+        font-size: 28px;
+        padding: 10px 14px;
+        position: absolute;
+        top: 0;
     }
-
     /* The circles or bullets and indicators */
+    
     .dots {
-    cursor: pointer;
-    height: 16px;
-    width: 16px;
-    margin: 0 3px;
-    background-color: #acc;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.5s ease;
+        cursor: pointer;
+        height: 16px;
+        width: 16px;
+        margin: 0 3px;
+        background-color: #acc;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.5s ease;
     }
-
-    .enable, .dots:hover {
-    background-color: #717161;
+    
+    .enable,
+    .dots:hover {
+        background-color: #717161;
     }
-
     /* Faint animation */
+    
     .fade {
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 1.4s;
-    animation-name: fade;
-    animation-duration: 1.4s;
+        -webkit-animation-name: fade;
+        -webkit-animation-duration: 1.4s;
+        animation-name: fade;
+        animation-duration: 1.4s;
     }
-
+    
     @-webkit-keyframes fade {
-    from {opacity: .5}
-    to {opacity: 2}
+        from {
+            opacity: .5
+        }
+        to {
+            opacity: 2
+        }
     }
-
+    
     @keyframes fade {
-    from {opacity: .5}
-    to {opacity: 2}
+        from {
+            opacity: .5
+        }
+        to {
+            opacity: 2
+        }
     }
-
+    
     .col {
         color: black;
         float: left;
@@ -107,18 +120,17 @@
         text-align: center;
         margin-bottom: 5px;
     }
-
     /* Clear floats after the columns */
+    
     .row:after {
-    content: "";
-    display: table;
-    clear: both;
+        content: "";
+        display: table;
+        clear: both;
     }
-
+    
     #container {
         margin: auto;
     }
-
 </style>
 {% endblock stylesheets %} {% block content %}
 
@@ -133,49 +145,49 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 id = "name">
+                                <h5 id="name">
                                     Exercises
                                 </h5>
                             </div>
                             <div class="card-block">
-                                <h6 id = "desc">
+                                <h6 id="desc">
                                     Regular exercise makes you feel happier, helps with weight loss, strengthens muscles and bones and enhances your energy levels. Further, it reduces your risk of chronic disease and can help your brain health and memory.
                                 </h6>
                             </div>
                             <div class="card-header">
-                                <h5 id = "name">
+                                <h5 id="name">
                                     Desk Exercises
                                 </h5>
                             </div>
                             <div class="card-block">
-                                <h6 id = "desc">
+                                <h6 id="desc">
                                     Desk Exercise Description
                                 </h6>
                             </div>
                             <div class="slideshow-container" id="ss1">
-                              </div>
-                              <br>
-                              
-                              <!-- The circles/dots -->
-                              <div id = "dot-c" style="text-align:center">
-                              </div> 
+                            </div>
+                            <br>
+
+                            <!-- The circles/dots -->
+                            <div id="dot-c" style="text-align:center">
+                            </div>
                             <div class="card-header">
-                                <h5 id = "name">
+                                <h5 id="name">
                                     Outdoor Exercises
                                 </h5>
                             </div>
                             <div class="card-block">
-                                <h6 id = "desc">
+                                <h6 id="desc">
                                     Outdoor Exercise Description
                                 </h6>
                             </div>
                             <div class="slideshow-container" id="ss2">
                             </div>
                             <br>
-                            
+
                             <!-- The circles/dots -->
-                            <div id = "dot-c2" style="text-align:center">
-                            </div> 
+                            <div id="dot-c2" style="text-align:center">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -189,46 +201,45 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script>
-    
-        var data = JSON.parse('{{allData | tojson}}');
-        var e = "";
-        var p = []
-        var tot = Object.keys(data.desk).length;
-        for(var i = 0; i < tot; i++) {
-            p[i] = window.location.pathname + "/prayanama/" + data.prayanama[i].sanskrit_name;
-            e += "<div class='Containers'><div class='MessageInfo'>" + (i + 1) + "/" + tot + "</div><img src='"+ data.prayanama[i].img_url +"' style='width:100%;' onclick = 'myFunction(" + i + ")'><div class='Info'>Tap on Image to know more</div></div>"
-        }
+    var data = JSON.parse('{{allData | tojson}}');
+    var e = "";
+    var p = []
+    var tot = Object.keys(data.desk).length;
+    for (var i = 0; i < tot; i++) {
+        p[i] = window.location.pathname + "/prayanama/" + data.prayanama[i].sanskrit_name;
+        e += "<div class='Containers'><div class='MessageInfo'>" + (i + 1) + "/" + tot + "</div><img src='" + data.prayanama[i].img_url + "' style='width:100%;' onclick = 'myFunction(" + i + ")'><div class='Info'>Tap on Image to know more</div></div>"
+    }
 
-        function myFunction(n) {
-            window.location.href = p[n];
-        }
+    function myFunction(n) {
+        window.location.href = p[n];
+    }
 
-        e += "<a class='Back' onclick='plusSlides(-1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a>"
-        var k = "";
-        for(var i = 0; i < tot; i++) {
-            k += "<span class='dots' onclick='currentSlide(" + (i + 1) + ")'></span>";
-        }
-        document.getElementById("ss1").innerHTML = e;
-        document.getElementById("dot-c").innerHTML = k;
-
+    e += "<a class='Back' onclick='plusSlides(-1)'>&#10094;</a><a class='forward' onclick='plusSlides(1)'>&#10095;</a>"
+    var k = "";
+    for (var i = 0; i < tot; i++) {
+        k += "<span class='dots' onclick='currentSlide(" + (i + 1) + ")'></span>";
+    }
+    document.getElementById("ss1").innerHTML = e;
+    document.getElementById("dot-c").innerHTML = k;
 
 
 
-        e = "";
-        p = []
-        var tot = Object.keys(data.outdoor).length;
 
-        for(var i = 0; i < tot; i++) {
-            e += "<div class='Containers-1'><div class='MessageInfo-1'>" + (i + 1) + "/" + tot + "<iframe></div></div>"
-        }
+    e = "";
+    p = []
+    var tot = Object.keys(data.outdoor).length;
 
-        e += "<a class='Back-1' onclick='plusSlides1(-1)'>&#10094;</a><a class='forward-1' onclick='plusSlides1(1)'>&#10095;</a>"
-        k = "";
-        for(var i = 0; i < tot; i++) {
-            k += "<span class='dots' onclick='currentSlide1(" + (i + 1) + ")'></span>";
-        }
-        document.getElementById("ss2").innerHTML = e;
-        document.getElementById("dot-c2").innerHTML = k;
+    for (var i = 0; i < tot; i++) {
+        e += "<div class='Containers-1'><div class='MessageInfo-1'>" + (i + 1) + "/" + tot + "<iframe></div></div>"
+    }
+
+    e += "<a class='Back-1' onclick='plusSlides1(-1)'>&#10094;</a><a class='forward-1' onclick='plusSlides1(1)'>&#10095;</a>"
+    k = "";
+    for (var i = 0; i < tot; i++) {
+        k += "<span class='dots' onclick='currentSlide1(" + (i + 1) + ")'></span>";
+    }
+    document.getElementById("ss2").innerHTML = e;
+    document.getElementById("dot-c2").innerHTML = k;
 
 
     var slidePosition = 1;
@@ -236,29 +247,33 @@
 
     // forward/Back controls
     function plusSlides(n) {
-    SlideShow(slidePosition += n);
+        SlideShow(slidePosition += n);
     }
 
     //  images controls
     function currentSlide(n) {
-    SlideShow(slidePosition = n);
+        SlideShow(slidePosition = n);
     }
 
     function SlideShow(n) {
         var i;
         var slides = document.getElementsByClassName("Containers");
         var circles = document.getElementsByClassName("dots");
-        if (n > slides.length) {slidePosition = 1}
-        if (n < 1) {slidePosition = slides.length}
+        if (n > slides.length) {
+            slidePosition = 1
+        }
+        if (n < 1) {
+            slidePosition = slides.length
+        }
         for (i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
         }
         for (i = 0; i < circles.length; i++) {
             circles[i].className = circles[i].className.replace(" enable", "");
         }
-        slides[slidePosition-1].style.display = "block";
-        circles[slidePosition-1].className += " enable";
-    } 
+        slides[slidePosition - 1].style.display = "block";
+        circles[slidePosition - 1].className += " enable";
+    }
 
 
 
@@ -267,30 +282,33 @@
 
     // forward/Back controls
     function plusSlides1(n) {
-    SlideShow1(slidePosition1 += n);
+        SlideShow1(slidePosition1 += n);
     }
 
     //  images controls
     function currentSlide1(n) {
-    SlideShow1(slidePosition1 = n);
+        SlideShow1(slidePosition1 = n);
     }
 
     function SlideShow1(n) {
         var i;
         var slides = document.getElementsByClassName("Containers-1");
         var circles = document.getElementsByClassName("dots-1");
-        if (n > slides.length) {slidePosition = 1}
-        if (n < 1) {slidePosition = slides.length}
+        if (n > slides.length) {
+            slidePosition = 1
+        }
+        if (n < 1) {
+            slidePosition = slides.length
+        }
         for (i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
         }
         for (i = 0; i < circles.length; i++) {
             circles[i].className = circles[i].className.replace(" enable", "");
         }
-        slides[slidePosition-1].style.display = "block";
-        circles[slidePosition-1].className += " enable";
-    } 
-
+        slides[slidePosition - 1].style.display = "block";
+        circles[slidePosition - 1].className += " enable";
+    }
 </script>
 
 {% endblock javascripts %}

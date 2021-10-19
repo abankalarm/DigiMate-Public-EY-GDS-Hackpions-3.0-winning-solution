@@ -1,4 +1,4 @@
- {% extends "layouts/base.html" %} {% block title %} Page Blank {% endblock %}
+ {% extends "layouts/base.html" %} {% block title %} {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -7,11 +7,12 @@
         height: 800px;
         width: 100%;
     }
+    
     .button-skill {
         border-radius: 12px;
         font-size: 16px;
-        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-        background-color:  rgb(36, 112, 160);
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: rgb(36, 112, 160);
         color: white;
         padding: 10px 20px;
         text-align: center;
@@ -23,6 +24,7 @@
         align-items: center;
         margin-bottom: 5px;
     }
+    
     .button-skill:hover {
         background-color: cyan;
         color: black;
@@ -66,11 +68,11 @@
                                     </ul>
                                 </div>
                                 <div class="row">
-                                    <div><button class = "button-skill" id="skills1"></button></div>
-                                    <div><button class = "button-skill" id="skills2"></button></div>
-                                    <div><button class = "button-skill" id="skills3"></button></div>
-                                    <div><button class = "button-skill" id="skills4"></button></div>
-                                    <div><button class = "button-skill" id="skills5"></button></div>
+                                    <div><button class="button-skill" id="skills1"></button></div>
+                                    <div><button class="button-skill" id="skills2"></button></div>
+                                    <div><button class="button-skill" id="skills3"></button></div>
+                                    <div><button class="button-skill" id="skills4"></button></div>
+                                    <div><button class="button-skill" id="skills5"></button></div>
                                 </div>
                             </div>
 
@@ -78,7 +80,7 @@
                     </div>
                 </div>
                 <!-- [ Main Content ] end -->
-                
+
                 <div id="myplot"></div>
 
             </div>
@@ -94,208 +96,208 @@
 <script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <script>
-var allData = JSON.parse('{{allData | tojson}}');
-var allDataOne = JSON.parse('{{allDataOne | tojson}}');
-var recomm = JSON.parse('{{recomm | tojson}}');
-var crecomm = JSON.parse('{{crecomm | tojson}}');
+    var allData = JSON.parse('{{allData | tojson}}');
+    var allDataOne = JSON.parse('{{allDataOne | tojson}}');
+    var recomm = JSON.parse('{{recomm | tojson}}');
+    var crecomm = JSON.parse('{{crecomm | tojson}}');
 
-var skills1 = document.getElementById('skills1');
-var skills2 = document.getElementById('skills2');
-var skills3 = document.getElementById('skills3');
-var skills4 = document.getElementById('skills4');
-var skills5 = document.getElementById('skills5');
+    var skills1 = document.getElementById('skills1');
+    var skills2 = document.getElementById('skills2');
+    var skills3 = document.getElementById('skills3');
+    var skills4 = document.getElementById('skills4');
+    var skills5 = document.getElementById('skills5');
 
-skills1.addEventListener("click", function() {
-    window.location.href = window.location.pathname + "/" + skills1.innerHTML;
-});
+    skills1.addEventListener("click", function() {
+        window.location.href = window.location.pathname + "/" + skills1.innerHTML;
+    });
 
-skills2.addEventListener("click", function() {
-    window.location.href = window.location.pathname + "/" + skills2.innerHTML;
-});
+    skills2.addEventListener("click", function() {
+        window.location.href = window.location.pathname + "/" + skills2.innerHTML;
+    });
 
-skills3.addEventListener("click", function() {
-    window.location.href = window.location.pathname + "/" + skills3.innerHTML;
-});
+    skills3.addEventListener("click", function() {
+        window.location.href = window.location.pathname + "/" + skills3.innerHTML;
+    });
 
-skills4.addEventListener("click", function() {
-    window.location.href = window.location.pathname + "/" + skills4.innerHTML;
-});
+    skills4.addEventListener("click", function() {
+        window.location.href = window.location.pathname + "/" + skills4.innerHTML;
+    });
 
-skills5.addEventListener("click", function() {
-    window.location.href = window.location.pathname + "/" + skills5.innerHTML;
-});
+    skills5.addEventListener("click", function() {
+        window.location.href = window.location.pathname + "/" + skills5.innerHTML;
+    });
 
 
 
-$(document).ready(function() {
-    skills1.innerHTML = recomm[0];
-    skills2.innerHTML = recomm[1];
-    skills3.innerHTML = recomm[2];
-    skills4.innerHTML = recomm[3];
-    skills5.innerHTML = recomm[4];
-    setTimeout(function() {
-        am4core.ready(function() {
-            am4core.useTheme(am4themes_animated);
-            // Themes end
-
-            var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
-
-            var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
-            networkSeries.dataFields.linkWith = "linkWith";
-            networkSeries.dataFields.name = "name";
-            networkSeries.dataFields.id = "name";
-            networkSeries.dataFields.value = "value";
-            networkSeries.dataFields.children = "children";
-
-            networkSeries.nodes.template.label.text = "{name}"
-            networkSeries.fontSize = 12;
-            networkSeries.linkWithStrength = 0;
-
-            var nodeTemplate = networkSeries.nodes.template;
-            nodeTemplate.tooltipText = "{name}";
-            nodeTemplate.fillOpacity = 1;
-            nodeTemplate.label.hideOversized = true;
-            nodeTemplate.label.truncate = true;
-
-            var linkTemplate = networkSeries.links.template;
-            linkTemplate.strokeWidth = 1;
-            var linkHoverState = linkTemplate.states.create("hover");
-            linkHoverState.properties.strokeOpacity = 1;
-            linkHoverState.properties.strokeWidth = 2;
-
-            nodeTemplate.events.on("over", function (event) {
-                var dataItem = event.target.dataItem;
-                dataItem.childLinks.each(function (link) {
-                    link.isHover = true;
-                })
-            })
-
-            nodeTemplate.events.on("out", function (event) {
-                var dataItem = event.target.dataItem;
-                dataItem.childLinks.each(function (link) {
-                    link.isHover = false;
-                })
-            })
-
-            networkSeries.data = allData
-                    });
-                }, 700);
-            });
-
-    var another = false;
-    if(!another) {
-    document.getElementById("pills-sk2-tab").addEventListener('click', function() {
-        skills1.innerHTML = crecomm[0];
-        skills2.innerHTML = crecomm[1];
-        skills3.innerHTML = crecomm[2];
-        skills4.innerHTML = crecomm[3];
-        skills5.innerHTML = crecomm[4];
-        setTimeout(function() {
-        am4core.ready(function() {
-            am4core.useTheme(am4themes_animated);
-            // Themes end
-
-            var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
-
-            var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
-            networkSeries.dataFields.linkWith = "linkWith";
-            networkSeries.dataFields.name = "name";
-            networkSeries.dataFields.id = "name";
-            networkSeries.dataFields.value = "value";
-            networkSeries.dataFields.children = "children";
-
-            networkSeries.nodes.template.label.text = "{name}"
-            networkSeries.fontSize = 12;
-            networkSeries.linkWithStrength = 0;
-
-            var nodeTemplate = networkSeries.nodes.template;
-            nodeTemplate.tooltipText = "{name}";
-            nodeTemplate.fillOpacity = 1;
-            nodeTemplate.label.hideOversized = true;
-            nodeTemplate.label.truncate = true;
-
-            var linkTemplate = networkSeries.links.template;
-            linkTemplate.strokeWidth = 1;
-            var linkHoverState = linkTemplate.states.create("hover");
-            linkHoverState.properties.strokeOpacity = 1;
-            linkHoverState.properties.strokeWidth = 2;
-
-            nodeTemplate.events.on("over", function (event) {
-                var dataItem = event.target.dataItem;
-                dataItem.childLinks.each(function (link) {
-                    link.isHover = true;
-                })
-            })
-
-            nodeTemplate.events.on("out", function (event) {
-                var dataItem = event.target.dataItem;
-                dataItem.childLinks.each(function (link) {
-                    link.isHover = false;
-                })
-            })
-
-            networkSeries.data = allDataOne;
-                    });
-                }, 700);
-            another = true;
-        });
-    }
-
-    var anotherOne = false;
-    if(!anotherOne) {
-    document.getElementById("pills-sk1-tab").addEventListener('click', function() {
+    $(document).ready(function() {
         skills1.innerHTML = recomm[0];
         skills2.innerHTML = recomm[1];
         skills3.innerHTML = recomm[2];
         skills4.innerHTML = recomm[3];
         skills5.innerHTML = recomm[4];
         setTimeout(function() {
-        am4core.ready(function() {
-            am4core.useTheme(am4themes_animated);
-            // Themes end
+            am4core.ready(function() {
+                am4core.useTheme(am4themes_animated);
+                // Themes end
 
-            var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
+                var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
 
-            var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
-            networkSeries.dataFields.linkWith = "linkWith";
-            networkSeries.dataFields.name = "name";
-            networkSeries.dataFields.id = "name";
-            networkSeries.dataFields.value = "value";
-            networkSeries.dataFields.children = "children";
+                var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+                networkSeries.dataFields.linkWith = "linkWith";
+                networkSeries.dataFields.name = "name";
+                networkSeries.dataFields.id = "name";
+                networkSeries.dataFields.value = "value";
+                networkSeries.dataFields.children = "children";
 
-            networkSeries.nodes.template.label.text = "{name}"
-            networkSeries.fontSize = 12;
-            networkSeries.linkWithStrength = 0;
+                networkSeries.nodes.template.label.text = "{name}"
+                networkSeries.fontSize = 12;
+                networkSeries.linkWithStrength = 0;
 
-            var nodeTemplate = networkSeries.nodes.template;
-            nodeTemplate.tooltipText = "{name}";
-            nodeTemplate.fillOpacity = 1;
-            nodeTemplate.label.hideOversized = true;
-            nodeTemplate.label.truncate = true;
+                var nodeTemplate = networkSeries.nodes.template;
+                nodeTemplate.tooltipText = "{name}";
+                nodeTemplate.fillOpacity = 1;
+                nodeTemplate.label.hideOversized = true;
+                nodeTemplate.label.truncate = true;
 
-            var linkTemplate = networkSeries.links.template;
-            linkTemplate.strokeWidth = 1;
-            var linkHoverState = linkTemplate.states.create("hover");
-            linkHoverState.properties.strokeOpacity = 1;
-            linkHoverState.properties.strokeWidth = 2;
+                var linkTemplate = networkSeries.links.template;
+                linkTemplate.strokeWidth = 1;
+                var linkHoverState = linkTemplate.states.create("hover");
+                linkHoverState.properties.strokeOpacity = 1;
+                linkHoverState.properties.strokeWidth = 2;
 
-            nodeTemplate.events.on("over", function (event) {
-                var dataItem = event.target.dataItem;
-                dataItem.childLinks.each(function (link) {
-                    link.isHover = true;
+                nodeTemplate.events.on("over", function(event) {
+                    var dataItem = event.target.dataItem;
+                    dataItem.childLinks.each(function(link) {
+                        link.isHover = true;
+                    })
                 })
-            })
 
-            nodeTemplate.events.on("out", function (event) {
-                var dataItem = event.target.dataItem;
-                dataItem.childLinks.each(function (link) {
-                    link.isHover = false;
+                nodeTemplate.events.on("out", function(event) {
+                    var dataItem = event.target.dataItem;
+                    dataItem.childLinks.each(function(link) {
+                        link.isHover = false;
+                    })
                 })
-            })
 
-            networkSeries.data = allData
-                    });
-                }, 700);
+                networkSeries.data = allData
+            });
+        }, 700);
+    });
+
+    var another = false;
+    if (!another) {
+        document.getElementById("pills-sk2-tab").addEventListener('click', function() {
+            skills1.innerHTML = crecomm[0];
+            skills2.innerHTML = crecomm[1];
+            skills3.innerHTML = crecomm[2];
+            skills4.innerHTML = crecomm[3];
+            skills5.innerHTML = crecomm[4];
+            setTimeout(function() {
+                am4core.ready(function() {
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
+
+                    var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+                    networkSeries.dataFields.linkWith = "linkWith";
+                    networkSeries.dataFields.name = "name";
+                    networkSeries.dataFields.id = "name";
+                    networkSeries.dataFields.value = "value";
+                    networkSeries.dataFields.children = "children";
+
+                    networkSeries.nodes.template.label.text = "{name}"
+                    networkSeries.fontSize = 12;
+                    networkSeries.linkWithStrength = 0;
+
+                    var nodeTemplate = networkSeries.nodes.template;
+                    nodeTemplate.tooltipText = "{name}";
+                    nodeTemplate.fillOpacity = 1;
+                    nodeTemplate.label.hideOversized = true;
+                    nodeTemplate.label.truncate = true;
+
+                    var linkTemplate = networkSeries.links.template;
+                    linkTemplate.strokeWidth = 1;
+                    var linkHoverState = linkTemplate.states.create("hover");
+                    linkHoverState.properties.strokeOpacity = 1;
+                    linkHoverState.properties.strokeWidth = 2;
+
+                    nodeTemplate.events.on("over", function(event) {
+                        var dataItem = event.target.dataItem;
+                        dataItem.childLinks.each(function(link) {
+                            link.isHover = true;
+                        })
+                    })
+
+                    nodeTemplate.events.on("out", function(event) {
+                        var dataItem = event.target.dataItem;
+                        dataItem.childLinks.each(function(link) {
+                            link.isHover = false;
+                        })
+                    })
+
+                    networkSeries.data = allDataOne;
+                });
+            }, 700);
+            another = true;
+        });
+    }
+
+    var anotherOne = false;
+    if (!anotherOne) {
+        document.getElementById("pills-sk1-tab").addEventListener('click', function() {
+            skills1.innerHTML = recomm[0];
+            skills2.innerHTML = recomm[1];
+            skills3.innerHTML = recomm[2];
+            skills4.innerHTML = recomm[3];
+            skills5.innerHTML = recomm[4];
+            setTimeout(function() {
+                am4core.ready(function() {
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    var chart = am4core.create("myplot", am4plugins_forceDirected.ForceDirectedTree);
+
+                    var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+                    networkSeries.dataFields.linkWith = "linkWith";
+                    networkSeries.dataFields.name = "name";
+                    networkSeries.dataFields.id = "name";
+                    networkSeries.dataFields.value = "value";
+                    networkSeries.dataFields.children = "children";
+
+                    networkSeries.nodes.template.label.text = "{name}"
+                    networkSeries.fontSize = 12;
+                    networkSeries.linkWithStrength = 0;
+
+                    var nodeTemplate = networkSeries.nodes.template;
+                    nodeTemplate.tooltipText = "{name}";
+                    nodeTemplate.fillOpacity = 1;
+                    nodeTemplate.label.hideOversized = true;
+                    nodeTemplate.label.truncate = true;
+
+                    var linkTemplate = networkSeries.links.template;
+                    linkTemplate.strokeWidth = 1;
+                    var linkHoverState = linkTemplate.states.create("hover");
+                    linkHoverState.properties.strokeOpacity = 1;
+                    linkHoverState.properties.strokeWidth = 2;
+
+                    nodeTemplate.events.on("over", function(event) {
+                        var dataItem = event.target.dataItem;
+                        dataItem.childLinks.each(function(link) {
+                            link.isHover = true;
+                        })
+                    })
+
+                    nodeTemplate.events.on("out", function(event) {
+                        var dataItem = event.target.dataItem;
+                        dataItem.childLinks.each(function(link) {
+                            link.isHover = false;
+                        })
+                    })
+
+                    networkSeries.data = allData
+                });
+            }, 700);
             anotherOne = true;
         });
     }
