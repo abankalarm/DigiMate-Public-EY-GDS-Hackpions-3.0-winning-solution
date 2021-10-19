@@ -136,11 +136,11 @@ def listtask1():
     
     task = row.tasks
     if (task=="null" or task==""):
-        tasks = json.dumps({1:'enter your first task'})
+        tasks = json.dumps({1:'delete your first task'})
     if task:
         tasks = json.loads(task)
     else:
-        tasks = json.dumps({1:'enter your first task'})
+        tasks = json.dumps({1:'delete your first task'})
     #print("gsdhfdjgkfjg",tasks)
     return tasks
 
