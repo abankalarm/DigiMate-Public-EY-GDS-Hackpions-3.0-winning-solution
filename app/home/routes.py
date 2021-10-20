@@ -893,7 +893,7 @@ def route_work_dep():
 def sync_function():
     csvFile = "CSVs/EmployeeDataset.csv"
     dfCsv = pd.read_csv(csvFile)
-    for row in User.query.filter_by(id=current_user.get_id()).first():
+    for row in User.query.filter_by(id=current_user.get_id()).all():
         username = row.username
         diction = dfCsv.loc[dfCsv['username'] == username]
         diction=diction.to_dict('records')
