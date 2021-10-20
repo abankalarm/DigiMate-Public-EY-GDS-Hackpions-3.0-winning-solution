@@ -1199,9 +1199,12 @@ def profile(template):
         "onsite" : row.onsite,
         "salary" : row.salary,
         "height" : row.height,
-        "weight" : row.weight,
-        "SkillPointEarned":int(row.SkillPointEarned)
+        "weight" : row.weight
     }
+    try:
+        allDataSupplied["SkillPointEarned"]=int(row.SkillPointEarned)
+    except:
+        allDataSupplied["SkillPointEarned"]=0
     done=[]
     doing=[]
     if "dont" in allDataSupplied["skills"]: 
@@ -1249,9 +1252,12 @@ def profilesection():
         "onsite" : row.onsite,
         "salary" : row.salary,
         "height" : row.height,
-        "weight" : row.weight,
-        "SkillPointEarned":int(row.SkillPointEarned)
+        "weight" : row.weight
     }
+    try:
+        allDataSupplied["SkillPointEarned"]=int(row.SkillPointEarned)
+    except:
+        allDataSupplied["SkillPointEarned"]=0
     done=[]
     doing=[]
     if "dont" in allDataSupplied["skills"]: 
