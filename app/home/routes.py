@@ -1205,6 +1205,8 @@ def profile(template):
         allDataSupplied["SkillPointEarned"]=int(row.SkillPointEarned)
     except:
         allDataSupplied["SkillPointEarned"]=0
+        row.SkillPointEarned = 0
+        db.commit()
     done=[]
     doing=[]
     if "dont" in allDataSupplied["skills"]: 
@@ -1258,6 +1260,8 @@ def profilesection():
         allDataSupplied["SkillPointEarned"]=int(row.SkillPointEarned)
     except:
         allDataSupplied["SkillPointEarned"]=0
+        row.SkillPointEarned = 0
+        db.commit()
     done=[]
     doing=[]
     if "dont" in allDataSupplied["skills"]: 
