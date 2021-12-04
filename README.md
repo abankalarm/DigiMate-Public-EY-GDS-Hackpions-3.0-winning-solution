@@ -1,3 +1,13 @@
+# EY GDS Hackpions 3.0 Winning Solution 
+Team name - EY jiit Troupe
+2nd position 
+theme - Human Digital Twins
+
+This is our public repo, This solution was finally deployed on azure infra and is scalable
+
+If you deploy it please, supply all the api keys, including GOOGLE's SECRET JSON file for supporting google authentication and using its APIs
+
+
 # DigiMate-Public
 Instructions
 If running on localhost get the requirements from requirements.txt and run the run.py file
